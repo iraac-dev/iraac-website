@@ -19,7 +19,7 @@ IMG = {
     "news2": "https://picsum.photos/seed/iraac-news2/700/500",
 }
 
-SURVEY_URL = "https://forms.gle/TQTjNc7kzJYXvPyy5"
+SURVEY_URL = "https://forms.gle/b8P66C6SqjARdD9H6"
 
 CSS = """
 :root {
