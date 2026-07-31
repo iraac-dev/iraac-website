@@ -133,6 +133,15 @@ de-identified dataset snapshot and three audience-specific drafts:
   report**; and
 - the **business/community newsletter**.
 
+The approved business/community newsletter is a full-audience publication,
+not a 30% sample. The monthly campaign includes every email address that is
+currently eligible for that exact newsletter under the recorded Path 1 policy
+or Path 2 email permission, except unsubscribed, suppressed, invalid, duplicate,
+hard-bounced or otherwise ineligible addresses. New eligible addresses join the
+next full monthly audience automatically. The platform creates one complete
+audience snapshot and campaign manifest, then may transmit it in controlled
+provider waves for deliverability, complaint handling and emergency pause.
+
 The platform calculates metrics deterministically and may draft narrative,
 but production distribution starts only after the required named approval has
 locked the exact dataset, claims, artefacts and recipient manifest. The
@@ -156,7 +165,9 @@ snapshots, policies, cadence, content, metrics and suppression decisions.
 1. **Approved value newsletter/report email.** Every recipient must pass the
    business email policy. The email provides useful monthly findings and
    explains how IRAAC turns community evidence into recommendations to
-   government. It ends with a voluntary survey link.
+   government. It ends with a voluntary survey link. Every currently eligible
+   Path 1 address is included in the monthly newsletter campaign; the rotating
+   sample applies only to later survey chasing.
 2. **Rotating survey-chase selection.** Roughly 30% of the eligible business
    survey pool is selected for active follow-up in a month. The newsletter
    audience and the survey-chase sample are different objects.
@@ -182,8 +193,9 @@ from an unanswered email.
 1. **Direct survey and consent intake.** The person completes Have Your Say by
    web, QR, worker-assisted visit, drop-in, home visit, event, human phone or
    another approved mode. Contact permissions remain optional and separate.
-2. **Newsletter email.** People with current email permission may receive the
-   monthly newsletter with findings, action updates and a survey link.
+2. **Newsletter email.** Every Path 2 person with current newsletter email
+   permission is included in the full monthly newsletter audience, with
+   findings, action updates, a survey link and a simple unsubscribe route.
 3. **Rotating survey-chase selection.** Roughly 30% of the eligible citizen
    survey pool is selected for active follow-up in a month.
 4. **SMS survey link.** After the waiting period and only with current SMS
@@ -201,13 +213,24 @@ reconciliation. It is never inferred from an email open, pixel, click or
 missing webhook. Every transition requires both no current-cycle completion or
 terminal response and a fresh eligibility decision for the next action.
 
-Survey completion through any channel, reply, opt-out, complaint, withdrawal,
-distress, wrong person, invalid endpoint, hard bounce or suppression stops all
-controllable remaining chase attempts for that campaign cycle. Provider events
+Survey completion through any channel or a terminal response stops all
+controllable remaining chase attempts for that campaign cycle. Terminal events
+are typed: `NEWSLETTER_EMAIL_UNSUBSCRIBE` suppresses the canonical email endpoint
+for IRAAC's newsletter purpose; `CHANNEL_STOP` suppresses the approved channel
+and purpose; `GLOBAL_STOP`, complaint, wrong-person or safety suppression stops
+every channel. Invalid endpoint and hard bounce suppress the affected endpoint.
+Provider events
 may arrive late or out of order, so state changes use event time,
 deduplication, idempotency and reconciliation. One canonical completion key
 prevents web, SMS, staff and AI channels from asking the same current-cycle
 survey twice.
+
+Newsletter email suppression is channel- and purpose-specific. Unsubscribing
+from the newsletter stops future newsletter email but does not itself revoke a
+separately granted and still-current human-call or AI-call permission. Every
+unsubscribe experience must also offer a clear way to stop all future IRAAC
+outreach. A global stop, complaint, wrong-person result or safety suppression
+overrides every channel.
 
 People and organisations remain separate. A person answering on behalf of a
 business does not silently convert business contact eligibility into personal
@@ -276,16 +299,19 @@ privacy, Indigenous Data Sovereignty and vendor reviews. Excel and Google
 Sheets are import/export staging tools, never a second source of truth.
 
 **Monthly extract.** Each month a job builds four linked but distinct immutable
-snapshots: the approved Path 1 newsletter audience, the Path 1 survey-chase
-sample, the consented Path 2 newsletter audience and the Path 2 survey-chase
-sample. They are never combined into a single undifferentiated list. Each
+snapshots: the full currently eligible Path 1 newsletter audience, the Path 1
+survey-chase sample, the full currently email-consented Path 2 newsletter
+audience and the Path 2 survey-chase sample. The two newsletter snapshots may
+be deduplicated into one full delivery manifest while retaining pathway and
+eligibility evidence for each address. The chase pools remain separate. Each
 recipient/channel/action pair must pass the policy engine before inclusion,
 queueing and delivery.
 
 **Revocation.** Every outbound message — SMS, email, and voice — must offer a
-clear way to stop being contacted. Revocation propagates to the central store
-immediately. IRAAC guarantees cancellation while an attempt remains in its own
-queue and uses best-effort provider cancellation after acceptance. Use
+clear way to stop that channel/purpose and a discoverable way to stop all IRAAC
+outreach. Revocation propagates to the central store immediately. IRAAC
+guarantees cancellation while an attempt remains in its own queue and uses
+best-effort provider cancellation after acceptance. Use
 short-lived dispatch leases, an atomic final eligibility check at handoff,
 provider cancellation where supported, idempotent reconciliation and a
 `SUPPRESSED_AFTER_PROVIDER_ACCEPTANCE` audit state for unavoidable races.
@@ -293,12 +319,50 @@ Statutory maximum timeframes remain outer limits, not the system target.
 
 ---
 
-## 6. Monthly sampling: two rotating survey pools
+## 6. Full monthly newsletter and two rotating survey-chase pools
 
-The monthly newsletter may reach the full approved Path 1 email audience and
-the full consented Path 2 newsletter audience. Active survey chasing is
-different: roughly **30% of each pathway's currently eligible survey pool** is
-selected each month.
+The monthly newsletter goes to **100% of the currently eligible email audience**:
+all approved Path 1 business addresses and all Path 2 addresses with current
+newsletter email permission. This is one complete monthly audience, not a
+sample. It excludes duplicate, unsubscribed, suppressed, invalid, hard-bounced
+and policy-ineligible addresses. “Every email on file” is the audience-building
+goal, but an address being stored, found online or associated with an Aboriginal
+business is not by itself an eligibility decision.
+
+Recurring Path 1 newsletter eligibility fails closed unless the record contains
+the source URL or dataset and licence, observed date, published role/context,
+absence of a no-unsolicited-contact statement, relevance to that role, entity
+and message classification, approved policy/legal-rule version, reviewer,
+expiry or revalidation date, and evidence hash. Path 2 requires a current
+newsletter-email consent receipt. Missing, stale or conflicting evidence denies
+inclusion.
+
+Active survey chasing is different: roughly **30% of each pathway's currently
+eligible survey pool** is selected each month. Newsletter delivery alone does
+not place an address into that sample and newsletter non-response does not
+create permission for SMS or voice.
+
+The system creates one locked full-audience snapshot and send manifest for the
+newsletter. Delivery may be throttled into provider waves so IRAAC can preserve
+sender reputation, process unsubscribes and complaints, and stop the remaining
+queue if a problem appears. Throttling changes transport timing, not audience
+coverage. “100%” means inclusion in the approved audience snapshot, not bypassing
+a later suppression. Each manifest row records `eligibility_snapshot_at` and a
+reconciled outcome such as `SENT`, `DELIVERED`, `FAILED` or
+`SKIPPED_SUPPRESSED_AFTER_SNAPSHOT`; reports show planned, attempted, delivered,
+failed and newly suppressed counts separately.
+
+Deduplication uses one canonical email endpoint and newsletter purpose per
+campaign. Preserve every contributing person, organisation, pathway, provenance
+and eligibility decision, but send at most once. A denial, unsubscribe or
+suppression on any contributing record wins. Apply the most restrictive content
+and permission rule and do not personalise when ownership is ambiguous.
+
+Sampling Path 1 and Path 2 independently does not permit double chasing. A
+cross-path contact-pressure gate allows only one active chase assignment per
+canonical person or endpoint in a survey cycle and applies approved person,
+endpoint, household and organisation frequency caps while retaining both
+pathway memberships for analysis.
 
 Path 1 and Path 2 are sampled independently. Selection is reproducible,
 auditable and without replacement until the relevant pool has been covered,

@@ -130,6 +130,10 @@ only if separately consented and eligible → completion or terminal state`.
 
 The newsletter audience and the survey-chase sample are separate. Completion
 through any mode stops the current-cycle chase across every remaining channel.
+Every currently eligible Path 1 and Path 2 email address belongs to the full
+monthly newsletter campaign. Build one locked, deduplicated audience manifest
+covering 100% of those eligible addresses, then use controlled provider waves;
+do not apply the 30% chase sample to newsletter delivery.
 
 ### 3.2 Aboriginal business prospect pathway
 
@@ -189,13 +193,19 @@ survey pools and select roughly 30% from each as a configurable target/cap.
 Use a seeded, auditable rotation without replacement and an initial 90-day
 cooldown, with organisation/household caps, governance-approved strata and
 capacity limits. A typical eligible contact is actively chased about once
-every three to four months. The broader approved newsletter audiences may
-still receive the monthly value report; newsletter delivery does not place a
-recipient into the survey chase.
+every three to four months. The broader approved newsletter audiences receive
+the monthly value report. Every currently eligible newsletter address
+must be included in the full monthly campaign; newsletter delivery does not
+place a recipient into the survey chase. A newsletter-only unsubscribe does not
+revoke a separately granted human-call or AI-call permission, while a global
+stop or safety suppression overrides all channels.
 
-Stop escalation immediately after survey completion, reply, opt-out,
-withdrawal, complaint, hard bounce, invalid endpoint, distress escalation or
-suppression. Email opens and tracking pixels are not authoritative evidence
+Stop escalation immediately after survey completion or a typed terminal event.
+`NEWSLETTER_EMAIL_UNSUBSCRIBE` suppresses that canonical endpoint for the
+newsletter purpose; `CHANNEL_STOP` suppresses its approved channel/purpose;
+`GLOBAL_STOP`, complaint, wrong-person or safety suppression stops every
+channel. Hard bounce and invalid endpoint suppress the endpoint. Email opens
+and tracking pixels are not authoritative evidence
 that someone responded.
 
 ## 4. Legal and governance sources to preserve
@@ -890,7 +900,11 @@ withdrawal or any current-cycle completion blocks the next queued attempt.
 Acceptance: Path 1's second email can only follow rotating-sample assignment
 and reconciled no-response; no send without environment, approval, audience
 hash and policy pass; duplicate jobs do not double-send; report exact sandbox
-evidence.
+evidence. Race tests inject newsletter unsubscribe, complaint, global stop,
+source invalidation and policy withdrawal after manifest approval but before a
+later wave. Unsent rows cancel, provider-accepted rows reconcile as
+`SUPPRESSED_AFTER_PROVIDER_ACCEPTANCE`, retries cannot resurrect them, and the
+final report separates sent, delivered, failed and newly suppressed outcomes.
 
 ### W4 — SMS pilot
 

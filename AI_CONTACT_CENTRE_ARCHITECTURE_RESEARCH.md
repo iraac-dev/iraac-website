@@ -298,7 +298,13 @@ initial 90-day cooldown, organisation/household caps, capacity limits and
 governance-approved strata. Record selection probability, inclusion/exclusion
 reason, contact mode, response propensity and any weighting.
 
-Newsletter membership is separate from survey-chase membership. A canonical
+Newsletter membership is separate from survey-chase membership. Each monthly
+newsletter uses one locked manifest containing 100% of the currently eligible,
+deduplicated Path 1 and Path 2 email audience; controlled provider waves change
+delivery timing, not coverage. Newsletter-specific unsubscribe does not revoke
+a separately valid voice permission, but a global stop or safety suppression
+does. Deduplication is deny-wins across all contributing records and uses one
+canonical endpoint/purpose per campaign. A canonical
 `campaign_cycle_completion_key` links web, QR, staff, SMS and phone completion
 so any verified current-cycle completion or terminal response cancels every
 controllable remaining chase step. Mode effects and non-response bias must be

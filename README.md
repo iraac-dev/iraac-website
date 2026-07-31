@@ -22,8 +22,9 @@ survey and reporting system:
   or phone survey, followed by separately consented email, SMS and AI-call
   contact for the rotating sample.
 
-The wider approved newsletter audiences are separate from the roughly 30%
-monthly survey-chase samples. The shared private backend, stable survey system,
+The monthly newsletter targets 100% of the currently eligible, deduplicated
+Path 1 and Path 2 email audience. That full audience is separate from the
+roughly 30% monthly survey-chase samples. The shared private backend, stable survey system,
 campaign engine, admin dashboard and report publisher are planned, not present
 in this static repository.
 
