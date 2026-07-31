@@ -113,9 +113,12 @@ release imports real membership and enables real delivery.
   exact proposed report and outbound email, hashes, change log, limitations,
   required decisions and intended release status.
 - R29. The definitive current IRAAC staff and affiliated-partner contacts must
-  be maintained as a private, versioned `IRAAC_STAFF_REVIEW_GROUP`, never
-  hard-coded in this public repository or exposed in client bundles, logs,
-  public pages or visible recipient headers. Membership must have provenance,
+  be maintained as a private, versioned `IRAAC_STAFF_REVIEW_GROUP`. The sole
+  approved public address source is
+  `docs/operations/IRAAC_STAFF_CONTACT_REGISTER.md`; operational state remains
+  private, and the addresses must not be duplicated in client bundles, runtime
+  configuration, fixtures, logs, public website pages or visible recipient
+  headers. Membership must have provenance,
   effective dates and an append-only administrator change record. Active
   membership supplies the approved recipient role for all three final report
   families unless an unsubscribe, suppression, removal or legal hold blocks
@@ -351,8 +354,9 @@ flowchart TB
 - Public `/survey` remains a non-collecting IRAAC holding page until launch and
   changes only after new-platform acceptance and rollback tests.
 - Later campaigns, calls and reports depend on the canonical completion and consent events created here.
-- The public repository contains only the review-group identifier and contract;
-  real membership is imported into the private admin data plane.
+- The public repository contains the intentionally approved contact register as
+  the sole address source; a pinned, reviewed version is imported into the
+  private admin data plane, where operational membership state is maintained.
 - Privacy claims must say Sydney is the selected primary region, not promise that every vendor process is exclusively Australian until contracts and subprocessors are reviewed.
 - A launch-blocking data-flow register must cover CDN, functions, database, assets, logs, monitoring, backups, support access and later messaging/AI vendors.
 
@@ -532,8 +536,9 @@ flowchart TB
 - **Test scenarios:** Current and archived cards render at 320px, 200% zoom,
   keyboard and screen reader; loading, empty, error, stale, superseded,
   corrected and retracted states are clear; public/unauthorised/wrong-role
-  access fails at middleware, API and RLS; no real address appears in source,
-  fixture, bundle, log or visible headers; every synthetic active reviewer gets
+  access fails at middleware, API and RLS; real addresses appear only in the
+  approved contact register and are absent from code, fixtures, bundles, logs
+  and visible headers; every synthetic active reviewer gets
   one version-bound notification; forwarded, expired, replayed and wrong-user
   links cannot read or approve; scanner visits do not consume or expose access;
   leaked links reveal no packet/member identifier; forged, replayed, oversized,

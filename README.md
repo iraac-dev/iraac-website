@@ -73,8 +73,12 @@ requirements and are not yet live in this static repository.
   records the platform comparison and selected stack.
 - [`docs/survey/IRAAC_HAVE_YOUR_SAY_V1_DRAFT.md`](docs/survey/IRAAC_HAVE_YOUR_SAY_V1_DRAFT.md)
   contains the complete stable V1 survey draft for human approval.
-- This repository is public. Never commit contact lists, survey responses,
-  consent evidence, provider credentials, operational scripts or other private
+- [`docs/operations/IRAAC_STAFF_CONTACT_REGISTER.md`](docs/operations/IRAAC_STAFF_CONTACT_REGISTER.md)
+  is the intentionally published definitive staff and affiliated-partner
+  contact register.
+- This repository is public. Except for the expressly approved staff register,
+  never commit contact lists, survey responses, consent evidence, provider
+  credentials, operational scripts or other private
   data here.
 
 ## Editing

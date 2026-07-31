@@ -309,12 +309,14 @@ The archive preserves superseded, corrected, retracted, published and sent
 versions rather than silently replacing them.
 
 The definitive reviewer set is a private versioned group named
-`IRAAC_STAFF_REVIEW_GROUP`. Its addresses are seeded outside the public
-repository and stored only in the private admin data plane. A membership record
-has source, effective dates, status, role/access claims and an append-only
-change event. Active members receive an individual or privacy-preserving group
-notification for every new version of all three approval packets. No raw
-address list appears in a visible CC header, client code, public report or log.
+`IRAAC_STAFF_REVIEW_GROUP`. Its approved seed list is intentionally published
+only in `docs/operations/IRAAC_STAFF_CONTACT_REGISTER.md` and imported through
+an authorised, hash-verified process. Operational membership state remains in
+the private admin data plane. A membership record has source, effective dates,
+status, role/access claims and an append-only change event. Active members
+receive an individual or privacy-preserving group notification for every new
+version of all three approval packets. The addresses are not duplicated in a
+visible CC header, client code, public report, runtime configuration or log.
 The group is also the initial Path 2 staff/affiliate cohort. Active membership
 supplies the approved recipient role for all three final report families unless
 an applicable unsubscribe, suppression, removal or legal hold blocks delivery;

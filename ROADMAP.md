@@ -845,10 +845,13 @@ identical artefact, recipient and approved retry window.
 
 Maintain one private, change-controlled group named
 `IRAAC_STAFF_REVIEW_GROUP`. Its current membership is the definitive contact
-set for IRAAC staff and affiliated partners, but the addresses themselves must
-live only in the private admin data store or approved secret/configuration
-system. Never hard-code, publish or expose the list in this public repository,
-client bundles, logs, report pages or recipient headers. Every membership
+set for IRAAC staff and affiliated partners. The approved addresses are
+intentionally published only in
+`docs/operations/IRAAC_STAFF_CONTACT_REGISTER.md`; that file is the sole public
+exception. Operational membership state, roles, effective dates, delivery
+history and preferences live only in the private admin data store. Never
+duplicate or compile the addresses into website pages, client bundles, runtime
+configuration, logs, fixtures or visible recipient headers. Every membership
 change records the named administrator, reason, source, effective time and
 previous/new group version.
 

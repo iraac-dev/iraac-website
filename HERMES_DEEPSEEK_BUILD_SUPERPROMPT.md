@@ -863,11 +863,13 @@ decisions, expiry, scheduled release and final delivery/publication outcome.
 Include accessible loading, empty, error, stale, superseded, corrected and
 retracted states.
 
-Create a private versioned group `IRAAC_STAFF_REVIEW_GROUP`. Seed its real
-membership only from an authorised private admin import; never put addresses in
-this public repository, fixtures, logs, client bundles or visible recipient
-headers. Members are the definitive current IRAAC/affiliate staff review set,
-the initial Path 2 staff/affiliate cohort and approved recipients for all three
+Create a private versioned group `IRAAC_STAFF_REVIEW_GROUP`. Its sole approved
+public seed list is `docs/operations/IRAAC_STAFF_CONTACT_REGISTER.md`. Import a
+pinned, reviewed hash of that register through an authorised private admin
+process, and never duplicate the addresses in other repository files, fixtures,
+logs, client bundles, runtime configuration or visible recipient headers.
+Members are the definitive current IRAAC/affiliate staff review set, the
+initial Path 2 staff/affiliate cohort and approved recipients for all three
 final report families unless an unsubscribe, suppression, removal or legal hold
 blocks delivery. Group membership never creates a dashboard login or SMS,
 human-call or AI-call consent.
