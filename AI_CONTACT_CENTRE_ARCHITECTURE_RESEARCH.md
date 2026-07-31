@@ -199,7 +199,7 @@ database holds:
 - consent wording and immutable consent events;
 - suppressions, complaints, hard bounces and wrong-person events;
 - surveys, versions, sessions and structured answers;
-- survey/question/option/topic-cycle reviews; Terms, Privacy Notice and
+- survey/question/option/reporting-taxonomy reviews; Terms, Privacy Notice and
   response-use versions;
 - campaign cycles, content artefacts/versions, audience snapshots, sample
   assignments, journeys/stages, survey invitations, completion correlations,
@@ -216,18 +216,23 @@ attempt. Provider callbacks are signature-checked, replay-safe and idempotent.
 
 ### Canonical survey and response store
 
-Use one server-rendered/mobile-first survey runtime against a published,
-immutable survey version. A governed question bank and issue cycle let IRAAC
-prepare monthly, quarterly or annual priorities without changing historical
-meaning. Every response records pathway, completion mode, survey/question/
-option versions and a campaign-cycle completion key.
+Use one mobile-first survey application against a stable published instrument.
+Next.js and SurveyJS Form Library provide the web experience. An IRAAC-owned
+deterministic contract and execution engine—not the renderer—own question IDs,
+validation, branching and session state. Supabase Postgres in Sydney stores the
+governed records. Monthly priorities change analysis, reports and outreach;
+they do not routinely change Have Your Say. Every response records pathway,
+completion mode, survey/question/option versions and a campaign-cycle
+completion key.
 
-Use the survey and session lifecycles defined in `ROADMAP.md`. Campaigns pin
-one canonical approved core version, including approved translation and
-delivery-script versions. Partial/abandoned sessions are not completions and
+Use the survey and session lifecycles defined in `ROADMAP.md`. Campaigns and
+started sessions pin one approved core release, including approved translation
+and delivery-script releases. Partial/abandoned sessions are not completions and
 are excluded from reports unless an approved methodology explicitly includes
 and labels them. Critical withdrawal blocks submission and invokes a reviewed
-recovery path; corrections always create a successor version.
+recovery path; corrections always create a successor release. Web, staff,
+human-phone and AI-phone adapters must pass identical branch and answer-shape
+fixtures.
 
 Separate identity/contact records from structured survey answers and give them
 different access policies. The public form is anonymous/no-account by default;

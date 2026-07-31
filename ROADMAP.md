@@ -13,6 +13,10 @@ Companion documents:
   voice state machine and source register.
 - [`HERMES_DEEPSEEK_BUILD_SUPERPROMPT.md`](HERMES_DEEPSEEK_BUILD_SUPERPROMPT.md)
   converts this roadmap into a guarded, multi-bot execution brief.
+- [`docs/survey/IRAAC_SURVEY_PLATFORM_DECISION.md`](docs/survey/IRAAC_SURVEY_PLATFORM_DECISION.md)
+  records the selected survey stack and rejected alternatives.
+- [`docs/survey/IRAAC_HAVE_YOUR_SAY_V1_DRAFT.md`](docs/survey/IRAAC_HAVE_YOUR_SAY_V1_DRAFT.md)
+  is the complete stable V1 questionnaire draft for human approval.
 
 ---
 
@@ -334,13 +338,15 @@ progress, error recovery, low-bandwidth delivery and an immediate human/help
 path. A dropped connection must not lose already confirmed answers or create a
 duplicate completion.
 
-IRAAC identifies priority issues for a month, quarter or year, but published
-surveys are immutable. Staff select from a governed question bank, document the
-purpose and owner, run cultural/privacy/methodology review, test every branch,
-and publish a new version with an effective period. Historical answers always
-retain their exact survey, question, option, wording and topic-cycle versions.
-Trend comparisons are allowed only where questions and populations remain
-comparable; the system labels breaks in series.
+IRAAC operates one stable Have Your Say instrument. Monthly campaigns,
+newsletters and reports use the same active survey; monthly priorities affect
+analysis and communication, not the questionnaire. Review the instrument
+annually, or sooner only when community governance, evidence, law, safety,
+accessibility or methodology requires it. A material change creates a reviewed
+immutable successor release. Historical answers retain their exact survey,
+question, option, wording, translation and delivery-script versions. Trend
+comparisons are allowed only where questions and populations remain comparable;
+the system labels or blocks breaks in series.
 
 The survey lifecycle is `DRAFT → CULTURAL_REVIEW → PRIVACY_ETHICS_REVIEW →
 METHODOLOGY_REVIEW → BRANCH_TESTED → APPROVED → SCHEDULED → ACTIVE → RETIRED |
@@ -351,11 +357,11 @@ in-flight session finishes that version; a critical withdrawal blocks further
 submission and presents the approved recovery path. Corrections create a
 successor and an explicit comparability decision, never an edit in place.
 
-Topic cycles use `PROPOSED → SCOPED → COMMUNITY_REVIEW →
-METHODOLOGY_APPROVED → SCHEDULED → ACTIVE → CLOSED → EVALUATED`, with
-`REJECTED` and `URGENT_WITHDRAWAL`. Each cycle records its decision owner,
-community authority, intended use, target population, evidence threshold,
-survey versions, report outputs and closing-the-loop date.
+If an urgent issue requires extra questions before the core review, use a
+clearly separate supplemental instrument with its own approval and reporting
+limits. Never silently append rotating modules to Have Your Say. Reporting may
+classify emerging themes against an approved taxonomy without changing the
+respondent-facing instrument.
 
 Survey sessions use `STARTED → IN_PROGRESS → SAVED → RESUMED → SUBMITTED |
 EXPIRED | ABANDONED | WITHDRAWN_VERSION`. Opaque resume tokens expire and
@@ -390,6 +396,25 @@ idempotent and validated; public clients never receive privileged database
 keys. RLS is enabled on exposed Supabase tables, production forms cannot read
 other responses, and report jobs use approved de-identified views/snapshots
 rather than querying raw contact records.
+
+### Selected survey technology
+
+The reference implementation is a small IRAAC-owned Next.js and TypeScript
+application. SurveyJS Form Library renders the mobile/web form but does not own
+the survey definition or response data. An IRAAC deterministic execution engine
+and Zod contract own stable IDs, validation, branching and state. Supabase
+Postgres in Sydney is the governed system of record. Vercel functions are
+configured for Sydney. Web, staff, human-phone and AI-phone experiences use
+modality-specific adapters against the same contract and prove parity with
+shared conformance fixtures.
+
+Do not build a general drag-and-drop form builder in phase one. Agents and
+authorised editors may draft a successor, produce a semantic diff, render
+previews and run tests. Named humans approve cultural meaning, methodology,
+privacy/consent, safeguarding, comparability, publication, withdrawal and
+rollback. The stable IRAAC-owned address is
+`https://www.iraac-aco.com/survey`; provider or deployment URLs are never the
+durable public address.
 
 ### Private admin dashboard
 
@@ -769,7 +794,7 @@ The baseline to validate through Architecture Decision Records (ADRs) is:
 The core data model includes: organisations, people/contact identities,
 organisation relationships, pathway memberships, channel endpoints,
 source/provenance records, consent receipts, suppression entries, survey
-definitions/versions/questions/options, survey-version questions, topic cycles,
+definitions/releases/questions/options, survey-release questions, reporting taxonomies,
 survey review decisions, survey sessions/answers, Terms/Privacy/response-use
 versions, campaign cycles,
 content artefacts/versions, audience snapshots, sample assignments, journeys,

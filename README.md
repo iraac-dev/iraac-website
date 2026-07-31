@@ -23,9 +23,14 @@ survey and reporting system:
   contact for the rotating sample.
 
 The wider approved newsletter audiences are separate from the roughly 30%
-monthly survey-chase samples. The shared private backend, survey builder,
+monthly survey-chase samples. The shared private backend, stable survey system,
 campaign engine, admin dashboard and report publisher are planned, not present
 in this static repository.
+
+The selected survey stack is Next.js and TypeScript, SurveyJS Form Library for
+the mobile/web presentation, an IRAAC-owned deterministic survey contract and
+Supabase Postgres in Sydney. Have Your Say remains one stable instrument with
+rare reviewed successor releases. Monthly reporting topics do not rewrite it.
 
 The public **Insights** section is planned to become **Reports**, containing
 only approved community reports with stable index and detail pages. Staff,
@@ -40,6 +45,10 @@ partner and government reports remain private in the future admin dashboard.
   hybrid architecture.
 - [`HERMES_DEEPSEEK_BUILD_SUPERPROMPT.md`](HERMES_DEEPSEEK_BUILD_SUPERPROMPT.md)
   is the execution brief for the Hermes desktop app and collaborating bots.
+- [`docs/survey/IRAAC_SURVEY_PLATFORM_DECISION.md`](docs/survey/IRAAC_SURVEY_PLATFORM_DECISION.md)
+  records the platform comparison and selected stack.
+- [`docs/survey/IRAAC_HAVE_YOUR_SAY_V1_DRAFT.md`](docs/survey/IRAAC_HAVE_YOUR_SAY_V1_DRAFT.md)
+  contains the complete stable V1 survey draft for human approval.
 - This repository is public. Never commit contact lists, survey responses,
   consent evidence, provider credentials, operational scripts or other private
   data here.

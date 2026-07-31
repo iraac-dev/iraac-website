@@ -374,7 +374,7 @@ Design migrations for at least:
 - `survey_versions`
 - `survey_questions`
 - `survey_question_options`
-- `survey_topic_cycles`
+- `reporting_topic_cycles` (analysis and outreach classification only; never survey mutation)
 - `survey_version_questions`
 - `survey_review_decisions`
 - `survey_sessions`
@@ -427,8 +427,8 @@ Requirements:
 - all completion modes write the same answer contract and record the mode;
 - a campaign-cycle completion key stops duplicate current-cycle surveys across
   web, QR, staff, SMS, human phone and AI phone;
-- published survey versions are immutable and topic-cycle changes create a new
-  version with comparability metadata;
+- published survey releases are immutable and material changes create a new
+  successor with comparability metadata;
 - anonymous answers are never reidentified; optional contact details and
   structured answers have separate access policies;
 - contact attempts have idempotency keys and provider IDs;
@@ -477,7 +477,8 @@ Build a simulation UI showing why each synthetic contact is allowed or denied.
 
 ## 8. Survey and phone operator experience
 
-Build one canonical survey renderer used by:
+Build one canonical survey contract and deterministic execution engine, with
+separate approved adapters for:
 
 - public web;
 - staff-assisted in-person and drop-in;
@@ -495,13 +496,24 @@ large tap targets, keyboard/screen-reader support, clear progress and error
 recovery. A lost connection or repeated submit must not lose confirmed answers
 or create a duplicate completion.
 
-Build a governed question bank and topic-cycle workflow for monthly, quarterly
-or annual issues. A draft survey records purpose, owner and intended reports,
-then passes cultural, privacy, ethics/methodology and branch testing. Publishing
-makes the version immutable. Every response retains exact survey, question,
-option, wording and topic-cycle versions, pathway and completion mode. Record
-comparability metadata so the dashboard does not show false trends across
-changed questions or populations.
+Use the stable instrument in
+`docs/survey/IRAAC_HAVE_YOUR_SAY_V1_DRAFT.md` as the content baseline. Do not
+build monthly, quarterly or annual question modules and do not build a general
+drag-and-drop form builder. Monthly priorities change reporting and outreach,
+not the active questionnaire. A rare successor draft records its purpose and
+owner, then passes cultural, privacy, safeguarding, methodology, accessibility,
+branch and cross-adapter tests. Publishing makes the release immutable. Every
+response retains exact survey, question, option, wording, translation and
+delivery-script releases, pathway and completion mode. Record comparability
+metadata so the dashboard cannot show false trends across changed questions or
+populations.
+
+Use Next.js, TypeScript and SurveyJS Form Library for the mobile/web renderer;
+use an IRAAC-owned Zod contract and engine as the authority; and use Supabase
+Postgres in Sydney as the governed response store. Staff, human-phone and
+AI-phone modes present the same contract through modality-specific adapters.
+Prove parity with shared fixtures; never claim that one React renderer directly
+powers a phone conversation.
 
 Implement the survey lifecycle `DRAFT → CULTURAL_REVIEW →
 PRIVACY_ETHICS_REVIEW → METHODOLOGY_REVIEW → BRANCH_TESTED → APPROVED →
@@ -510,10 +522,8 @@ version plus approved translation/delivery-script versions. Existing sessions
 normally finish their pinned version; critical withdrawal blocks submission
 and shows the approved recovery path. Corrections create successors.
 
-Topic cycles use `PROPOSED → SCOPED → COMMUNITY_REVIEW →
-METHODOLOGY_APPROVED → SCHEDULED → ACTIVE → CLOSED → EVALUATED`, plus
-`REJECTED` and `URGENT_WITHDRAWAL`, with a decision owner, community authority,
-intended use, target population, evidence threshold and closing-the-loop date.
+If an urgent issue genuinely needs new questions, create a separate supplemental
+instrument with named human approval. Never silently append it to Have Your Say.
 
 Implement session states `STARTED → IN_PROGRESS → SAVED → RESUMED → SUBMITTED
 | EXPIRED | ABANDONED | WITHDRAWN_VERSION`. Resume tokens are opaque, expiring
@@ -844,10 +854,11 @@ logs.
 ### W2 — Canonical survey and intake
 
 - versioned survey contracts;
-- governed question bank and monthly/quarterly/yearly topic-cycle workflow;
-- mobile-first web/QR/staff/drop-in/home-visit/human-phone/AI-phone renderer;
+- one stable approved core with rare governed successor releases;
+- Next.js/SurveyJS web renderer plus staff, human-phone and AI-phone adapters
+  against the same deterministic contract;
 - immutable published versions and question-comparability metadata;
-- survey/session/topic-cycle lifecycle states, emergency withdrawal and safe
+- survey/session lifecycle states, emergency withdrawal and safe
   in-flight-session handling;
 - separate Terms/Privacy acceptance, response-use acknowledgement and optional
   future-contact choices;
@@ -858,6 +869,7 @@ logs.
 
 Acceptance: all devices/modes save the same versioned answer shape and record
 pathway/mode; a dropped/repeated submit does not lose or duplicate answers;
+shared conformance fixtures produce the same branch in every adapter;
 partial/abandoned sessions are not counted as completions; a withdrawn version
 cannot accept a new submission; declining contact still completes the survey;
 Terms acceptance grants no
