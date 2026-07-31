@@ -440,8 +440,14 @@ Design migrations for at least:
 - `report_runs`
 - `report_dataset_snapshots`
 - `report_versions`
+- `report_approval_packets`
 - `report_review_threads`
 - `report_comments`
+- `review_groups`
+- `review_group_memberships`
+- `review_group_membership_events`
+- `review_notifications`
+- `monthly_consultations`
 - `issue_suggestions`
 - `suggestion_events`
 - `report_publications`
@@ -844,6 +850,69 @@ Publication uses `QUEUED → BUILDING → DEPLOYED_UNVERIFIED → VERIFIED_PUBLI
 | FAILED → RETRY_PENDING | ROLLED_BACK`; update the Reports index only after
 route, audience, privacy and content-hash verification. A failed release leaves
 the prior index intact. Corrections and retractions preserve visible history.
+
+Build a protected admin navigation item named **Approvals**. Its landing page
+must always show the current monthly community, IRAAC/NGO/partner staff and
+government packets, plus their complete version archive. For every packet,
+render the exact proposed outbound email (subject, sender, reply-to, body,
+calls to action, links and attachment/download metadata), the exact report,
+dataset and artefact hashes, evidence limitations, redaction/privacy result,
+audience-manifest hash, change log, required roles/quorum, completed and pending
+decisions, expiry, scheduled release and final delivery/publication outcome.
+Include accessible loading, empty, error, stale, superseded, corrected and
+retracted states.
+
+Create a private versioned group `IRAAC_STAFF_REVIEW_GROUP`. Seed its real
+membership only from an authorised private admin import; never put addresses in
+this public repository, fixtures, logs, client bundles or visible recipient
+headers. Members are the definitive current IRAAC/affiliate staff review set,
+the initial Path 2 staff/affiliate cohort and approved recipients for all three
+final report families unless an unsubscribe, suppression, removal or legal hold
+blocks delivery. Group membership never creates a dashboard login or SMS,
+human-call or AI-call consent.
+
+Bind every review round to the exact review-group version and a versioned
+`ReportReviewPolicy` hash defining eligible and required roles, quorum, order,
+abstention/recusal, conflicts, expiry and decision states. A membership or
+policy change creates a successor round and re-evaluates notifications and
+quorum. Decision-eligible members map one-to-one to named MFA-protected Auth
+principals; a contact-list entry alone cannot read or approve a packet.
+
+For every newly generated or revised version of any of the three packets, send
+every active group member an individual privacy-preserving review notification
+with minimal metadata and an opaque, expiring deep link. The link grants no
+packet read or mutation capability; the intended named reviewer must still
+establish an authorised MFA-protected dashboard session. Store only token
+hashes and use no-store/no-referrer responses. Dispatch through a durable
+idempotent outbox keyed by packet version, group version, recipient and
+notification type. A changed
+dataset, metric, sentence, recommendation, template, attachment, destination
+or recipient manifest invalidates affected approvals and must create a fresh
+version and fresh notification round. Asking all members to review is distinct
+from policy quorum; never infer unanimity or approval from silence.
+
+At the bottom of each preview show a mail action to `info@iraac-aco.com` saying
+that the administrator should be emailed if anything needs changing. Prefill
+the report family, reporting period and version in the subject. Import replies
+only as inert review comments. They may create a human-reviewed proposed
+redline and successor version, but never approval, publication or distribution.
+
+Once per calendar month, send each active group member one idempotent,
+deduplicated consultation email asking what IRAAC should add or improve on the
+website, survey, reports and operating model and what issue may be missing.
+Use the monitored administrator Reply-To and route every response through the
+untrusted suggestion workflow. Prefer individual delivery or a managed private
+group over visible CC so member addresses and reply chains are protected.
+
+Authenticate and replay-protect the inbound-mail provider route. Enforce event
+and Message-ID idempotency, strict size/MIME limits, inert plain-text
+conversion, attachment quarantine/rejection, quoted-history minimisation, loop
+suppression, sender matching and rate limits. Mark imported comments unverified
+until a named reviewer confirms them. Apply the approved retention/disposal
+schedule to active and former membership, provenance, link/delivery metadata,
+raw inbound mail, derived comments and backups. Removal immediately blocks
+access and future notification while retaining only the approved audit
+tombstone.
 
 Closing-the-loop reports link issues to interventions and later re-survey
 evidence without exposing an individual's history.

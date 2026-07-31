@@ -40,6 +40,10 @@ The current static website points to Google Forms and has no governed backend. G
 - A6. Cultural, privacy/legal, safeguarding, methodology and accessibility reviewers.
 - A7. A separate authorised publisher activating, withdrawing or rolling back a release.
 - A8. A report service reading only approved de-identified outputs.
+- A9. A member of the definitive IRAAC/affiliate staff review group inspecting
+  the three monthly report packets and providing feedback.
+- A10. A report approver making an attributable policy-defined decision in the
+  protected dashboard.
 
 ### Requirements
 
@@ -92,6 +96,45 @@ The current static website points to Google Forms and has no governed backend. G
   least two separately verified named administrators must be active and the
   bootstrap identity must be demoted to a non-interactive, no-data notification
   state with all sessions revoked.
+R28-R32 describe the production end state. This release proves their contracts,
+access controls and failure behaviour using synthetic packets, synthetic group
+members and test-only recipient allowlists; a separate approved activation
+release imports real membership and enables real delivery.
+
+- R28. The protected admin application must have an **Approvals** workspace
+  showing the current community, IRAAC/NGO/partner staff and government report
+  packets and their immutable version history. Each packet must display the
+  exact proposed report and outbound email, hashes, change log, limitations,
+  required decisions and intended release status.
+- R29. The definitive current IRAAC staff and affiliated-partner contacts must
+  be maintained as a private, versioned `IRAAC_STAFF_REVIEW_GROUP`, never
+  hard-coded in this public repository or exposed in client bundles, logs,
+  public pages or visible recipient headers. Membership must have provenance,
+  effective dates and an append-only administrator change record. Active
+  membership supplies the approved recipient role for all three final report
+  families unless an unsubscribe, suppression, removal or legal hold blocks
+  delivery; it does not create a dashboard login or permission for another
+  contact channel. The approved retention/disposal schedule must cover active
+  and former membership, provenance, notification metadata, link records, raw
+  inbound mail, derived comments and backup expiry.
+- R30. Every new or materially revised version of any of the three monthly
+  packets must notify every active review-group member individually or through
+  a privacy-preserving managed group. Any changed dataset, metric, narrative,
+  recommendation, template, attachment, destination or recipient manifest
+  invalidates affected approvals and begins a fresh review round. Dispatch must
+  use a durable idempotent outbox keyed by packet version, group version,
+  recipient and notification type.
+- R31. Approval must occur only through a named, MFA-protected dashboard
+  session and bind to the exact packet hashes. Email to or replies handled by
+  `info@iraac-aco.com` may create inert review comments and proposed redlines,
+  but never approval, publication or distribution. Notification links grant no
+  read or mutation capability: packet access still requires the intended named
+  reviewer to establish an authorised AAL2 dashboard session.
+- R32. Once per calendar month, the system must send each active review-group
+  member one idempotent consultation asking what the website, survey, reports
+  or operating model should add or improve and what issue may be missing.
+  Replies enter the governed suggestion workflow. Review-group membership
+  grants no SMS, human-call or AI-call permission.
 
 **Governed change**
 
@@ -116,6 +159,11 @@ The current static website points to Google Forms and has no governed backend. G
   - **Steps:** Create successor draft; classify semantic diff; preview every adapter; run automated tests; collect named approvals; atomically activate the approved hash.
   - **Outcome:** Historical releases stay immutable and reporting comparability is explicit.
   - **Covered by:** R1-R4, R12-R14.
+- F4. **Monthly report review**
+  - **Trigger:** The report service creates or revises one of the three monthly audience packets.
+  - **Steps:** Freeze the exact report, email and audience manifest; create a new version; show it in Approvals; notify every active review-group member with a recipient-bound link; collect comments and policy-required dashboard decisions; invalidate and repeat if an approval-bound input changes.
+  - **Outcome:** Reviewers can see exactly what will be sent, every version is traceable and only the locked policy-approved packet can publish or distribute.
+  - **Covered by:** R19, R22, R28-R32.
 
 ### Acceptance Examples
 
@@ -142,6 +190,22 @@ The current static website points to Google Forms and has no governed backend. G
   logs; the disclosed password is rejected; AAL1 reaches setup routes only;
   two named AAL2 administrators are active; and the bootstrap principal is
   non-interactive, no-data and unable to use any stale session.
+- AE13. **Covers R28-R31:** Given a community packet is in review, when a
+  recommendation or recipient changes, then the old approval becomes stale, a
+  successor version appears in Approvals and every active reviewer receives a
+  fresh privacy-preserving test notification in this release.
+- AE14. **Covers R29-R30:** Given an unauthorised user opens a public page,
+  client bundle or log, when they search for review-group membership, then no
+  address or recipient list is disclosed; authorised import and membership
+  changes remain attributable in the private data plane.
+- AE15. **Covers R31:** Given a reviewer emails “approved”, when the mailbox
+  importer processes the reply, then it creates only an inert comment and the
+  packet remains unapproved until the required named dashboard decisions bind
+  the current hashes.
+- AE16. **Covers R32:** Given the monthly consultation job retries, when the
+  same synthetic group member and Australia/Sydney calendar month are processed
+  again, then only one test consultation is sent and any reply enters the
+  suggestion queue without changing production content.
 
 ### Success Criteria
 
@@ -152,13 +216,18 @@ The current static website points to Google Forms and has no governed backend. G
 - Public writes pass rate, body-size, session-challenge and quarantine controls; direct anonymous database inserts are unavailable.
 - Shared-device and quick-exit tests leave no sensitive URL, page title, cache, local storage, tracker or answer-bearing log entry.
 - Every submitted response can be traced to immutable release hashes and approved reporting semantics.
+- Every current monthly report packet and proposed email is visible to
+  authorised reviewers in Approvals with exact version and manifest lineage.
+- Every synthetic active review-group member is notified for each version
+  without exposing the membership list, and no email reply can manufacture
+  approval; real delivery remains disabled pending the activation release.
 - Google Forms remains the tested rollback until the cutover acceptance period is complete.
 
 ### Scope Boundaries
 
-**Included:** the stable V1 survey contract, optional missing-issue suggestion intake, web survey, staff adapter, conformance-only human-phone and AI-phone simulators, governed storage, consent receipts, release review/publish controls, protected named-account admin entry, tests, a non-production deployment and controlled public cutover.
+**Included:** the stable V1 survey contract, optional missing-issue suggestion intake, web survey, staff adapter, conformance-only human-phone and AI-phone simulators, governed storage, consent receipts, release review/publish controls, protected named-account admin entry, a report Approvals workspace with private reviewer-group controls and synthetic report packets, tests, a non-production deployment and controlled public cutover.
 
-**Deferred:** all live human and AI outbound calling, provider credentials and cancellation, outreach campaigns, automated reports, a youth instrument, a general form builder, rotating monthly modules, live machine translation and full disconnected field collection. A separate reviewed live-calling plan must select the provider and independent durable emergency-quarantine implementation before either phone mode receives production egress.
+**Deferred:** all live human and AI outbound calling, provider credentials and cancellation, outreach campaigns, production report generation/publication/distribution, real reviewer notifications and monthly consultation delivery, a youth instrument, a general form builder, rotating monthly modules, live machine translation and full disconnected field collection. U9 proves the review contract with synthetic packets and private test recipients only. Separate reviewed release plans must authorise live calling and production report distribution.
 
 **Possible later adapter:** ODK Central may feed the canonical API if production-grade disconnected field collection becomes urgent. ODK identifiers must not become IRAAC's enterprise data model.
 
@@ -180,9 +249,30 @@ The current static website points to Google Forms and has no governed backend. G
 - KTD10. **Resume is same-device by default.** Use at least 128-bit random credentials, store hashes only, deliver them in Secure, HttpOnly, SameSite=Strict cookies, rotate after use and revoke on completion or withdrawal. Cross-device recovery is a separate reviewed design. Governs R17.
 - KTD11. **Sensitive content never becomes active content.** Self-host required survey assets, disable nonessential telemetry, use neutral URLs/titles, no-store caching, restrictive referrers and CSP, and escape free text in every renderer. AI extraction receives isolated data with structured output and no tools. Governs R20.
 - KTD12. **Release states distinguish operational and analytical status.** Use `ACTIVE`, `RETIRED`, `SUSPENDED`, `RETRACTED` and `ANALYTICALLY_INVALIDATED`. Retirement or rollback preserves valid historical evidence; analytical exclusion needs a recorded governance decision. Governs R1, R3, R12.
-- KTD13. **The selected stack has a measured acceptance gate.** Build a thin U1-U3 vertical slice of the real V1 web/phone contract, then compare it with a Qualtrics Australian-region trial/quote against recorded mandatory thresholds for accessibility, interruption/resume, consent evidence, phone parity, immutable releases, export, incident recovery, cost and operator burden. Record the evidence and named go/no-go decision before U4, U5 or U8 expands the system. Governs R4-R5, R9-R14.
+- KTD13. **The selected stack has two measured acceptance gates.** Gate A uses
+  U1-U3 to compare the real canonical definition, storage, consent, resume,
+  immutable-release, export and recovery contracts with a Qualtrics
+  Australian-region trial/quote before U8 or U4 expands the system. Gate B uses
+  U4's real web/staff adapters and phone conformance simulators to compare
+  accessibility, interruption/resume and phone parity before U5, U6, U9 or
+  cutover expands the system. Both gates record thresholds, cost/operator
+  burden, evidence and a named go/no-go decision. Governs R4-R5, R9-R14.
 - KTD14. **Admin access is simple but attributable.** Use `https://admin.iraac-aco.com/login`, invite-only named Supabase Auth accounts, mandatory MFA, server-validated sessions and RLS-backed roles. Require recent step-up MFA for publication, withdrawal, rollback, invitation, role and privileged recovery actions; use dual control for publisher recovery, CSRF-resistant mutations, short-lived single-use invitations and immediate session revocation on removal. Add the public footer link only after DNS, TLS, callbacks, login and direct API-denial readiness pass. Reject a shared or static-site PIN because it is bypassable and cannot support individual audit. Governs R19, R25.
-- KTD15. **Suggestions enter governance, not the survey.** G05 remains one inert canonical answer. Only final submission creates one suggestion workflow record referencing that answer, without copying the raw text; partial or abandoned text is not monitored. A named reviewer may link the record internally to an issue or write a neutral successor proposal through U5; the untrusted label persists and no suggestion alters an active definition. Every submitted non-empty G05 response enters trained human triage under approved staffed-hours, throughput, queue-age and response-time limits. Deterministic rules may raise priority but never dismiss safety risk, and an LLM cannot make that decision. Exceeding the safe backlog threshold disables G05 for new sessions and presents the human pathway. Governs R1-R2, R7, R20, R24.
+- KTD15. **Suggestions enter governance, not the survey.** Use a source-neutral
+  suggestion envelope with source type and immutable source reference. A
+  successfully submitted non-empty G05 answer creates one envelope referencing
+  that answer without copying raw text; consultation/report email creates a
+  separate envelope referencing the sanitised correspondence record. Partial
+  or abandoned survey text is not monitored. Review comments remain distinct
+  from issue suggestions unless a named reviewer deliberately promotes a
+  neutral summary. A named reviewer may link a suggestion internally to an
+  issue or write a neutral successor proposal through U5; the untrusted label
+  persists and no suggestion alters an active definition. Every submitted
+  non-empty G05 response enters trained human triage under approved staffed
+  hours, throughput, queue-age and response-time limits. Deterministic rules
+  may raise priority but never dismiss safety risk, and an LLM cannot make that
+  decision. Exceeding the safe backlog threshold disables G05 for new sessions
+  and presents the human pathway. Governs R1-R2, R7, R20, R24, R32.
 - KTD16. **The suppression command, not a phone adapter, owns a stop.** A canonical voice endpoint is the provider-confirmed dialled Australian number normalised to E.164, represented in lookup indexes by a versioned HMAC-SHA-256 key whose secret is held in an approved key manager, and linked deny-wins across formatting variants, duplicates and shared-number records. Ambiguous regional inputs are quarantined rather than guessed; dual-read key rotation and collision/migration tests preserve existing stops. A service-authenticated, idempotent command resolves that endpoint, atomically appends `VOICE_DO_NOT_CALL`, updates the current deny projection and audit record, and returns an explicit committed or unavailable result. Phone runtimes may append idempotent stop events but cannot inspect or remove suppressions; campaign services receive allow/deny only; ordinary staff cannot enumerate raw endpoints. V1 implements and tests this provider-neutral contract against synthetic endpoints. The later live-calling release must bind it to an independently durable encrypted emergency outbox and provider cancellation. Re-import, contact merge and ordinary consent cannot clear a stop; any verified number-reassignment or explicit re-permission process is a separately approved future workflow requiring proof of endpoint control, a new channel-specific receipt, a named compliance role, recent MFA, dual approval and an append-only supersession event. Governs R9-R11, R19, R26.
 - KTD17. **Phone adapters are non-production conformance simulators in V1.** Neither human-phone nor AI-phone code receives production telephony credentials, provider endpoints or outbound network egress. A server-side capability gate is disabled in every production environment, and build/deployment tests prove an origin call cannot be made. Live activation requires a separate approved implementation plan covering legal classification, consent, staff training, emergency quarantine, provider cancellation, incident response and production acceptance. Governs R4, R7, R26.
 - KTD18. **Bootstrap access is invitation-only and expires into a no-data
@@ -198,6 +288,26 @@ The current static website points to Google Forms and has no governed backend. G
   stale claims from authoritative role/session-version state. Privileged
   recovery requires two named custodians and cannot be approved by the affected
   account. Governs R19, R25, R27.
+- KTD19. **Approvals freezes what people are deciding.** A report packet is one
+  immutable version containing the dataset/query/code hashes, metrics,
+  narrative, recommendations, redaction result, evidence limitations, rendered
+  email, report artefact, audience-manifest hash, review-group version/hash and
+  review-policy version/hash. `IRAAC_STAFF_REVIEW_GROUP` membership is private
+  versioned data, not source code. A group membership change creates a
+  successor review round, cancels old pending assignments and re-evaluates
+  quorum; decisions by an ended member remain historical but cannot count on
+  the successor. Each active member is
+  asked to review every version, but the audience-specific policy—not silence
+  or an email reply—defines required roles and quorum. Any approval-bound
+  change creates a successor version and fresh notification round. Notification
+  URLs are opaque authenticated deep links, not bearer access. A decision-
+  eligible member has exactly one named Auth principal and lifecycle
+  `PENDING_IDENTITY → PENDING_MFA → ACTIVE → SUSPENDED | ENDED`; only `ACTIVE`
+  plus AAL2 can read or decide. The versioned `ReportReviewPolicy` defines
+  audience roles, required roles, quorum, order, abstention/recusal, conflicts,
+  expiry, decision states and policy-change invalidation. Mailbox replies remain
+  unverified until a named reviewer confirms them in the dashboard.
+  Governs R19, R22, R28-R32.
 
 ### High-Level Technical Design
 
@@ -218,6 +328,11 @@ flowchart TB
   X -. "central write unavailable" .-> Q["Emergency quarantine contract; production binding deferred"]
   A --> P["Supabase Postgres in Sydney"]
   P --> R["Approved de-identified reporting views"]
+  R --> Z["Three immutable monthly report packets"]
+  Z --> Y["Protected Approvals workspace"]
+  C["Private versioned staff review group"] --> Y
+  Y --> N["Individual review notifications"]
+  Y --> O["Named MFA-bound decisions"]
   G["Draft, diff, preview and review"] --> D
   U["Separate human publisher"] --> D
 ```
@@ -228,6 +343,8 @@ flowchart TB
 - A new private repository becomes the system of record for survey code and migrations.
 - Public `/survey` changes late in the release after dual-run and rollback tests.
 - Later campaigns, calls and reports depend on the canonical completion and consent events created here.
+- The public repository contains only the review-group identifier and contract;
+  real membership is imported into the private admin data plane.
 - Privacy claims must say Sydney is the selected primary region, not promise that every vendor process is exclusively Australian until contracts and subprocessors are reviewed.
 - A launch-blocking data-flow register must cover CDN, functions, database, assets, logs, monitoring, backups, support access and later messaging/AI vendors.
 
@@ -278,8 +395,8 @@ flowchart TB
 ### U2. Build the governed database boundary
 
 - **Goal:** Create the response, contact, consent, release and audit system of record.
-- **Requirements:** R3, R9-R12, R14, R19, R24-R26.
-- **Files:** `supabase/migrations/0001_identity_contact.sql`, `supabase/migrations/0002_survey_releases.sql`, `supabase/migrations/0003_sessions_answers.sql`, `supabase/migrations/0004_consent_receipts.sql`, `supabase/migrations/0005_safety_and_audit.sql`, `supabase/migrations/0006_rls.sql`, `supabase/migrations/0007_suggestions.sql`, `supabase/migrations/0009_contact_suppressions.sql`, `supabase/tests/survey_rls.sql`, `supabase/tests/contact_suppressions.sql`.
+- **Requirements:** R3, R9-R12, R14, R18-R19, R23-R26.
+- **Files:** `supabase/migrations/0001_identity_contact.sql`, `supabase/migrations/0002_survey_releases.sql`, `supabase/migrations/0003_sessions_answers.sql`, `supabase/migrations/0004_consent_receipts.sql`, `supabase/migrations/0005_safety_and_audit.sql`, `supabase/migrations/0006_rls.sql`, `supabase/migrations/0007_suggestions.sql`, `supabase/migrations/0008_contact_suppressions.sql`, `supabase/tests/survey_rls.sql`, `supabase/tests/contact_suppressions.sql`.
 - **Approach:** Use separate schemas/policies, append-only grant/refusal/withdrawal/expiry/supersession events, authoritative endpoint-level suppressions, idempotency keys, release hashes, a human-triaged suggestion queue and approved de-identified reporting views. `VOICE_DO_NOT_CALL` is deny-wins across human and AI phone modes and remains effective across contact merges, deletion/re-import and ordinary future consent. Define a role/action/data matrix and a retention/disposal schedule for every domain, including exports and backups. The workflow record follows the answer's correction, withdrawal, deletion and expiry state; it retains only the minimum audit tombstone after source removal. Reviewer summaries keep lineage and are re-reviewed or withdrawn when their source changes. An open safety incident follows its separately approved retention rule.
 - **Test scenarios:** Valid anonymous API write succeeds; every direct public table access fails; each staff, partner, publisher and service identity is denied outside its scope; partial submission creates no consent; withdrawal suppresses queued contact; phone formatting variants and duplicate/shared contact rows resolve to the same `VOICE_DO_NOT_CALL`; deletion/re-import and ordinary later consent cannot reactivate it; expired data is removed from primary stores and backups on schedule while the minimum suppression tombstone remains; sparse-community fixtures enforce disclosure controls; repeated submit creates one completion; a non-empty G05 answer has exactly one linked suggestion workflow record while blank G05 creates none; correction, withdrawal, deletion and expiry update the workflow/summary state without an orphan or retained raw-text copy.
 - **Verification:** Migration, RLS and restore tests pass in a non-production Sydney project.
@@ -287,7 +404,7 @@ flowchart TB
 ### U3. Implement the canonical engine and API
 
 - **Goal:** Make all modes use the same validated state transitions.
-- **Requirements:** R3-R7, R10-R12, R24, R26.
+- **Requirements:** R3-R7, R10-R12, R16-R17, R20-R21, R24, R26.
 - **Dependencies:** U1, U2.
 - **Files:** `packages/surveys/src/engine.ts`, `packages/contracts/src/survey-session.ts`, `packages/contracts/src/contact-suppression.ts`, `apps/survey/app/api/public/survey/session/route.ts`, `apps/survey/app/api/public/survey/answer/route.ts`, `apps/survey/app/api/public/survey/resume/route.ts`, `apps/survey/app/api/public/survey/complete/route.ts`, `apps/survey/app/api/internal/contact-preferences/voice-stop/route.ts`, `apps/survey/tests/integration/voice-stop-route.test.ts`.
 - **Approach:** Keep branch calculation server-verifiable, checkpoint answers with monotonic revisions, issue rotating hashed same-device resume credentials and place public writes behind short-lived challenges, privacy-preserving rate limits and quarantine. Add KTD16's service-authenticated, idempotent suppression command: accept the provider-confirmed dialled endpoint and call correlation, normalise and resolve it server-side, atomically append the stop/projection/audit state, and return deterministic committed/unavailable outcomes. The route is inaccessible to public or ordinary staff identities. The idempotent final-submission transaction keeps G05 in the canonical answer set and, when non-empty, creates exactly one suggestion workflow record that references the answer ID rather than copying its text. A failure rolls back completion so a retry can safely finish once.
@@ -298,27 +415,30 @@ flowchart TB
 
 - **Goal:** Protect every staff and privileged route before an admin surface can be deployed.
 - **Requirements:** R19, R25, R27.
-- **Dependencies:** U2.
-- **Files:** `apps/admin/app/login/page.tsx`, `apps/admin/app/auth/activate/page.tsx`, `apps/admin/app/auth/mfa/page.tsx`, `apps/admin/app/auth/recovery/page.tsx`, `apps/admin/middleware.ts`, `apps/admin/lib/auth.ts`, `supabase/migrations/0008_admin_roles.sql`, `supabase/tests/admin_auth.sql`, `apps/admin/tests/e2e/admin-auth.spec.ts`, `docs/design/admin-access-flow.md`, `docs/runbooks/admin-access-and-recovery.md`.
-- **Approach:** Configure the dedicated admin origin, invite-only named accounts, mandatory AAL2 data access, server and database role checks, recent step-up for sensitive actions, CSRF-resistant mutations, account-change session rotation, short-lived invitations, dual-controlled recovery, removal revocation and audited lifecycle events. Implement KTD18 as one restricted server-only operator command using `inviteUserByEmail`, a secret-manager-held Supabase key, exact email/role/origin/callback bindings, custom SMTP and non-enumerating responses. It emits an append-only event with named operator, independent approver, target, role before/after, AAL, request/session identifier, timestamp and result, but no password, token, factor or key. AAL1 can reach only activation, password creation, MFA enrol/challenge, recovery status and sign-out. Role plus AAL2 is enforced at middleware, API and restrictive RLS before dashboard/data access. Record the exclusive custodian or make the mailbox notification-only; create and verify two named administrators; exercise dual control; then atomically demote the bootstrap principal, increment its session/auth version and revoke all sessions. Specify ordinary sign-in/out, invalid credentials, wrong-role/removal denial, session expiry, lost-factor request, dual-control recovery pending/approved/denied and safe support. Nothing under `apps/admin` is deployable until the denial matrix and bootstrap closure pass.
-- **Test scenarios:** Invitation activation succeeds once; expired, wrong-recipient, wrong-role, wrong-origin and replayed invitations fail safely; login/invite/reset responses do not enumerate accounts; the bootstrap identity is created only from the restricted server action; the disclosed password is rejected and credential-closure evidence contains no secret; password, invite/session tokens, factors and Supabase keys are absent from source, generated assets, logs and deployment output; the service key never reaches a client or `NEXT_PUBLIC` value; AAL1 reaches setup routes only; MFA enrolment, challenge and session refresh work with keyboard and screen reader; bootstrap and notification-only roles cannot read/export survey, contact, safety or report data, publish, approve, invite, grant roles, recover accounts or self-elevate; two separate named AAL2 accounts satisfy role and dual-control checks; bootstrap demotion revokes refresh sessions and stale AAL2 tokens fail at API and RLS layers; invalid, expired, non-MFA, removed and wrong-role sessions cannot read data or call private APIs; password/MFA recovery requires two independent named approvers, replaces affected factors, revokes sessions, notifies the owner and cannot be approved by the affected account; forged cross-origin mutations, stale assurance, replayed approvals and concurrent artefact changes fail.
+- **Dependencies:** U3 and Gate A from KTD13.
+- **Files:** `apps/admin/app/login/page.tsx`, `apps/admin/app/auth/activate/page.tsx`, `apps/admin/app/auth/mfa/page.tsx`, `apps/admin/app/auth/recovery/page.tsx`, `apps/admin/middleware.ts`, `apps/admin/lib/auth.ts`, `supabase/migrations/0009_admin_roles.sql`, `supabase/tests/admin_auth.sql`, `apps/admin/tests/e2e/admin-auth.spec.ts`, `docs/design/admin-access-flow.md`, `docs/runbooks/admin-access-and-recovery.md`.
+- **Approach:** Configure the dedicated admin origin, invite-only named accounts, mandatory AAL2 data access, server and database role checks, recent step-up for sensitive actions, CSRF-resistant mutations, account-change session rotation, short-lived invitations, dual-controlled recovery, removal revocation and audited lifecycle events. Implement KTD18 as one restricted server-only operator command using `inviteUserByEmail`, a secret-manager-held Supabase key, exact email/role/origin/callback bindings, custom SMTP and non-enumerating responses. It emits an append-only event with named operator, independent approver, target, role before/after, AAL, request/session identifier, timestamp and result, but no password, token, factor or key. AAL1 can reach only activation, password creation, MFA enrol/challenge, recovery status and sign-out. Role plus AAL2 is enforced at middleware, API and restrictive RLS before dashboard/data access. Record the exclusive custodian or make the mailbox notification-only; create and verify two named administrators; exercise dual control; then atomically demote the bootstrap principal, increment its session/auth version and revoke all sessions. Specify ordinary sign-in/out, invalid credentials, wrong-role/removal denial, session expiry, lost-factor request, dual-control recovery pending/approved/denied and safe support. Login, invitation, activation and recovery use bounded per-account, per-origin and global throttles, breached-password rejection, suspicious-activity alerts and provider spend caps without enabling hostile lockout of a legitimate administrator. Nothing under `apps/admin` is deployable until the denial matrix and bootstrap closure pass.
+- **Test scenarios:** Invitation activation succeeds once; expired, wrong-recipient, wrong-role, wrong-origin and replayed invitations fail safely; login/invite/reset responses do not enumerate accounts; the bootstrap identity is created only from the restricted server action; the disclosed password is rejected and credential-closure evidence contains no secret; password, invite/session tokens, factors and Supabase keys are absent from source, generated assets, logs and deployment output; the service key never reaches a client or `NEXT_PUBLIC` value; AAL1 reaches setup routes only; MFA enrolment, challenge and session refresh work with keyboard and screen reader; bootstrap and notification-only roles cannot read/export survey, contact, safety or report data, publish, approve, invite, grant roles, recover accounts or self-elevate; two separate named AAL2 accounts satisfy role and dual-control checks; bootstrap demotion revokes refresh sessions and stale AAL2 tokens fail at API and RLS layers; invalid, expired, non-MFA, removed and wrong-role sessions cannot read data or call private APIs; password/MFA recovery requires two independent named approvers, replaces affected factors, revokes sessions, notifies the owner and cannot be approved by the affected account; distributed credential stuffing, invitation/reset flooding, recovery races and lockout abuse are bounded without blocking legitimate recovery; forged cross-origin mutations, stale assurance, replayed approvals and concurrent artefact changes fail.
 - **Verification:** The negative authorisation matrix passes at middleware, API and RLS layers on the verified admin origin.
 
 ### U4. Build and test participant and operator adapters
 
 - **Goal:** Deliver accessible web, staff and phone experiences with proven parity.
-- **Requirements:** R4-R8, R26.
+- **Requirements:** R4-R8, R20-R21, R26.
 - **Dependencies:** U3, U8.
 - **Files:** `apps/survey/app/survey/page.tsx`, `apps/survey/components/SurveyJsAdapter.tsx`, `apps/admin/app/surveys/assisted/page.tsx`, `packages/surveys/src/adapters/human-phone.ts`, `packages/surveys/src/adapters/ai-voice.ts`, `apps/survey/tests/e2e/have-your-say.spec.ts`, `apps/survey/tests/e2e/mobile-accessibility.spec.ts`.
 - **Approach:** Use SurveyJS for web presentation, approved versioned spoken scripts for phone and shared fixture histories for adapter conformance. Put a code-owned stop-intent guard and human-operator stop control ahead of normal phone dialogue in every state; the LLM may flag candidate wording but cannot continue, narrow or reverse a stop. Barge-in cancels generated speech, conservative interim-ASR and approved semantic patterns favour stopping over continuing, and the adapter invokes KTD16's command. On a committed result, the fixed acknowledgement is: "I'm sorry. I'm ending the call now. IRAAC has recorded that this number must not be called again. This is IRAAC's own list, not the Australian Government's Do Not Call Register. Goodbye." On an unavailable result it must not claim success: "I'm sorry. I'm ending the call now. IRAAC has blocked any retry and alerted our team to complete your request. Goodbye." It asks no further question and the simulator exercises the future emergency-quarantine contract. Enforce KTD17 with no production telephony secrets or egress and a server-side disabled capability. Use neutral titles/URLs, no-store caching, restrictive referrers, no third-party tracking or session replay, inert free-text rendering and safe verified follow-up. Operational logs retain only the suppression event ID, endpoint HMAC, rule/version ID, timestamp, call correlation and outcome; raw audio, transcripts, recognition alternatives and full stop phrases are excluded by default.
 - **Test scenarios:** Keyboard-only completion, screen-reader labels, 320px viewport, 200% zoom, interrupted connection, shared-device quick exit, Back/history/cache checks, stored-XSS and prompt-injection fixtures, mistyped/shared contact destination, spoken option order and clarification, human handover and equivalent phone/web branches; direct and indirect stop phrases—including "I'm on the Do Not Call Register"—interrupt opening, consent, every survey question and closing; accent, noise, overlap, partial-utterance, paraphrase, low-confidence and negation fixtures prove the conservative recognition policy; generated speech stops within the approved latency after the guard emits; no further question is asked; human and AI modes use the same success or failure acknowledgement selected from the command result; a simulated write outage terminates, emits emergency-quarantine work and blocks retry; repeated stop events remain idempotent; logs contain no raw audio, transcript, recognition alternatives or full phrase; production has no credentials/egress and cannot originate a call.
-- **Verification:** Playwright, Axe and manual accessibility evidence pass the release threshold; phone conformance evidence is synthetic only and proves the production-origin-call denial gate.
+- **Verification:** Playwright, Axe and manual accessibility evidence pass the
+  release threshold; phone conformance evidence is synthetic only and proves
+  the production-origin-call denial gate. KTD13 Gate B records the adapter-level
+  comparison evidence and named go/no-go decision before U5, U6 or U9 expands.
 
 ### U5. Build change review and publication controls
 
 - **Goal:** Let agents draft safely while reserving production authority for people.
 - **Requirements:** R1-R3, R12-R14, R19, R24-R25.
-- **Dependencies:** U2, U8.
+- **Dependencies:** U2, U4, U8 and Gate B from KTD13.
 - **Files:** `apps/admin/app/surveys/releases/page.tsx`, `apps/admin/app/suggestions/page.tsx`, `packages/surveys/src/semantic-diff.ts`, `packages/surveys/src/review-policy.ts`, `docs/surveys/change-control.md`, `docs/runbooks/withdraw-survey-version.md`.
 - **Approach:** Generate classified diffs and four-mode previews. Use `NEW → ACKNOWLEDGED → ASSIGNED → IN_REVIEW → SAFETY_ESCALATED | LINKED_TO_EXISTING | ACCEPTED_FOR_REVIEW | NO_CHANGE_NEEDED → CLOSED` for suggestion review, with owner, due time, permitted transitions, duplicate/related links, escalation destination, separate reviewer notes and final disposition. Define loading, empty, error, stale/concurrent-change and success states. Render suggestion source text only as escaped plain text, preserve its untrusted label and internal reference, and require a named reviewer to write any downstream neutral summary. Activate through an atomic active-release pointer only after the policy-required approvals bind the release hash and U8 authorises the action.
 - **Test scenarios:** Queue loading, empty, error and retry states are accessible; assignment and each permitted disposition are audited; two reviewers cannot overwrite a newer decision; safety escalation reaches the approved destination and cannot be silently closed; editor cannot publish; suggestion cannot mutate the active release or enter an AI/tool context; stored HTML, malicious links and prompt instructions stay inert through linking; consent-copy change requires privacy/legal approval; missing translation falls back to human; stale MFA, forged mutation, replayed approval, concurrent change and unlawful rollback are denied.
@@ -328,16 +448,100 @@ flowchart TB
 
 - **Goal:** Make every public Have Your Say action use the IRAAC-owned route without losing rollback.
 - **Requirements:** R15, R25.
+- **Dependencies:** U8 and Gate B from KTD13 for the Admin-link portion.
 - **Files:** Public repo `build.py`, eleven generated HTML pages, `vercel.json`, `tests/test_build_reproducibility.py`, `tests/test_survey_destination.py`, `.github/workflows/static-site-checks.yml`.
 - **Approach:** First make `build.py` reproduce the reviewed public site. Then add a temporary `/survey` redirect and regenerate every CTA from one constant. Add Admin beneath Contact Us only after `https://admin.iraac-aco.com/login` passes its DNS, TLS, callback, login and unauthenticated API-denial readiness checks.
 - **Test scenarios:** No Google/provider URL remains after cutover; no placeholder asset returns; all internal links resolve; redirect can switch back during rollback; Admin is absent before readiness, then opens only the login route; no password, PIN or bypass appears in generated HTML or JavaScript.
 - **Verification:** Static checks and a production link crawl pass.
 
+### U9. Build the report Approvals contract and synthetic workspace
+
+- **Goal:** Let authorised reviewers see exactly what each monthly audience
+  will receive while proving versioning, notification and approval controls
+  before any production report is distributed.
+- **Requirements:** R19, R22 and synthetic contract conformance for R28-R32.
+- **Dependencies:** U2, U4, U8 and Gate B from KTD13.
+- **Files:** `apps/admin/app/approvals/page.tsx`,
+  `apps/admin/app/approvals/[packetId]/page.tsx`,
+  `apps/admin/app/api/approvals/[packetId]/route.ts`,
+  `apps/admin/app/api/approvals/[packetId]/decision/route.ts`,
+  `apps/admin/app/api/review-groups/[groupId]/route.ts`,
+  `apps/admin/app/api/review-groups/import/route.ts`,
+  `apps/admin/app/api/webhooks/inbound-email/route.ts`,
+  `packages/contracts/src/report-approval-packet.ts`,
+  `packages/contracts/src/report-review-policy.ts`,
+  `packages/reports/src/review-policy.ts`,
+  `packages/reports/src/review-notification-outbox.ts`,
+  `packages/reports/src/monthly-consultation-job.ts`,
+  `supabase/migrations/0010_report_approvals.sql`,
+  `supabase/migrations/0011_review_groups.sql`,
+  `supabase/tests/report_approvals.sql`,
+  `apps/admin/tests/e2e/report-approvals.spec.ts`,
+  `docs/runbooks/report-review-and-revision.md`.
+- **Approach:** Implement three synthetic monthly packet families and an
+  accessible Approvals index/detail/archive. Freeze exact report, rendered
+  email and manifest hashes; display version diffs, required roles/quorum,
+  comments, status and history. Import test membership through a staged,
+  explicit snapshot-or-delta contract using canonical member IDs, normalised
+  email validation, required provenance, duplicate/conflict rejection, preview
+  and named approval, source-file-hash idempotency and an empty-replacement
+  guard. Commit one group version atomically; rollback creates a successor
+  version rather than editing history. Bind every review round to the exact
+  group and `ReportReviewPolicy` versions/hashes. Generate individual
+  opaque expiring test deep links, never a visible CC list. A link grants no
+  packet read or mutation capability and reveals no packet/member identifier;
+  the intended named reviewer must establish an AAL2 dashboard session before
+  data is returned. Store only a hash of routing tokens and use no-store,
+  no-referrer responses. Add the administrator change-request action with a
+  version-specific subject. The inbound-mail route requires an authenticated
+  provider webhook, replay protection, provider-event/Message-ID idempotency,
+  strict size and MIME limits, HTML-to-plain-text sanitisation, attachment
+  rejection/quarantine, quoted-history minimisation, loop suppression, rate
+  limits and sender-to-reviewer matching. Label imported comments unverified
+  until a named reviewer confirms them; define raw-message/comment retention
+  and disposal. Use a transactional notification outbox keyed by packet
+  version, group version, recipient and notification type, with provider IDs,
+  bounded retries and reconciliation. Assignments use
+  `PENDING → ACCEPTED → DELIVERED | FAILED | SUPPRESSED | CANCELLED`; a packet
+  remains `NOTIFICATION_INCOMPLETE` until every required assignment reaches an
+  allowed terminal state, and membership is rechecked immediately before each
+  test send. Define a role/action/data matrix for
+  reviewer, approver, group administrator, notification service, mailbox
+  importer and consultation scheduler, including AAL, CSRF/webhook checks,
+  version preconditions, idempotency, RLS and audit events. Prove that material
+  changes invalidate decisions and create a successor packet and fresh
+  notification round. Implement the monthly consultation as a
+  disabled-by-default idempotent test job. No real report,
+  reviewer notification, consultation or external distribution is permitted
+  in this unit.
+- **Test scenarios:** Current and archived cards render at 320px, 200% zoom,
+  keyboard and screen reader; loading, empty, error, stale, superseded,
+  corrected and retracted states are clear; public/unauthorised/wrong-role
+  access fails at middleware, API and RLS; no real address appears in source,
+  fixture, bundle, log or visible headers; every synthetic active reviewer gets
+  one version-bound notification; forwarded, expired, replayed and wrong-user
+  links cannot read or approve; scanner visits do not consume or expose access;
+  leaked links reveal no packet/member identifier; forged, replayed, oversized,
+  attachment-bearing and looped inbound messages fail or quarantine safely;
+  email “approved” creates an unverified comment only; any bound
+  field, group-version or review-policy change stales the old decision and
+  sends a new test round; concurrent
+  decisions cannot overwrite a newer packet; one group member receives at most
+  one consultation per calendar month; crashes before send, after provider
+  acceptance and before acknowledgement create neither a missed logical notice
+  nor duplicate logical notice; removed/former members lose access and future
+  notifications immediately; retention expiry and restore tests dispose of raw
+  address/mail data while preserving the approved minimum audit tombstone;
+  group membership cannot create SMS or voice consent.
+- **Verification:** Contract, migration, RLS and Playwright suites pass with
+  synthetic packets and test-only recipient allowlists.
+
 ### U7. Run dual-run, cutover and operational acceptance
 
 - **Goal:** Replace Google Forms only after end-to-end production evidence exists.
-- **Requirements:** R1-R27.
-- **Dependencies:** U1-U6, U8.
+- **Requirements:** R1-R27 plus synthetic contract-conformance acceptance for
+  R28-R32; production report activation remains a separate release.
+- **Dependencies:** U1-U6, U8-U9.
 - **Files:** `docs/runbooks/survey-cutover.md`, `docs/runbooks/survey-rollback.md`, `docs/privacy/data-flow.md`, deployment records outside Git for secrets and real test identifiers.
 - **Approach:** Run an approved parity period, verify a controlled production smoke submission, exercise rollback, activate `/survey` and monitor errors. The rollback target must itself be a frozen approved release with compatible privacy, age, consent and safety wording; otherwise show an IRAAC-owned maintenance page that collects no sensitive answers.
 - **Test scenarios:** New platform outage returns to the old route; smoke data is identified and removed through the approved process; live logs contain no answers or secrets; cutover is blocked until two named AAL2 administrators pass role/recovery checks and the bootstrap principal is notification-only with stale sessions denied; synthetic phone evidence covers stop phrases, central-store outage, emergency-quarantine output, cancellation-race states and production-origin-call denial.
@@ -370,7 +574,7 @@ Release evidence must include:
 
 ## Definition of Done
 
-- U1-U8 meet their test scenarios and verification clauses.
+- U1-U9 meet their test scenarios and verification clauses.
 - The exact V1 content, privacy/consent wording and safety response model have named human approvals.
 - One immutable active survey release serves web and assisted modes; both phone adapters pass only synthetic conformance tests and all live human/AI outbound calling remains disabled.
 - Phone adapters implement the reviewed `VOICE_DO_NOT_CALL` interrupt and
@@ -379,6 +583,10 @@ Release evidence must include:
 - Abuse controls, least-privilege roles, safe resume, no-tracking shared-device behaviour, retention/deletion and verified contact paths pass their release tests.
 - The public site uses the IRAAC-owned `/survey` route and retains a tested rollback.
 - The public Admin link appears only with a verified protected sign-in route; all dashboard access is attributable to named MFA-protected accounts.
+- The Approvals workspace shows all three synthetic monthly packets and exact
+  proposed emails, keeps immutable version history, protects the private review
+  group and proves that replies and silence cannot create approval. This
+  release sends no real reviewer notification, consultation or report.
 - The approved bootstrap contact is provisioned through managed Auth,
   rejects the disclosed password, allows AAL1 setup only, exposes no secret,
   activates two named AAL2 administrators, and is non-interactive/no-data with

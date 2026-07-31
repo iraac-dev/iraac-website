@@ -666,6 +666,13 @@ pattern and every sensitive action binds to the exact artefact hash.
   approve and schedule the community, staff/partner and government reports.
   Every output is a draft until named approvers lock its dataset, privacy
   treatment, claims, recommendations, artefact and recipient manifest.
+- **Open Approvals.** See the three current monthly approval packets together:
+  community, IRAAC/NGO/partner staff and government. Each card shows the exact
+  report and proposed outbound email, reporting period, version, change log,
+  review status, required roles, outstanding decisions, planned recipients and
+  scheduled release. Reviewers can compare versions, comment, request changes
+  or approve through their named account. The screen also retains immutable
+  history for sent, superseded, corrected and retracted versions.
 - **Review what people think is missing.** See suggestions submitted through
   the survey or received as replies to report/newsletter emails; acknowledge,
   deduplicate, classify, assign and close them. Accepted suggestions enter the
@@ -831,6 +838,94 @@ attachment by default. Access/downloads are audited. Removing a recipient is
 always permitted before dispatch; adding, substituting or correcting one
 changes the manifest and requires approval. Provider retries may use only the
 identical artefact, recipient and approved retry window.
+
+### Definitive staff review group and Approvals workspace
+
+Maintain one private, change-controlled group named
+`IRAAC_STAFF_REVIEW_GROUP`. Its current membership is the definitive contact
+set for IRAAC staff and affiliated partners, but the addresses themselves must
+live only in the private admin data store or approved secret/configuration
+system. Never hard-code, publish or expose the list in this public repository,
+client bundles, logs, report pages or recipient headers. Every membership
+change records the named administrator, reason, source, effective time and
+previous/new group version.
+
+Active group members have three distinct governed uses:
+
+1. receive an individual privacy-preserving review notification for every new
+   version of each community, staff/partner and government approval packet;
+2. receive the final approved version of all three report families where their
+   active group status supplies the approved recipient role, unless an
+   applicable unsubscribe, suppression, removal or legal hold blocks delivery;
+   and
+3. form the initial Path 2 staff/partner contact cohort with provenance
+   `staff_affiliate_seed_2026_07_31`.
+
+Group membership is not SMS, human-call or AI-call consent and never overrides
+an unsubscribe, endpoint suppression, report access rule or channel-specific
+permission. Review notifications are operational workflow messages and remain
+separate from newsletter/report subscriptions. Deliver group mail as
+individual messages or through a privacy-preserving managed group—not a visible
+CC list—so addresses are not disclosed and each delivery, link and decision is
+attributable.
+
+The protected admin navigation includes **Approvals**. Its landing page has one
+current card for each of the three monthly report families and an archive. Each
+card displays:
+
+- reporting period, audience, version, generated time and current lifecycle
+  state;
+- the exact proposed subject, sender, reply-to, rendered body, calls to action,
+  links, attachment/download metadata and audience-manifest hash;
+- the exact report preview, evidence/limitations statement, privacy status and
+  artefact hash;
+- changes since the last review round, comments and immutable decision history;
+- required roles/quorum, completed and outstanding decisions, expiry and
+  planned release time; and
+- delivery/publication status after approval, including correction or
+  retraction history.
+
+At the bottom of every preview, show: “Email the IRAAC administrator at
+`info@iraac-aco.com` if you would like anything changed.” Prefill a subject
+containing the report family, reporting period and version. Mailbox replies are
+ingested only as inert, untrusted review comments. They can trigger a proposed
+redline and new version, but cannot approve, publish or send anything.
+
+Every material change to the locked dataset, metric, narrative,
+recommendation, attachment, destination, recipient manifest or template creates
+a fresh immutable report version, invalidates affected approvals and sends a
+new review notification to every active group member. Notifications contain
+minimal metadata and an opaque, expiring deep link; the link grants no packet
+read or mutation capability, and the intended named reviewer must still
+establish an authorised MFA-protected dashboard session. Sensitive staff and
+government content remains in the authenticated dashboard. Dispatch uses a
+durable idempotent outbox keyed by packet version, group version, recipient and
+notification type. Asking every
+group member for review does not imply unanimous approval: the Board-approved
+policy defines required roles, quorum, order and conflicts for each audience.
+Each review round also freezes the exact review-group version and a versioned
+review-policy hash covering eligible/required roles, quorum, order,
+abstention/recusal, conflicts, expiry and decision states. A membership or
+policy change creates a successor review round and re-evaluates notifications
+and quorum. Decision-eligible members map one-to-one to named MFA-protected
+accounts; a contact-list entry alone cannot read or approve a packet.
+
+Inbound administrator email is accepted only through an authenticated,
+replay-protected provider route with event idempotency, strict size/MIME limits,
+HTML-to-plain-text sanitisation, attachment quarantine/rejection, quoted-history
+minimisation, loop suppression and rate limits. Imported comments are labelled
+unverified until confirmed by a named reviewer. The retention schedule covers
+active/former membership, provenance, link and delivery metadata, raw inbound
+mail, derived comments, correction/deletion and backup expiry; removal blocks
+access and future notification immediately while preserving only the approved
+minimum audit tombstone.
+
+Once per calendar month, send each active group member one deduplicated
+consultation email asking what IRAAC should add or improve across the website,
+survey, reports and operating model, and what issue may be missing. Use the
+monitored administrator reply address, record delivery and acknowledgement,
+and route replies to the same untrusted suggestion workflow. This consultation
+never changes production content without the normal governed review process.
 
 ---
 
@@ -1081,8 +1176,10 @@ versions, campaign cycles,
 content artefacts/versions, audience snapshots, sample assignments, journeys,
 journey stages, survey invitations, completion correlations, terminal
 responses, contact attempts, provider events, call tasks/sessions/dispositions,
-issues, interventions, report snapshots, report versions, approvals,
-review threads/comments, report publications, distribution attempts/manifests,
+issues, interventions, report snapshots, report versions, report approval
+packets, approvals, review groups/memberships/membership events, review
+notifications, monthly consultations, review threads/comments, report
+publications, distribution attempts/manifests,
 metric definitions/snapshots, dashboard targets, trend-comparability decisions,
 incidents and audit events.
 

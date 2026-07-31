@@ -298,6 +298,40 @@ downloads, with no sensitive email attachment by default. Public publishing
 has explicit build, deployed-unverified, verified, failure, retry and rollback
 states so a failed release leaves the prior Reports index intact.
 
+The private admin application includes an **Approvals** workspace with three
+current monthly packets: community, IRAAC/NGO/partner staff and government.
+Each packet freezes and renders the exact proposed report and outbound email,
+including subject, sender, reply-to, body, calls to action, links,
+attachment/download metadata, audience-manifest hash, report artefact hash,
+change log, limitations and planned release time. It shows policy-required
+roles, quorum, completed/outstanding decisions and immutable version history.
+The archive preserves superseded, corrected, retracted, published and sent
+versions rather than silently replacing them.
+
+The definitive reviewer set is a private versioned group named
+`IRAAC_STAFF_REVIEW_GROUP`. Its addresses are seeded outside the public
+repository and stored only in the private admin data plane. A membership record
+has source, effective dates, status, role/access claims and an append-only
+change event. Active members receive an individual or privacy-preserving group
+notification for every new version of all three approval packets. No raw
+address list appears in a visible CC header, client code, public report or log.
+The group is also the initial Path 2 staff/affiliate cohort. Active membership
+supplies the approved recipient role for all three final report families unless
+an applicable unsubscribe, suppression, removal or legal hold blocks delivery;
+this classification grants no SMS or voice permission and does not create a
+dashboard login.
+
+Any change to an approval-bound dataset, metric, sentence, recommendation,
+template, attachment, destination or recipient manifest invalidates affected
+decisions, creates a new immutable version and notifies every active reviewer
+again. Notification email carries minimal metadata and a recipient-bound,
+signed, expiring link; private content stays behind authenticated access. The
+preview footer offers `info@iraac-aco.com` for change requests, with a
+version-specific subject. Replies are inert comments, never approval. A
+separate idempotent monthly consultation asks the group what the website,
+survey, reports or operating model may be missing and routes replies through
+the governed suggestion queue.
+
 The public footer exposes an Admin link only when the private application has a
 working sign-in route. Use named invite-only accounts with Supabase Auth, MFA,
 server-side session validation and RLS-backed role checks. A shared four-digit
