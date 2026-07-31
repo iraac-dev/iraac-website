@@ -1,9 +1,9 @@
 # IRAAC Have Your Say — stable survey V1 draft
 
 > **Approval state:** Draft for Aboriginal community, cultural, privacy/legal,
-> safeguarding and survey-method review. This is not the live survey. It must
-> not replace Google Forms or be used for real outreach until the release gate
-> in this document is complete.
+> safeguarding and survey-method review. This is not the live survey. The old
+> Google Form is cancelled and is not a fallback. Real collection remains
+> closed until this new IRAAC-owned survey passes every release gate.
 
 ## Purpose and operating rule
 
@@ -223,7 +223,8 @@ V1 may become active only after all of the following are recorded:
 5. accessibility testing with keyboard, screen reader, zoom and mobile devices;
 6. branch, parity, save/resume, duplicate-submit and withdrawal tests;
 7. a reviewed data dictionary, small-cell policy and report-denominator rules;
-8. an approved dual-run, cutover and rollback plan from the current Google Form; and
+8. an approved launch and rollback plan using only IRAAC-owned release versions
+   or a non-collecting IRAAC maintenance page; and
 9. named human approval of the exact immutable release hash.
 
 The release also requires an approved retention/disposal schedule, a

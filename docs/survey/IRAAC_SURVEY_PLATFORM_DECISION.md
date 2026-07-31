@@ -1,5 +1,13 @@
 # IRAAC survey platform decision
 
+## Superseded form status
+
+The previous Google Form is cancelled, null and void as of 2026-07-31. It is
+not a live destination, fallback, rollback target, migration baseline or source
+of consent authority. IRAAC will build the new survey from scratch. Until the
+new release is approved, `/survey` remains an IRAAC-owned page that collects no
+responses.
+
 ## Decision
 
 Build a small IRAAC-owned survey system. Use Next.js and TypeScript for the

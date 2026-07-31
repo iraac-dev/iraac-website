@@ -69,9 +69,10 @@ At the start:
 7. Never paste secrets or private data while reporting what you found.
 
 The current public repository is `rhy-collab/iraac-website`. It is a public,
-static eleven-page Vercel site. It has no production backend. Its Google Form
-is the current live survey destination, while the local HTML survey is a
-demonstration that does not store responses. `build.py` is materially behind
+static eleven-page Vercel site. It has no production backend. The previous
+Google Form and local demonstration survey are cancelled and must not collect
+responses. Every Have Your Say action stays on an IRAAC-owned, non-collecting
+holding page until the new survey is approved. `build.py` is materially behind
 some hand-edited production HTML and must be reconciled before regeneration.
 
 Keep the public repository as the front door. Build the operational platform
@@ -1005,8 +1006,9 @@ Create work orders in this dependency order.
 - verify every Have Your Say destination;
 - plan the public `Insights` → `Reports` route/navigation migration with an
   `insights.html` compatibility redirect;
-- inventory the current Google Form consent wording through an authorised
-  human/admin review;
+- confirm the cancelled Google Form is closed and absent from every source,
+  generated page, redirect and rollback path; historical wording has no
+  canonical authority;
 - confirm legal entity, ABN, current ACNC status, APP coverage and contracting
   party;
 - obtain the research/evaluation/community-consultation ethics determination
@@ -1066,7 +1068,8 @@ logs.
 - identity/answer separation and idempotent completion correlation;
 - consent receipt UI/API;
 - import staging, validation, dedupe and reconciliation;
-- dual-run Google Form migration plan.
+- launch and rollback plan using only approved IRAAC-owned releases or a
+  non-collecting IRAAC maintenance page.
 
 Acceptance: all devices/modes save the same versioned answer shape and record
 pathway/mode; a dropped/repeated submit does not lose or duplicate answers;

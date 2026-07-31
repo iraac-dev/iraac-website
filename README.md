@@ -95,8 +95,9 @@ change belongs in `build.py`.
 
 ## Current boundary
 
-The public pages contain working content plus prototype pathways. The external
-Google Form is the current live survey destination; the in-repository survey
-demo does not store production responses. Do not represent any form, contact
-flow, report or call-centre capability as production-ready until its roadmap
-release gate has passed.
+The public pages contain working content plus prototype pathways. The previous
+Google Form and the in-repository demonstration survey are cancelled and must
+not receive responses. Every Have Your Say action stays on the IRAAC-owned,
+non-collecting `survey.html` holding page until the new survey passes its
+roadmap release gates. Do not represent any form, contact flow, report or
+call-centre capability as production-ready before those gates pass.

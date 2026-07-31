@@ -66,16 +66,18 @@ Organisations and News reachable via the footer. The hamburger breakpoint sits
 at 960px to avoid iPad/mid-size wrapping issues. The "Have Your Voice Heard"
 strip runs across the top of every page.
 
-The survey today points to a Google Form (`SURVEY_URL` in `build.py`). This is
-the piece that changes in the next phase — the form becomes the front door of
-the entire listening loop, not just a passive feedback collector.
+The previous Google Form is cancelled, null and void as of 2026-07-31. It is
+not a fallback, migration target, parity baseline or source of current consent.
+Every public Have Your Say action now stays on an IRAAC-owned holding page until
+the new platform passes its release gates. The new survey is built from scratch
+as the front door of the listening loop.
 
 ### Current capability matrix
 
 | Capability | State now | Important boundary |
 |---|---|---|
 | Public website | Live | Static public front door only |
-| Have Your Say | External Google Form | Exact current consent wording is not verified in this repository |
+| Have Your Say | IRAAC-owned holding page | Collection remains closed until the new governed survey is approved |
 | In-repo survey page | Demonstration | Does not store production answers |
 | Contact/home-visit form | Demonstration | Does not submit to a governed system |
 | Book a Call | Public pathway | No production scheduling/call-centre backend in this repo |
@@ -340,8 +342,8 @@ a restricted channel. Everything else in this project depends on getting
 consent capture right.
 
 **Intake channels.** A community member enters the system through one of:
-- **The website form** (`survey.html` → currently Google Forms → will need to
-  become a proper first-party form with a real backend).
+- **The website form** (`survey.html` → IRAAC-owned holding page → new
+  first-party form and governed backend built from scratch).
 - **A home visit** where an IRAAC officer fills the form on the resident's
   behalf, on the resident's device or on the officer's own device.
 - **A drop-in** at an IRAAC office where a staff member enters details on a
@@ -487,8 +489,8 @@ tablet, desktop, worker-assisted, drop-in, home-visit, human-phone and AI-phone
 modes all write the same answer contract and record the pathway and completion
 mode separately.
 
-The survey is mobile-first, device-independent, plain-language and as simple
-as the current Google Form. It requires no account. It supports large tap
+The survey is mobile-first, device-independent and plain-language. It requires
+no account. It supports large tap
 targets, keyboard and screen-reader use, save/resume where approved, clear
 progress, error recovery, low-bandwidth delivery and an immediate human/help
 path. A dropped connection must not lose already confirmed answers or create a
@@ -1270,8 +1272,9 @@ secure link.
 The public marketing site (this repo) stays broadly as it is. `build.py`
 continues to generate the flat HTML pages. What changes:
 
-- **`survey.html`** stops pointing at Google Forms and points at a
-  first-party form endpoint on the new backend.
+- **`survey.html`** remains an IRAAC-owned closed holding page until it points
+  at the approved first-party form endpoint on the new backend. No Google Form
+  redirect or fallback remains.
 - **A new intake form** is embedded on the site (probably as an iframe or a
   small JS widget from the new backend). It must work on mobile and load
   quickly.

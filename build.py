@@ -19,7 +19,7 @@ IMG = {
     "news2": "https://picsum.photos/seed/iraac-news2/700/500",
 }
 
-SURVEY_URL = "https://forms.gle/b8P66C6SqjARdD9H6"
+SURVEY_URL = "survey.html"
 
 CSS = """
 :root {
@@ -281,8 +281,8 @@ QUICKBAR = f"""<section class="frontdoor">
       </a>
       <a class="fd-card" href="{SURVEY_URL}">
         <span class="fd-icon">&#128203;</span>
-        <h3>Complete a Survey</h3>
-        <p>Tell us a bit about what you need &mdash; takes about two minutes.</p>
+        <h3>Have Your Say</h3>
+        <p>The new IRAAC-owned survey is being built. See the latest update.</p>
       </a>
     </div>
   </div>
@@ -816,7 +816,7 @@ CONTACT = f"""
 <section>
   <div class="container">
     <div class="contact-grid" style="margin-bottom: 48px;">
-      <div class="contact-card"><div class="icon">&#128203;</div><h3>Complete a Survey</h3><p>Tell us a bit about what you need and we'll follow up.</p><a class="btn btn-primary" style="margin:0;" href="{SURVEY_URL}">Start Survey</a></div>
+      <div class="contact-card"><div class="icon">&#128203;</div><h3>Have Your Say</h3><p>The new IRAAC-owned survey is being built.</p><a class="btn btn-primary" style="margin:0;" href="{SURVEY_URL}">Survey Update</a></div>
       <div class="contact-card"><div class="icon">&#127968;</div><h3>Visit a Local Office</h3><p>Drop in and speak with your local IRAAC officer in person.</p><a class="btn btn-primary" style="margin:0;" href="offices.html">Find an Office</a></div>
       <div class="contact-card" id="home-visit"><div class="icon">&#128100;</div><h3>Request a Home Visit</h3><p>Ask an IRAAC officer to come to you, at a time that works.</p><a class="btn btn-primary" style="margin:0;" href="#home-visit-form">Request a Visit</a></div>
       <div class="contact-card"><div class="icon">&#128197;</div><h3>Book a Call</h3><p>Pick a time that suits you &mdash; we'll call you.</p><a class="btn btn-primary" style="margin:0;" href="book-a-call.html">Book a Time</a></div>
@@ -846,7 +846,7 @@ CONTACT = f"""
 </section>
 """
 
-SURVEY = f"""
+CANCELLED_SURVEY_DEMO = f"""
 <section class="page-hero" style="background-image:url('{IMG['support']}');">
   <div class="container">
     <div class="eyebrow">Tell Us About You</div>
@@ -922,6 +922,32 @@ SURVEY = f"""
 </section>
 """
 
+# The previous Google Form and the early in-page demonstration are cancelled.
+# Keep every public Have Your Say link on this IRAAC-owned holding route until
+# the new governed survey passes its release gates.
+SURVEY = f"""
+<section class="page-hero" style="background-image:url('{IMG['support']}');">
+  <div class="container">
+    <div class="eyebrow">A New IRAAC Survey Is Being Built</div>
+    <h1>Have Your Say</h1>
+    <p>IRAAC is building a new, secure Have Your Say survey from the ground up. The previous survey is closed and is no longer accepting responses.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="call-card">
+      <h2 class="section-title" style="margin-top:0;">The new survey is coming soon</h2>
+      <p>We are creating one IRAAC-owned survey that will work online, in person and over the phone. It will explain clearly how information is protected, how it helps IRAAC report community priorities to government, and what contact choices are available.</p>
+      <p>Until it is ready, you can still speak with IRAAC in the way that works best for you.</p>
+      <a href="book-a-call.html" class="btn btn-primary">Book a Call</a>
+      <a href="offices.html" class="btn btn-outline" style="color:var(--ochre-dark);border-color:var(--ochre-dark);">Drop In</a>
+      <a href="contact.html#home-visit" class="btn btn-outline" style="color:var(--ochre-dark);border-color:var(--ochre-dark);">Request a Home Visit</a>
+    </div>
+  </div>
+</section>
+"""
+
 OFFICES = f"""
 <section class="page-hero" style="background-image:url('{IMG['office']}');">
   <div class="container">
@@ -976,7 +1002,7 @@ pages = [
     ("news.html", "News", "Latest updates from IRAAC.", "news.html", NEWS),
     ("insights.html", "Insights", "Reflections on governance, community programs and Local Decision Making from IRAAC.", "insights.html", INSIGHTS),
     ("contact.html", "Contact", "Get in touch with IRAAC.", "contact.html", CONTACT),
-    ("survey.html", "Complete a Survey", "A short survey to help IRAAC connect you with the right support.", "contact.html", SURVEY),
+    ("survey.html", "Have Your Say", "The new IRAAC-owned Have Your Say survey is being built. The previous survey is closed.", "contact.html", SURVEY),
     ("offices.html", "Visit a Local Office", "Find an IRAAC office to visit in person.", "contact.html", OFFICES),
     ("book-a-call.html", "Book a Free 15-Minute Call", "Book a free 15-minute call with an experienced IRAAC officer.", "contact.html", BOOKCALL),
 ]

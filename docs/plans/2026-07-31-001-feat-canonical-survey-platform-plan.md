@@ -12,7 +12,9 @@ execution: code
 
 ## Goal Capsule
 
-- **Objective:** Replace the current Google Form with one stable, IRAAC-owned Have Your Say survey that works across web, assisted and phone modes and produces governed evidence.
+- **Objective:** Build one stable, IRAAC-owned Have Your Say survey from
+  scratch across web, assisted and phone modes, with governed evidence and no
+  dependency on the cancelled Google Form.
 - **Authority:** `ROADMAP.md` owns product and governance rules. `docs/survey/IRAAC_HAVE_YOUR_SAY_V1_DRAFT.md` owns the draft instrument. `docs/survey/IRAAC_SURVEY_PLATFORM_DECISION.md` owns the selected stack.
 - **Execution profile:** Build a new private listening-platform repository, then cut the public site over only after parity, safety, privacy, accessibility and rollback gates pass.
 - **Stop conditions:** Do not collect real responses until V1 and its notices are approved. Both human-phone and AI-phone adapters are conformance simulators in this release; they receive no production telephony credentials or egress and may not contact real participants.
@@ -28,7 +30,11 @@ IRAAC will own a stable survey contract and response system instead of relying o
 
 ### Problem Frame
 
-The current static website points to Google Forms and has no governed backend. Google Forms cannot be the canonical evidence and consent platform for IRAAC's intended web, worker, human-phone and AI-phone collection. A full survey SaaS also leaves the hardest duties—cross-mode state, consent receipts, identity separation, report lineage, approval and phone parity—to custom software.
+The previous Google Form is cancelled, null and void. The public website keeps
+Have Your Say on an IRAAC-owned non-collecting holding page while IRAAC builds a
+governed backend and new survey from scratch. A full survey SaaS would still
+leave the hardest duties—cross-mode state, consent receipts, identity
+separation, report lineage, approval and phone parity—to custom software.
 
 ### Actors
 
@@ -221,7 +227,8 @@ release imports real membership and enables real delivery.
 - Every synthetic active review-group member is notified for each version
   without exposing the membership list, and no email reply can manufacture
   approval; real delivery remains disabled pending the activation release.
-- Google Forms remains the tested rollback until the cutover acceptance period is complete.
+- Rollback uses a previously approved IRAAC-owned release or a non-collecting
+  IRAAC maintenance page; the cancelled Google Form is never a rollback target.
 
 ### Scope Boundaries
 
@@ -341,7 +348,8 @@ flowchart TB
 
 - The public static repository remains free of private survey data and secrets.
 - A new private repository becomes the system of record for survey code and migrations.
-- Public `/survey` changes late in the release after dual-run and rollback tests.
+- Public `/survey` remains a non-collecting IRAAC holding page until launch and
+  changes only after new-platform acceptance and rollback tests.
 - Later campaigns, calls and reports depend on the canonical completion and consent events created here.
 - The public repository contains only the review-group identifier and contract;
   real membership is imported into the private admin data plane.
@@ -350,7 +358,9 @@ flowchart TB
 
 ### Risks and Dependencies
 
-- The current Google Form definition and exact consent wording must be exported through authorised access before parity is claimed.
+- No Google Form export or parity claim is required. V1 content and consent
+  wording are reviewed and approved as a new IRAAC instrument on their own
+  merits; historical material may inform discussion but has no authority.
 - SurveyJS's accessibility statement is a starting point, not acceptance evidence for IRAAC's theme and content.
 - Sensitive wellbeing, violence and justice questions require trained response capacity before activation.
 - Sensitive branches require a named accountable safety owner, staffed hours, escalation destinations, response-time commitments, training evidence, incident audit and shutdown authority before activation.
@@ -388,7 +398,12 @@ flowchart TB
 - **Goal:** Convert the approved questionnaire into stable schema, text and reporting artifacts.
 - **Requirements:** R1-R4, R8, R12-R14, R24.
 - **Files:** `packages/surveys/definitions/have-your-say.v1.json`, `packages/surveys/src/schema.ts`, `packages/surveys/src/versioning.ts`, `packages/surveys/tests/have-your-say-v1.test.ts`, `docs/surveys/have-your-say-v1-source-review.md`.
-- **Approach:** Import the authorised live-form inventory, reconcile it with the draft, assign stable IDs, include G05 as the optional governed suggestion prompt, attach sensitivity/reporting metadata and record named approvals without embedding approver credentials in Git. Generate TypeScript artifacts from the single JSON source for KTD13's U1-U3 vertical slice.
+- **Approach:** Build the V1 inventory from the approved IRAAC draft, assign
+  stable IDs, include G05 as the optional governed suggestion prompt, attach
+  sensitivity/reporting metadata and record named approvals without embedding
+  approver credentials in Git. Historical Google Form material has no canonical
+  or parity status. Generate TypeScript artifacts from the single JSON source
+  for KTD13's U1-U3 vertical slice.
 - **Test scenarios:** Reject duplicate IDs, invalid branches, missing Prefer not to say on sensitive questions and a changed active release hash; accept a skipped G05; serialise and classify a supplied G05 response as inert suggestion data without changing the release.
 - **Verification:** Schema and branch fixture tests pass against synthetic data.
 
@@ -536,15 +551,29 @@ flowchart TB
 - **Verification:** Contract, migration, RLS and Playwright suites pass with
   synthetic packets and test-only recipient allowlists.
 
-### U7. Run dual-run, cutover and operational acceptance
+### U7. Run launch and operational acceptance
 
-- **Goal:** Replace Google Forms only after end-to-end production evidence exists.
+- **Goal:** Launch the new IRAAC-owned survey only after end-to-end production
+  evidence exists.
 - **Requirements:** R1-R27 plus synthetic contract-conformance acceptance for
   R28-R32; production report activation remains a separate release.
 - **Dependencies:** U1-U6, U8-U9.
 - **Files:** `docs/runbooks/survey-cutover.md`, `docs/runbooks/survey-rollback.md`, `docs/privacy/data-flow.md`, deployment records outside Git for secrets and real test identifiers.
-- **Approach:** Run an approved parity period, verify a controlled production smoke submission, exercise rollback, activate `/survey` and monitor errors. The rollback target must itself be a frozen approved release with compatible privacy, age, consent and safety wording; otherwise show an IRAAC-owned maintenance page that collects no sensitive answers.
-- **Test scenarios:** New platform outage returns to the old route; smoke data is identified and removed through the approved process; live logs contain no answers or secrets; cutover is blocked until two named AAL2 administrators pass role/recovery checks and the bootstrap principal is notification-only with stale sessions denied; synthetic phone evidence covers stop phrases, central-store outage, emergency-quarantine output, cancellation-race states and production-origin-call denial.
+- **Approach:** Keep `/survey` on the non-collecting IRAAC holding page while
+  verifying a controlled production smoke submission and exercising rollback.
+  Activate the approved new release and monitor errors. Rollback may target only
+  a frozen approved IRAAC-owned release with compatible privacy, age, consent
+  and safety wording; otherwise restore the IRAAC maintenance page. Never route
+  back to Google Forms.
+- **Test scenarios:** New platform outage returns to the non-collecting IRAAC
+  holding page or an approved prior IRAAC release; no Google Forms URL exists
+  in source, generated pages, redirects or rollback configuration; smoke data
+  is identified and removed through the approved process; live logs contain no
+  answers or secrets; cutover is blocked until two named AAL2 administrators
+  pass role/recovery checks and the bootstrap principal is notification-only
+  with stale sessions denied; synthetic phone evidence covers stop phrases,
+  central-store outage, emergency-quarantine output, cancellation-race states
+  and production-origin-call denial.
 - **Verification:** Named release sign-off records the exact deployment, database, release and redirect hashes.
 
 ---
@@ -592,6 +621,7 @@ Release evidence must include:
   activates two named AAL2 administrators, and is non-interactive/no-data with
   all sessions revoked before production.
 - G05 is optional, its text is handled as untrusted data, and accepted suggestions still require the normal governed survey-change process.
-- Google Forms is retired only after the approved acceptance window and data-retention decision.
+- Google Forms remains cancelled and absent from collection, fallback and
+  rollback paths throughout development and launch.
 - Runbooks, diagrams and data dictionaries match the deployed system.
 - Experimental, abandoned and duplicate implementation code is removed before merge.
