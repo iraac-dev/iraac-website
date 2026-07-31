@@ -67,10 +67,12 @@ The current static website points to Google Forms and has no governed backend. G
 - R17. Resume credentials must be hashed, short-lived, revocable and absent from URLs, analytics and logs.
 - R18. Every data domain must have an approved retention, access, correction, deletion, withdrawal and backup-expiry rule.
 - R19. Staff, partner, publisher and service identities must have explicit least-privilege action and data scopes with negative authorisation tests.
-- R20. Free text must remain inert untrusted data, and no raw answer may enter HTML, logs, telemetry or an AI tool/instruction context.
+- R20. Free text must remain inert untrusted data. Authorised staff views may render it only as escaped plain text; raw answers must never be interpreted as HTML or copied into logs, telemetry, AI prompts or tool instructions.
 - R21. Follow-up destinations must be confirmed through a neutral, safe-contact process before recurring or sensitive outreach.
 - R22. De-identified outputs must enforce approved small-cell, rare-combination, geography, free-text and prohibited-join disclosure controls.
 - R23. V1 answers may be used only for the approved core listening, advocacy and de-identified reporting purpose; any distinct secondary-research purpose requires a separate future permission and receipt.
+- R24. V1 must end with an optional question asking what the survey missed or what issue IRAAC should explore. Participant copy must say it supports future community priorities, is not an emergency or individual-support channel, only successfully submitted text is reviewed and a personal reply is not guaranteed; immediate-help choices remain visible beside the field and submission confirms receipt. The answer enters human review and never mutates the active survey automatically. G05 collection pauses in new sessions when approved trained-review capacity or queue-age thresholds are exceeded.
+- R25. The public footer may expose an Admin sign-in link only after a protected route exists; dashboard access must use named accounts, MFA and server/API/database authorisation, never a shared or client-side PIN.
 
 **Governed change**
 
@@ -106,6 +108,8 @@ The current static website points to Google Forms and has no governed backend. G
 - AE6. **Covers R16:** Given a scripted client sends many structurally valid submissions, when abuse controls identify the pattern, then submissions are quarantined from reports and the safety queue remains available.
 - AE7. **Covers R17:** Given a resume credential appears in a replayed request after rotation, when it is used, then access fails without revealing whether the session exists.
 - AE8. **Covers R20:** Given free text contains HTML and instructions for an AI, when staff previews and report extraction run, then the text renders inertly and cannot invoke tools or alter report instructions.
+- AE9. **Covers R24:** Given a participant suggests a new topic in G05, when the survey is submitted, then the text enters the suggestion queue and the active release hash remains unchanged.
+- AE10. **Covers R25:** Given an unauthenticated visitor follows the public Admin link, when they request dashboard data directly, then the server and database deny access and no secret is present in the public bundle.
 
 ### Success Criteria
 
@@ -120,7 +124,7 @@ The current static website points to Google Forms and has no governed backend. G
 
 ### Scope Boundaries
 
-**Included:** the stable V1 survey contract, web survey, staff and phone adapters, governed storage, consent receipts, release review/publish controls, tests, a non-production deployment and controlled public cutover.
+**Included:** the stable V1 survey contract, optional missing-issue suggestion intake, web survey, staff and phone adapters, governed storage, consent receipts, release review/publish controls, protected named-account admin entry, tests, a non-production deployment and controlled public cutover.
 
 **Deferred:** live AI calling, outreach campaigns, automated reports, a youth instrument, a general form builder, rotating monthly modules, live machine translation and full disconnected field collection.
 
@@ -144,7 +148,9 @@ The current static website points to Google Forms and has no governed backend. G
 - KTD10. **Resume is same-device by default.** Use at least 128-bit random credentials, store hashes only, deliver them in Secure, HttpOnly, SameSite=Strict cookies, rotate after use and revoke on completion or withdrawal. Cross-device recovery is a separate reviewed design. Governs R17.
 - KTD11. **Sensitive content never becomes active content.** Self-host required survey assets, disable nonessential telemetry, use neutral URLs/titles, no-store caching, restrictive referrers and CSP, and escape free text in every renderer. AI extraction receives isolated data with structured output and no tools. Governs R20.
 - KTD12. **Release states distinguish operational and analytical status.** Use `ACTIVE`, `RETIRED`, `SUSPENDED`, `RETRACTED` and `ANALYTICALLY_INVALIDATED`. Retirement or rollback preserves valid historical evidence; analytical exclusion needs a recorded governance decision. Governs R1, R3, R12.
-- KTD13. **The selected stack has a measured acceptance gate.** Before full build, implement the real V1 web/phone contract path as a time-boxed spike and compare it with a Qualtrics Australian-region trial/quote against accessibility, interruption/resume, consent evidence, phone parity, immutable releases, export, incident recovery, cost and operator burden. Continue with the selected custom stack only if it meets the recorded mandatory thresholds. Governs R4-R5, R9-R14.
+- KTD13. **The selected stack has a measured acceptance gate.** Build a thin U1-U3 vertical slice of the real V1 web/phone contract, then compare it with a Qualtrics Australian-region trial/quote against recorded mandatory thresholds for accessibility, interruption/resume, consent evidence, phone parity, immutable releases, export, incident recovery, cost and operator burden. Record the evidence and named go/no-go decision before U4, U5 or U8 expands the system. Governs R4-R5, R9-R14.
+- KTD14. **Admin access is simple but attributable.** Use `https://admin.iraac-aco.com/login`, invite-only named Supabase Auth accounts, mandatory MFA, server-validated sessions and RLS-backed roles. Require recent step-up MFA for publication, withdrawal, rollback, invitation, role and privileged recovery actions; use dual control for publisher recovery, CSRF-resistant mutations, short-lived single-use invitations and immediate session revocation on removal. Add the public footer link only after DNS, TLS, callbacks, login and direct API-denial readiness pass. Reject a shared or static-site PIN because it is bypassable and cannot support individual audit. Governs R19, R25.
+- KTD15. **Suggestions enter governance, not the survey.** G05 remains one inert canonical answer. Only final submission creates one suggestion workflow record referencing that answer, without copying the raw text; partial or abandoned text is not monitored. A named reviewer may link the record internally to an issue or write a neutral successor proposal through U5; the untrusted label persists and no suggestion alters an active definition. Every submitted non-empty G05 response enters trained human triage under approved staffed-hours, throughput, queue-age and response-time limits. Deterministic rules may raise priority but never dismiss safety risk, and an LLM cannot make that decision. Exceeding the safe backlog threshold disables G05 for new sessions and presents the human pathway. Governs R1-R2, R7, R20, R24.
 
 ### High-Level Technical Design
 
@@ -190,6 +196,10 @@ flowchart TB
 - [SurveyJS backend integration](https://surveyjs.io/documentation/backend-integration)
 - [Supabase regions](https://supabase.com/docs/guides/platform/regions)
 - [Supabase Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security)
+- [Supabase Auth](https://supabase.com/docs/guides/auth)
+- [Supabase multi-factor authentication](https://supabase.com/docs/guides/auth/auth-mfa)
+- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
+- [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)
 - [Vercel regions](https://vercel.com/docs/regions)
 - [Formbricks self-hosting](https://formbricks.com/docs/self-hosting/overview)
 - [ODK Web Forms](https://docs.getodk.org/web-forms-intro/)
@@ -203,34 +213,46 @@ flowchart TB
 ### U1. Freeze the approved V1 contract
 
 - **Goal:** Convert the approved questionnaire into stable schema, text and reporting artifacts.
-- **Requirements:** R1-R4, R8, R12-R14.
+- **Requirements:** R1-R4, R8, R12-R14, R24.
 - **Files:** `packages/surveys/definitions/have-your-say.v1.json`, `packages/surveys/src/schema.ts`, `packages/surveys/src/versioning.ts`, `packages/surveys/tests/have-your-say-v1.test.ts`, `docs/surveys/have-your-say-v1-source-review.md`.
-- **Approach:** Import the authorised live-form inventory, reconcile it with the draft, assign stable IDs, attach sensitivity/reporting metadata and record named approvals without embedding approver credentials in Git. Generate TypeScript artifacts from the single JSON source and run KTD13's time-boxed acceptance spike before U2.
-- **Test scenarios:** Reject duplicate IDs, invalid branches, missing Prefer not to say on sensitive questions and a changed active release hash.
+- **Approach:** Import the authorised live-form inventory, reconcile it with the draft, assign stable IDs, include G05 as the optional governed suggestion prompt, attach sensitivity/reporting metadata and record named approvals without embedding approver credentials in Git. Generate TypeScript artifacts from the single JSON source for KTD13's U1-U3 vertical slice.
+- **Test scenarios:** Reject duplicate IDs, invalid branches, missing Prefer not to say on sensitive questions and a changed active release hash; accept a skipped G05; serialise and classify a supplied G05 response as inert suggestion data without changing the release.
 - **Verification:** Schema and branch fixture tests pass against synthetic data.
 
 ### U2. Build the governed database boundary
 
 - **Goal:** Create the response, contact, consent, release and audit system of record.
-- **Requirements:** R3, R9-R12, R14.
-- **Files:** `supabase/migrations/0001_identity_contact.sql`, `supabase/migrations/0002_survey_releases.sql`, `supabase/migrations/0003_sessions_answers.sql`, `supabase/migrations/0004_consent_receipts.sql`, `supabase/migrations/0005_safety_and_audit.sql`, `supabase/migrations/0006_rls.sql`, `supabase/tests/survey_rls.sql`.
-- **Approach:** Use separate schemas/policies, append-only grant/refusal/withdrawal/expiry/supersession events, authoritative suppressions, idempotency keys, release hashes and approved de-identified reporting views. Define a role/action/data matrix and a retention/disposal schedule for every domain, including exports and backups.
-- **Test scenarios:** Valid anonymous API write succeeds; every direct public table access fails; each staff, partner, publisher and service identity is denied outside its scope; partial submission creates no consent; withdrawal suppresses queued contact; expired data is removed from primary stores and backups on schedule; sparse-community fixtures enforce disclosure controls; repeated submit creates one completion.
+- **Requirements:** R3, R9-R12, R14, R19, R24-R25.
+- **Files:** `supabase/migrations/0001_identity_contact.sql`, `supabase/migrations/0002_survey_releases.sql`, `supabase/migrations/0003_sessions_answers.sql`, `supabase/migrations/0004_consent_receipts.sql`, `supabase/migrations/0005_safety_and_audit.sql`, `supabase/migrations/0006_rls.sql`, `supabase/migrations/0007_suggestions.sql`, `supabase/tests/survey_rls.sql`.
+- **Approach:** Use separate schemas/policies, append-only grant/refusal/withdrawal/expiry/supersession events, authoritative suppressions, idempotency keys, release hashes, a human-triaged suggestion queue and approved de-identified reporting views. Define a role/action/data matrix and a retention/disposal schedule for every domain, including exports and backups. The workflow record follows the answer's correction, withdrawal, deletion and expiry state; it retains only the minimum audit tombstone after source removal. Reviewer summaries keep lineage and are re-reviewed or withdrawn when their source changes. An open safety incident follows its separately approved retention rule.
+- **Test scenarios:** Valid anonymous API write succeeds; every direct public table access fails; each staff, partner, publisher and service identity is denied outside its scope; partial submission creates no consent; withdrawal suppresses queued contact; expired data is removed from primary stores and backups on schedule; sparse-community fixtures enforce disclosure controls; repeated submit creates one completion; a non-empty G05 answer has exactly one linked suggestion workflow record while blank G05 creates none; correction, withdrawal, deletion and expiry update the workflow/summary state without an orphan or retained raw-text copy.
 - **Verification:** Migration, RLS and restore tests pass in a non-production Sydney project.
 
 ### U3. Implement the canonical engine and API
 
 - **Goal:** Make all modes use the same validated state transitions.
-- **Requirements:** R3-R7, R10-R12.
+- **Requirements:** R3-R7, R10-R12, R24.
+- **Dependencies:** U1, U2.
 - **Files:** `packages/surveys/src/engine.ts`, `packages/contracts/src/survey-session.ts`, `apps/survey/app/api/public/survey/session/route.ts`, `apps/survey/app/api/public/survey/answer/route.ts`, `apps/survey/app/api/public/survey/resume/route.ts`, `apps/survey/app/api/public/survey/complete/route.ts`.
-- **Approach:** Keep branch calculation server-verifiable, checkpoint answers with monotonic revisions, issue rotating hashed same-device resume credentials and place public writes behind short-lived challenges, privacy-preserving rate limits and quarantine.
-- **Test scenarios:** Out-of-order answer revision is rejected; two resumes cannot overwrite data; stolen, replayed and expired credentials fail; request/body limits stop abuse; valid accessibility fallback remains; poisoned responses stay out of reports; a suspended or retracted release follows its approved in-flight rule; deterministic safety logic survives AI outage.
-- **Verification:** Vitest contract and integration suites pass with synthetic fixtures.
+- **Approach:** Keep branch calculation server-verifiable, checkpoint answers with monotonic revisions, issue rotating hashed same-device resume credentials and place public writes behind short-lived challenges, privacy-preserving rate limits and quarantine. The idempotent final-submission transaction keeps G05 in the canonical answer set and, when non-empty, creates exactly one suggestion workflow record that references the answer ID rather than copying its text. A failure rolls back completion so a retry can safely finish once.
+- **Test scenarios:** Out-of-order answer revision is rejected; two resumes cannot overwrite data; stolen, replayed and expired credentials fail; request/body limits stop abuse; valid accessibility fallback remains; poisoned responses stay out of reports; a suspended or retracted release follows its approved in-flight rule; deterministic safety logic survives AI outage; absent, whitespace-only, deleted-before-submit and abandoned G05 text create no suggestion; disconnect/retry creates no duplicate; database failure creates neither a completion nor an orphan suggestion; sustained and burst submissions cannot starve legitimate safety triage; crossing the safe backlog threshold disables G05 for new sessions without hiding help routes.
+- **Verification:** Vitest contract and integration suites pass with synthetic fixtures. KTD13's comparison evidence and named go/no-go decision are recorded before dependent expansion begins.
+
+### U8. Establish the admin authentication boundary
+
+- **Goal:** Protect every staff and privileged route before an admin surface can be deployed.
+- **Requirements:** R19, R25.
+- **Dependencies:** U2.
+- **Files:** `apps/admin/app/login/page.tsx`, `apps/admin/app/auth/activate/page.tsx`, `apps/admin/app/auth/mfa/page.tsx`, `apps/admin/app/auth/recovery/page.tsx`, `apps/admin/middleware.ts`, `apps/admin/lib/auth.ts`, `supabase/migrations/0008_admin_roles.sql`, `supabase/tests/admin_auth.sql`, `apps/admin/tests/e2e/admin-auth.spec.ts`, `docs/design/admin-access-flow.md`, `docs/runbooks/admin-access-and-recovery.md`.
+- **Approach:** Configure the dedicated admin origin, invite-only named accounts, mandatory AAL2 sessions, server and database role checks, recent step-up for sensitive actions, CSRF-resistant mutations, account-change session rotation, short-lived invitations, dual-controlled publisher recovery, removal revocation and audited lifecycle events. Specify invited-user activation, password creation, MFA enrolment/challenge/step-up, ordinary sign-in/out, invalid credentials, wrong-role/removal denial, session expiry, lost-factor request, dual-control recovery pending/approved/denied and safe support. Each state has accessible focus, error summary and recovery status; successful sign-in lands on the least-privileged authorised dashboard. Nothing under `apps/admin` is deployable until the denial matrix passes.
+- **Test scenarios:** Invitation activation succeeds once; expired and replayed invitations fail safely; MFA enrolment, challenge and step-up work with keyboard and screen reader; invalid, expired, non-MFA, removed and wrong-role sessions cannot read data or call private APIs; session expiry preserves no unsaved sensitive action and explains how to sign in again; forged cross-origin mutations, stale assurance, replayed approvals and concurrent artefact changes fail; unilateral publisher recovery fails while pending/approved/denied outcomes are visible; removal revokes existing sessions.
+- **Verification:** The negative authorisation matrix passes at middleware, API and RLS layers on the verified admin origin.
 
 ### U4. Build and test participant and operator adapters
 
 - **Goal:** Deliver accessible web, staff and phone experiences with proven parity.
 - **Requirements:** R4-R8.
+- **Dependencies:** U3, U8.
 - **Files:** `apps/survey/app/survey/page.tsx`, `apps/survey/components/SurveyJsAdapter.tsx`, `apps/admin/app/surveys/assisted/page.tsx`, `packages/surveys/src/adapters/human-phone.ts`, `packages/surveys/src/adapters/ai-voice.ts`, `apps/survey/tests/e2e/have-your-say.spec.ts`, `apps/survey/tests/e2e/mobile-accessibility.spec.ts`.
 - **Approach:** Use SurveyJS for web presentation, approved versioned spoken scripts for phone and shared fixture histories for adapter conformance. Use neutral titles/URLs, no-store caching, restrictive referrers, no third-party tracking or session replay, inert free-text rendering and safe verified follow-up.
 - **Test scenarios:** Keyboard-only completion, screen-reader labels, 320px viewport, 200% zoom, interrupted connection, shared-device quick exit, Back/history/cache checks, stored-XSS and prompt-injection fixtures, mistyped/shared contact destination, spoken option order and clarification, human handover and equivalent phone/web branches.
@@ -239,25 +261,27 @@ flowchart TB
 ### U5. Build change review and publication controls
 
 - **Goal:** Let agents draft safely while reserving production authority for people.
-- **Requirements:** R1-R3, R12-R14.
-- **Files:** `apps/admin/app/surveys/releases/page.tsx`, `packages/surveys/src/semantic-diff.ts`, `packages/surveys/src/review-policy.ts`, `docs/surveys/change-control.md`, `docs/runbooks/withdraw-survey-version.md`.
-- **Approach:** Generate classified diffs and four-mode previews. Activate through an atomic active-release pointer only after the policy-required approvals bind the release hash.
-- **Test scenarios:** Editor cannot publish; consent-copy change requires privacy/legal approval; missing translation falls back to human; rollback rejects an unlawful or incompatible release.
+- **Requirements:** R1-R3, R12-R14, R19, R24-R25.
+- **Dependencies:** U2, U8.
+- **Files:** `apps/admin/app/surveys/releases/page.tsx`, `apps/admin/app/suggestions/page.tsx`, `packages/surveys/src/semantic-diff.ts`, `packages/surveys/src/review-policy.ts`, `docs/surveys/change-control.md`, `docs/runbooks/withdraw-survey-version.md`.
+- **Approach:** Generate classified diffs and four-mode previews. Use `NEW → ACKNOWLEDGED → ASSIGNED → IN_REVIEW → SAFETY_ESCALATED | LINKED_TO_EXISTING | ACCEPTED_FOR_REVIEW | NO_CHANGE_NEEDED → CLOSED` for suggestion review, with owner, due time, permitted transitions, duplicate/related links, escalation destination, separate reviewer notes and final disposition. Define loading, empty, error, stale/concurrent-change and success states. Render suggestion source text only as escaped plain text, preserve its untrusted label and internal reference, and require a named reviewer to write any downstream neutral summary. Activate through an atomic active-release pointer only after the policy-required approvals bind the release hash and U8 authorises the action.
+- **Test scenarios:** Queue loading, empty, error and retry states are accessible; assignment and each permitted disposition are audited; two reviewers cannot overwrite a newer decision; safety escalation reaches the approved destination and cannot be silently closed; editor cannot publish; suggestion cannot mutate the active release or enter an AI/tool context; stored HTML, malicious links and prompt instructions stay inert through linking; consent-copy change requires privacy/legal approval; missing translation falls back to human; stale MFA, forged mutation, replayed approval, concurrent change and unlawful rollback are denied.
 - **Verification:** Role, state-machine and approval-bundle tests pass.
 
 ### U6. Reconcile the public website and stable route
 
 - **Goal:** Make every public Have Your Say action use the IRAAC-owned route without losing rollback.
-- **Requirements:** R15.
+- **Requirements:** R15, R25.
 - **Files:** Public repo `build.py`, eleven generated HTML pages, `vercel.json`, `tests/test_build_reproducibility.py`, `tests/test_survey_destination.py`, `.github/workflows/static-site-checks.yml`.
-- **Approach:** First make `build.py` reproduce the reviewed public site. Then add a temporary `/survey` redirect and regenerate every CTA from one constant.
-- **Test scenarios:** No Google/provider URL remains after cutover; no placeholder asset returns; all internal links resolve; redirect can switch back during rollback.
+- **Approach:** First make `build.py` reproduce the reviewed public site. Then add a temporary `/survey` redirect and regenerate every CTA from one constant. Add Admin beneath Contact Us only after `https://admin.iraac-aco.com/login` passes its DNS, TLS, callback, login and unauthenticated API-denial readiness checks.
+- **Test scenarios:** No Google/provider URL remains after cutover; no placeholder asset returns; all internal links resolve; redirect can switch back during rollback; Admin is absent before readiness, then opens only the login route; no password, PIN or bypass appears in generated HTML or JavaScript.
 - **Verification:** Static checks and a production link crawl pass.
 
 ### U7. Run dual-run, cutover and operational acceptance
 
 - **Goal:** Replace Google Forms only after end-to-end production evidence exists.
-- **Requirements:** R1-R15.
+- **Requirements:** R1-R25.
+- **Dependencies:** U1-U6, U8.
 - **Files:** `docs/runbooks/survey-cutover.md`, `docs/runbooks/survey-rollback.md`, `docs/privacy/data-flow.md`, deployment records outside Git for secrets and real test identifiers.
 - **Approach:** Run an approved parity period, verify a controlled production smoke submission, exercise rollback, activate `/survey` and monitor errors. The rollback target must itself be a frozen approved release with compatible privacy, age, consent and safety wording; otherwise show an IRAAC-owned maintenance page that collects no sensitive answers.
 - **Test scenarios:** New platform outage returns to the old route; smoke data is identified and removed through the approved process; live logs contain no answers or secrets.
@@ -279,18 +303,22 @@ Release evidence must include:
 - abuse/poisoning, resume-token, stored-XSS, prompt-injection and cross-role denial results;
 - the approved retention/disposal schedule, disclosure-control fixtures and vendor/subprocessor data-flow register;
 - the approved V1 release hash and public deployment hash; and
-- a live link crawl showing every Have Your Say action resolves through the IRAAC-owned route.
+- a live link crawl showing every Have Your Say action resolves through the IRAAC-owned route;
+- auth denial tests for unauthenticated, expired, non-MFA and wrong-role sessions; and
+- proof that G05 suggestions enter human review without changing the active release hash.
 
 ---
 
 ## Definition of Done
 
-- U1-U7 meet their test scenarios and verification clauses.
+- U1-U8 meet their test scenarios and verification clauses.
 - The exact V1 content, privacy/consent wording and safety response model have named human approvals.
 - One immutable active survey release serves web and assisted modes; phone adapters pass conformance tests but live AI calling remains disabled.
 - Supabase primary data storage and server execution are configured for Sydney, with vendor/subprocessor review recorded separately.
 - Abuse controls, least-privilege roles, safe resume, no-tracking shared-device behaviour, retention/deletion and verified contact paths pass their release tests.
 - The public site uses the IRAAC-owned `/survey` route and retains a tested rollback.
+- The public Admin link appears only with a verified protected sign-in route; all dashboard access is attributable to named MFA-protected accounts.
+- G05 is optional, its text is handled as untrusted data, and accepted suggestions still require the normal governed survey-change process.
 - Google Forms is retired only after the approved acceptance window and data-retention decision.
 - Runbooks, diagrams and data dictionaries match the deployed system.
 - Experimental, abandoned and duplicate implementation code is removed before merge.

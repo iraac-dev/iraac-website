@@ -484,6 +484,34 @@ durable public address.
 
 IRAAC staff need a separate logged-in app that lets them do the following:
 
+The public website footer will include an **Admin** link directly beneath
+**Contact Us**. It opens the IRAAC admin sign-in page; it never exposes the
+dashboard itself. Add the footer link only in the same reviewed release that
+puts the authenticated admin route into production, so the public site never
+ships a dead link or a misleading static password screen.
+
+The originally suggested four-digit shared password must not be used. A value
+written into public HTML or JavaScript is visible and bypassable, and a shared
+credential cannot show which person viewed, changed or approved a report. The
+initial low-friction release therefore uses invite-only, named Supabase Auth
+accounts, server-validated sessions and mandatory MFA. Authorisation is
+enforced again in the API and database through role and row-level policies.
+Passwords and signing secrets live only in the managed authentication service
+or protected environment configuration, never in this public repository. A
+later access-group or single-sign-on option may simplify onboarding without
+removing individual accountability.
+
+The reference production entry point is
+`https://admin.iraac-aco.com/login`. The private deployment owns that origin,
+its cookies and authentication callbacks. DNS, TLS, callback allowlists,
+content-security/referrer policy and a readiness check must pass before the
+public footer publishes the link. Publishing, withdrawing or rolling back a
+survey/report, changing roles, sending invitations and recovering a privileged
+account require a recent step-up MFA check. Invitations are short-lived and
+single-use; publisher recovery uses dual control; removal revokes active
+sessions. Cross-origin mutations use an approved CSRF-resistant session
+pattern and every sensitive action binds to the exact artefact hash.
+
 - **See survey activity.** How many surveys have gone out this month, how
   many have come back, what the response rates look like by channel (email
   vs SMS vs call), by region, and by demographic.
@@ -511,10 +539,16 @@ IRAAC staff need a separate logged-in app that lets them do the following:
   approve and schedule the community, staff/partner and government reports.
   Every output is a draft until named approvers lock its dataset, privacy
   treatment, claims, recommendations, artefact and recipient manifest.
+- **Review what people think is missing.** See suggestions submitted through
+  the survey or received as replies to report/newsletter emails; acknowledge,
+  deduplicate, classify, assign and close them. Accepted suggestions enter the
+  governed issue or survey-review backlog. A reply or suggestion never changes
+  the active survey automatically.
 
 Auth is real. Passwords, sessions, role-based access at minimum (office staff
-vs. head office vs. read-only). PII handling must respect Indigenous Data
-Sovereignty principles (see §11).
+vs. head office vs. read-only), MFA for every privileged account, rate limits,
+session expiry, account recovery and access revocation are required. PII
+handling must respect Indigenous Data Sovereignty principles (see §11).
 
 The dashboard distinguishes operational KPIs (attempts, delivery, response,
 timeliness, workload and cost) from community outcome indicators (whether an
@@ -552,6 +586,41 @@ Explicitly linked to Local Decision Making outcomes: "You transferred these
 decisions to us because we can show you what community is actually telling
 us. Here it is." It stays private in the admin dashboard unless a separately
 approved public version is created.
+
+Every distributed community newsletter, staff/partner report email and
+government report email ends with the same governed listening invitation:
+
+> **What are we missing?**
+> Please reply to this email if there is an issue IRAAC should explore, a
+> question the survey should ask, or something important you believe has been
+> missed. We would love to hear from you. Every suggestion is reviewed by
+> IRAAC and may inform a future report, investigation or governed survey
+> revision.
+
+Use a monitored IRAAC `Reply-To` address. Inbound replies are untrusted content
+and enter a suggestion queue with source, audience, message/report version,
+received time and acknowledgement state. They do not count as report approval,
+consent, a survey response or permission to contact the writer through another
+channel. Automated acknowledgements must avoid repeating sensitive content.
+Named staff triage each suggestion through `NEW → ACKNOWLEDGED → ASSIGNED →
+IN_REVIEW → SAFETY_ESCALATED | LINKED_TO_EXISTING | ACCEPTED_FOR_REVIEW |
+NO_CHANGE_NEEDED → CLOSED`. Accepted items
+go to the issue taxonomy, a supplemental investigation or the next governed
+survey review; they never mutate the active questionnaire directly.
+The suggestion record permanently retains its untrusted-source label. Staff
+views render it only as escaped plain text. Linking or promoting a suggestion
+preserves an internal reference; it never copies raw text into an AI prompt,
+tool instruction or external issue. A named person writes the neutral summary
+used in a report, investigation or survey-change proposal.
+
+Only successfully submitted survey text is monitored. G05 must say this before
+the person types, repeat the immediate-help paths beside the field and preserve
+them through review/submit; abandoned or unsent text creates no monitoring
+promise. Before launch, IRAAC approves expected and burst volume, trained
+reviewer capacity, queue-age alerts, on-call ownership and a safe backlog
+threshold. If capacity is exceeded, the platform pauses G05 collection and
+shows the approved human contact pathway rather than accepting unreviewable
+text. Abuse quarantine cannot silently suppress a safety concern.
 
 An internal government or staff artefact is never published directly. Any
 material intended for public release becomes a new `community_public`

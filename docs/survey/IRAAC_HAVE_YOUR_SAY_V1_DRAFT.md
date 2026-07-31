@@ -131,6 +131,7 @@ offender name or evidence.
 | G02 | If you could say one thing directly to government, what would it be? | Paragraph | Optional. |
 | G03 | What is one change that would make life better over the next year? | Paragraph | Optional. |
 | G04 | Is there anything working well that government and services should protect or build on? | Paragraph | Optional. |
+| G05 | Is there anything important this survey did not ask about, or an issue IRAAC should explore? | Paragraph | Optional. State before the field that this is not an emergency service and only a successfully submitted response is reviewed. Keep approved immediate-help choices visible. Suggestions are reviewed by trained staff and may inform a future report, investigation or governed survey revision; they do not change the active survey automatically or guarantee a reply. A submitted response remains an inert canonical survey answer and creates one linked suggestion-review record. |
 
 Open text is highly sensitive and untrusted. Enforce approved length limits,
 store and render it as inert text, and prohibit raw HTML or Markdown. Redact and
@@ -181,6 +182,18 @@ Notice and response-use acknowledgement separately from optional contact
 permissions. Do not require Terms unless legal review confirms that service
 Terms are necessary. Submission creates one idempotent completion event and a
 receipt/reference that reveals no answers.
+
+The completion page repeats that people may use G05 to tell IRAAC what was
+missed and provides the general IRAAC contact pathway for anyone who would
+rather speak with a person. It must not imply that submitting a suggestion
+guarantees a survey change, service response or individual follow-up.
+Display the approved urgent-help choices again. Every non-empty G05 response
+enters trained human triage within the approved staffed-hours and response-time
+policy. Deterministic rules may raise priority but never dismiss or close a
+safety concern; an LLM cannot make the safety decision.
+If trained-review capacity or queue-age limits are exceeded, disable G05 for
+new sessions and show the approved human contact pathway until the named safety
+owner records that capacity is restored.
 
 ## Delivery parity
 

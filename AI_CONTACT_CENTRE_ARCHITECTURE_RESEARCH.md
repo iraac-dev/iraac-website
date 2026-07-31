@@ -253,6 +253,15 @@ de-identified derived views and versioned artefacts:
 - private IRAAC/affiliate/partner management report; and
 - private government advocacy report.
 
+Every distributed version carries a standard reply invitation asking what
+issue or survey question IRAAC may have missed. Replies go to a monitored
+IRAAC address and become untrusted suggestion records, not approvals, contact
+permissions or survey answers. Store source audience, report/content version,
+received time and acknowledgement state. Human reviewers deduplicate and route
+accepted suggestions into the issue backlog, a supplemental investigation or
+the governed survey successor process; no email reply may mutate the active
+survey.
+
 Metrics are deterministic. The LLM receives bounded de-identified outputs and
 creates a draft/redline, never the source statistics. Review email contains a
 signed expiring dashboard link. Free-text replies may be imported only as
@@ -275,6 +284,19 @@ Private reports use authenticated portal access or expiring recipient-bound
 downloads, with no sensitive email attachment by default. Public publishing
 has explicit build, deployed-unverified, verified, failure, retry and rollback
 states so a failed release leaves the prior Reports index intact.
+
+The public footer exposes an Admin link only when the private application has a
+working sign-in route. Use named invite-only accounts with Supabase Auth, MFA,
+server-side session validation and RLS-backed role checks. A shared four-digit
+PIN or client-side password gate is not an authentication control and provides
+no accountable audit trail.
+
+Use `https://admin.iraac-aco.com/login` as the reference entry point, with the
+private application owning its session cookie and callback allowlist. Require
+recent step-up MFA for publication, withdrawal, rollback, invitations, role
+changes and privileged recovery; use dual control for publisher recovery and
+revoke all sessions when access is removed. The footer readiness gate verifies
+DNS, TLS, callbacks, login protection and a direct unauthenticated API denial.
 
 ### Deterministic policy engine
 
@@ -591,6 +613,10 @@ before selection.
 - [Amazon Pinpoint end-of-support migration](https://docs.aws.amazon.com/pinpoint/latest/userguide/migrate.html)
 - [Gmail sender requirements](https://support.google.com/mail/answer/81126)
 - [Supabase Data API and RLS security](https://supabase.com/docs/guides/api/securing-your-api)
+- [Supabase Auth](https://supabase.com/docs/guides/auth)
+- [Supabase multi-factor authentication](https://supabase.com/docs/guides/auth/auth-mfa)
+- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
+- [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)
 - [Twilio Australia voice pricing](https://www.twilio.com/en-us/voice/pricing/au)
 - [Twilio ConversationRelay](https://www.twilio.com/docs/voice/twiml/connect/conversationrelay)
 - [Twilio AU1 regional migration](https://www.twilio.com/docs/global-infrastructure/localized-uris/regional-migration-best-practices)

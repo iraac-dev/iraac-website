@@ -414,6 +414,8 @@ Design migrations for at least:
 - `report_versions`
 - `report_review_threads`
 - `report_comments`
+- `issue_suggestions`
+- `suggestion_events`
 - `report_publications`
 - `approvals`
 - `distribution_manifests`
@@ -708,6 +710,29 @@ Rules:
 - reports remain drafts until all policy-defined approvals are satisfied;
 - no automatic external sending during development.
 
+Append this standard block to every approved community newsletter,
+staff/partner report email and government report email:
+
+> **What are we missing?**
+> Please reply to this email if there is an issue IRAAC should explore, a
+> question the survey should ask, or something important you believe has been
+> missed. We would love to hear from you. Every suggestion is reviewed by
+> IRAAC and may inform a future report, investigation or governed survey
+> revision.
+
+Configure a monitored IRAAC `Reply-To` address. Import replies only as inert,
+untrusted suggestions linked to their content/report version and audience.
+Send a neutral acknowledgement that does not repeat sensitive content. Support
+`NEW → ACKNOWLEDGED → ASSIGNED → IN_REVIEW → SAFETY_ESCALATED |
+LINKED_TO_EXISTING | ACCEPTED_FOR_REVIEW | NO_CHANGE_NEEDED → CLOSED`. Never
+interpret a reply as approval, consent, a survey
+answer or permission for another contact channel. Never let a reply update the
+active survey; accepted suggestions enter the governed review process.
+Preserve the untrusted-source label and an internal source reference through
+every state. Render only escaped plain text to authorised reviewers. Do not
+copy raw text into an external issue, report prompt or agent tool; a named
+reviewer writes the neutral summary used downstream.
+
 Rename the public site navigation and route from Insights to Reports. Add a
 Reports index and stable child pages showing only approved community artefacts,
 with title, publication date, reporting period, type/topic, summary, full
@@ -864,6 +889,19 @@ logs.
 ### W2 — Canonical survey and intake
 
 - versioned survey contracts;
+- optional final G05 prompt asking what the survey missed or what issue IRAAC
+  should explore, with clear non-emergency wording and approved help paths;
+- keep G05 as one inert canonical answer and create one idempotent linked
+  suggestion workflow record on successful submission, without copying text;
+- trained human review of every non-empty G05 response under approved staffed
+  hours and response targets; deterministic rules may raise safety priority but
+  never dismiss it, and an LLM cannot decide that a disclosure is safe;
+- state before G05 that only successfully submitted text is reviewed and keep
+  approved immediate-help routes visible; abandoned or unsent text creates no
+  monitoring promise;
+- define expected/burst volume, reviewer throughput, queue-age alert and safe
+  backlog thresholds; disable G05 for new sessions and show the human pathway
+  if trained review capacity is exceeded;
 - one stable approved core with rare governed successor releases;
 - Next.js/SurveyJS web renderer plus staff, human-phone and AI-phone adapters
   against the same deterministic contract;
@@ -939,6 +977,8 @@ hang-up/stop/complaint blocks retries; survey parity and caller-ID tests pass.
   AI-proposed redlines into new versions and policy-defined approval workflow;
 - de-identification, small-cell and evidence/comparability labels;
 - public Reports index/child-page publication feed and Insights redirect;
+- suggestion inbox for survey submissions and email replies, with human
+  acknowledgement, deduplication, classification, assignment and closure;
 - immutable publication/distribution manifest;
 - authenticated or recipient-bound private report access, audited downloads,
   public deployment verification, rollback, corrections and retractions.
@@ -948,6 +988,35 @@ text creates approval; changed content/recipient hashes require reapproval; no
 report can publish/send without the required locked approval; only approved
 `community_public` reports appear publicly; failed publication leaves the prior
 Reports index intact; sensitive private reports are not ordinary attachments.
+Every distributed template contains the approved feedback block; replies are
+stored as untrusted suggestions and cannot change a report, survey or consent
+state without a named human decision.
+
+### W6A — Admin entry and authentication
+
+- add **Admin** beneath **Contact Us** in the public footer only when the
+  production admin sign-in route is ready;
+- use a public login screen and a private dashboard with invite-only named
+  Supabase Auth accounts;
+- use `https://admin.iraac-aco.com/login` as the reference production route,
+  with the private application owning cookies and callbacks;
+- require MFA, server-side session validation, short-lived sessions,
+  rate-limited login/recovery and RLS-backed role/office access;
+- require recent step-up MFA for publish, withdraw, rollback, invitation, role
+  and privileged recovery actions; use short-lived single-use invitations and
+  dual-controlled publisher recovery;
+- use a CSRF-resistant mutation design, bind approvals to exact artefact hashes,
+  rotate sessions after authentication changes and revoke them on removal;
+- audit sign-in, access, review, change and approval actions by named actor;
+- never embed a password or shared PIN in HTML, JavaScript, Git or client
+  configuration.
+
+Acceptance: an unauthenticated or low-assurance session cannot read dashboard
+data or call private APIs; roles cannot cross office/data boundaries; removal
+revokes access; the public bundle contains no credential or bypass; the footer
+link is absent until DNS, TLS, callback, login and direct API-denial readiness
+checks pass. Forged cross-origin mutations, stale MFA, replayed approvals and
+concurrent artefact changes are denied.
 
 ### W7 — AI voice pilot
 

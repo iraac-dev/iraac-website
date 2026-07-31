@@ -36,6 +36,16 @@ rare reviewed successor releases. Monthly reporting topics do not rewrite it.
 The public **Insights** section is planned to become **Reports**, containing
 only approved community reports with stable index and detail pages. Staff,
 partner and government reports remain private in the future admin dashboard.
+When that authenticated dashboard is live, the public footer will add an
+**Admin** link beneath **Contact Us**. The link will open an invite-only login;
+no shared password or private dashboard data will be stored in this static
+public repository.
+
+Every newsletter and report email will invite recipients to reply with an
+issue or survey question they believe IRAAC has missed. The stable survey ends
+with the same optional prompt. Suggestions enter a human-reviewed queue and
+may inform a future report, investigation or governed survey release; they do
+not automatically rewrite the live questionnaire.
 
 ## Project planning
 

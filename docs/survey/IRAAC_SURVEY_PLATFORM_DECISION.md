@@ -81,6 +81,14 @@ alter live evidence.
   contact consent. A successful submission creates one completion event.
 - Monthly reporting topics use an approved taxonomy and never silently mutate
   the survey.
+- The public site may link to a public admin sign-in page only after the
+  private dashboard is deployed. Use invite-only named Supabase Auth accounts,
+  mandatory MFA, server-side session checks and RLS. Never use a shared PIN or
+  a password embedded in the static site.
+- Store end-of-survey and email-reply suggestions in a separate governed
+  review queue. Treat the text as untrusted, require human triage and route an
+  accepted item into the normal successor-release process rather than changing
+  the active definition.
 
 Before full implementation, run a time-boxed V1 spike and compare it with a
 Qualtrics Australian-region trial/quote using mandatory accessibility, resume,
