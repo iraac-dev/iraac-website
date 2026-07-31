@@ -332,6 +332,96 @@ so any verified current-cycle completion or terminal response cancels every
 controllable remaining chase step. Mode effects and non-response bias must be
 tested before pooling channel results as though they were interchangeable.
 
+### One preference service, distinct scopes
+
+The safest design is one IRAAC-owned preference and suppression service in the
+final eligibility path for email, SMS, human calls and AI calls. Providers may
+mirror suppressions, but no provider list is the source of truth. Use explicit,
+non-overlapping events:
+
+| Event | Effect |
+|---|---|
+| `REPORT_SERIES_EMAIL_UNSUBSCRIBE` | Stops the named newsletter/report series at the canonical email endpoint |
+| `ALL_NONESSENTIAL_EMAIL_STOP` | Stops every non-essential IRAAC newsletter/report email at the endpoint |
+| `SMS_STOP` | Stops approved outbound SMS at the canonical phone endpoint |
+| `VOICE_DO_NOT_CALL` | Stops every outbound human and AI call by or for IRAAC at the canonical phone endpoint |
+| `GLOBAL_STOP` | Stops all non-essential IRAAC outreach across every linked endpoint |
+| `STATUTORY_DNCR_CHECK` | Records a national Register list-wash result; it is evidence, not a substitute for internal suppression |
+
+Every community newsletter, government report distribution and staff/partner
+report distribution should include clear controls to unsubscribe from that
+series, stop IRAAC calls and manage all contact preferences. This is a stronger
+governance baseline than the minimum rule for a strictly factual operational
+message. A role-based recipient who unsubscribes is removed from the manifest;
+the admin workflow asks an authorised owner to nominate a replacement rather
+than silently resubscribing the same person. Keep genuinely essential
+employment, security or governance notices in a separately classified stream
+with no promotional content.
+
+For commercial electronic messages, ACMA requires a clear functional
+unsubscribe that remains available for at least 30 days, costs no more than
+usual, requires no login/account or extra personal information, and is honoured
+within five working days. IRAAC's product target should be immediate effect.
+The legal unsubscribe must stop all commercial email at that endpoint; topic
+opt-down choices may be offered but cannot obstruct it. A public business email
+is not blanket consent: the 10,000-address source needs per-record provenance,
+role relevance and a documented lawful basis before eligibility.
+
+Use an opaque signed token with no PII in the URL, generic success/error pages,
+single-purpose mutation endpoints, replay-safe idempotency and no identity
+disclosure for forwarded, invalid or expired links. Email replies saying
+unsubscribe, provider complaints, SMS `STOP`, admin entries and voice requests
+all append to the same canonical ledger. Every provider handoff repeats the
+eligibility check. A suppression arriving after provider acceptance cancels
+what is controllable and reconciles the remainder as
+`SUPPRESSED_AFTER_PROVIDER_ACCEPTANCE`; retries can never resurrect it.
+
+### Spoken stop requests are a hard real-time interrupt
+
+The Telemarketing and Research Calls Industry Standard applies to research
+calls and recorded or synthetic voices. It requires immediate termination when
+the recipient asks for termination or otherwise indicates they do not want the
+call to continue. Therefore stop detection is a deterministic safety control,
+not an LLM conversation choice.
+
+At every voice state, evaluate approved stop-intent patterns before ordinary
+dialogue. Treat "I am on the Do Not Call Register" as both an instruction to
+end the current call and a request that IRAAC not call the endpoint again,
+without arguing about business-number eligibility or an exemption. Append
+`VOICE_DO_NOT_CALL`, cancel queued human/AI calls, speak one brief
+acknowledgement and hang up. No identity proof, survey completion or repeated
+confirmation is required.
+
+IRAAC must say it has added the number to **IRAAC's internal do-not-call list**,
+not the Australian Government's Register. IRAAC cannot register a number on a
+recipient's behalf merely because the recipient said the phrase. If asked, the
+system may provide the official national route after recording the internal
+stop, without delaying termination.
+
+The durable-write path is fail closed. If the suppression database is
+unavailable, the call still ends, the canonical endpoint enters a local
+encrypted quarantine, an incident is raised and no retry is permitted until
+reconciliation writes the permanent event. In production that quarantine must
+be an independently durable encrypted emergency outbox; if it is unavailable,
+pause the campaign. Use truthful fallback copy that says IRAAC blocked retry
+and alerted its team, not that the permanent record definitely succeeded.
+Minimal evidence is sufficient:
+endpoint reference, event scope, source, request/effective times,
+policy/script version and call/provider correlation. Do not enable recording or
+retain a full transcript simply to prove the request. An authorised and
+separately audited re-permission process is the only path to supersede an
+internal voice stop; imports, new campaigns, provider retries and ordinary
+consent records cannot do so.
+
+Normalise provider-confirmed Australian numbers to E.164 and index long-lived
+suppression tombstones with a versioned HMAC-SHA-256 endpoint key backed by an
+approved key manager. Do not use a plain phone-number hash. Phone runtimes may
+append idempotent stop events but cannot inspect or remove them; campaign
+services receive only an eligibility decision. Exceptional reinstatement for a
+verified reassignment or later explicit re-permission needs proof of endpoint
+control, a new channel receipt, named compliance approval, recent MFA, dual
+control and an append-only supersession event.
+
 ### Deterministic AI survey
 
 The LLM does not own question order, skip logic, consent, eligibility or
@@ -589,6 +679,10 @@ before selection.
 - [Do Not Call Register Act 2006](https://www.legislation.gov.au/C2006A00088/latest/text)
 - [Telemarketing and Research Calls Industry Standard](https://www.legislation.gov.au/Latest/F2017L00323)
 - [ACMA avoid sending spam](https://www.acma.gov.au/avoid-sending-spam)
+- [ACMA email and SMS unsubscribe rules](https://www.acma.gov.au/sites/default/files/2024-05/Fact%20sheet%20-%20email%20and%20SMS%20unsubscribe%20rules.pdf)
+- [RFC 8058 one-click unsubscribe](https://datatracker.ietf.org/doc/html/rfc8058)
+- [Google email sender guidelines](https://support.google.com/a/answer/81126)
+- [Do Not Call Register using the register](https://www.donotcall.gov.au/industry/industry-overview/using-the-register)
 - [DNCR industry standards](https://www.donotcall.gov.au/industry/industry-overview/industry-standards/)
 - [DNCR registering numbers](https://www.donotcall.gov.au/consumers/register-your-numbers)
 - [ACMA SMS Sender ID Register](https://www.acma.gov.au/industry-rules-sms-sender-id-register)

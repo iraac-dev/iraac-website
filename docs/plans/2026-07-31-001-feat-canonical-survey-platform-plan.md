@@ -15,7 +15,7 @@ execution: code
 - **Objective:** Replace the current Google Form with one stable, IRAAC-owned Have Your Say survey that works across web, assisted and phone modes and produces governed evidence.
 - **Authority:** `ROADMAP.md` owns product and governance rules. `docs/survey/IRAAC_HAVE_YOUR_SAY_V1_DRAFT.md` owns the draft instrument. `docs/survey/IRAAC_SURVEY_PLATFORM_DECISION.md` owns the selected stack.
 - **Execution profile:** Build a new private listening-platform repository, then cut the public site over only after parity, safety, privacy, accessibility and rollback gates pass.
-- **Stop conditions:** Do not collect real responses until V1 and its notices are approved. Do not contact participants or enable AI calls during this survey-platform release.
+- **Stop conditions:** Do not collect real responses until V1 and its notices are approved. Both human-phone and AI-phone adapters are conformance simulators in this release; they receive no production telephony credentials or egress and may not contact real participants.
 - **Tail ownership:** The implementing team owns tests, deployment evidence, runbooks, rollback and removal of experimental code before handoff.
 
 ---
@@ -73,6 +73,14 @@ The current static website points to Google Forms and has no governed backend. G
 - R23. V1 answers may be used only for the approved core listening, advocacy and de-identified reporting purpose; any distinct secondary-research purpose requires a separate future permission and receipt.
 - R24. V1 must end with an optional question asking what the survey missed or what issue IRAAC should explore. Participant copy must say it supports future community priorities, is not an emergency or individual-support channel, only successfully submitted text is reviewed and a personal reply is not guaranteed; immediate-help choices remain visible beside the field and submission confirms receipt. The answer enters human review and never mutates the active survey automatically. G05 collection pauses in new sessions when approved trained-review capacity or queue-age thresholds are exceeded.
 - R25. The public footer may expose an Admin sign-in link only after a protected route exists; dashboard access must use named accounts, MFA and server/API/database authorisation, never a shared or client-side PIN.
+- R26. Every phone adapter must expose a deterministic priority stop action. A
+  spoken request to stop, not be called again or a statement that the number is
+  on the Do Not Call Register must immediately end the call and append an
+  endpoint-level IRAAC `VOICE_DO_NOT_CALL` suppression. The acknowledgement
+  must say that IRAAC will stop calling and has added the number to IRAAC's
+  internal do-not-call list; it must also make clear that IRAAC is not adding
+  the number to the Australian Government's Do Not Call Register. A failed
+  central write must still terminate and fail closed.
 
 **Governed change**
 
@@ -89,9 +97,9 @@ The current static website points to Google Forms and has no governed backend. G
   - **Covered by:** R1, R3, R5, R6, R9-R12, R15.
 - F2. **Assisted or phone completion**
   - **Trigger:** A2, A3 or later A4 starts the survey with a participant.
-  - **Steps:** Pin the same release; present the approved adapter; confirm answers; invoke the shared engine; pause, save, withdraw or submit through the canonical API.
-  - **Outcome:** Delivery mode differs while meaning, branch and stored answer shape remain equivalent.
-  - **Covered by:** R3-R7, R9-R12.
+  - **Steps:** Pin the same release; present the approved adapter; confirm answers; invoke the shared engine; pause, save, withdraw or submit through the canonical API. A stop indication interrupts any phone step, invokes the authoritative suppression command and terminates without another survey question.
+  - **Outcome:** Delivery mode differs while meaning, branch and stored answer shape remain equivalent; a phone stop creates a deny-wins canonical voice-endpoint suppression.
+  - **Covered by:** R3-R7, R9-R12, R26.
 - F3. **Rare survey revision**
   - **Trigger:** Governance, evidence, law, safety, accessibility or methodology justifies a change.
   - **Steps:** Create successor draft; classify semantic diff; preview every adapter; run automated tests; collect named approvals; atomically activate the approved hash.
@@ -110,6 +118,12 @@ The current static website points to Google Forms and has no governed backend. G
 - AE8. **Covers R20:** Given free text contains HTML and instructions for an AI, when staff previews and report extraction run, then the text renders inertly and cannot invoke tools or alter report instructions.
 - AE9. **Covers R24:** Given a participant suggests a new topic in G05, when the survey is submitted, then the text enters the suggestion queue and the active release hash remains unchanged.
 - AE10. **Covers R25:** Given an unauthenticated visitor follows the public Admin link, when they request dashboard data directly, then the server and database deny access and no secret is present in the public bundle.
+- AE11. **Covers R26:** Given a recipient says "I am on the Do Not Call Register"
+  during any phone-adapter state, when the stop guard detects it, then the
+  adapter asks no further question, records `VOICE_DO_NOT_CALL` for the
+  canonical endpoint, uses the approved IRAAC-internal-list acknowledgement
+  and terminates; if the store is unavailable, it terminates, quarantines the
+  endpoint and blocks retry.
 
 ### Success Criteria
 
@@ -124,9 +138,9 @@ The current static website points to Google Forms and has no governed backend. G
 
 ### Scope Boundaries
 
-**Included:** the stable V1 survey contract, optional missing-issue suggestion intake, web survey, staff and phone adapters, governed storage, consent receipts, release review/publish controls, protected named-account admin entry, tests, a non-production deployment and controlled public cutover.
+**Included:** the stable V1 survey contract, optional missing-issue suggestion intake, web survey, staff adapter, conformance-only human-phone and AI-phone simulators, governed storage, consent receipts, release review/publish controls, protected named-account admin entry, tests, a non-production deployment and controlled public cutover.
 
-**Deferred:** live AI calling, outreach campaigns, automated reports, a youth instrument, a general form builder, rotating monthly modules, live machine translation and full disconnected field collection.
+**Deferred:** all live human and AI outbound calling, provider credentials and cancellation, outreach campaigns, automated reports, a youth instrument, a general form builder, rotating monthly modules, live machine translation and full disconnected field collection. A separate reviewed live-calling plan must select the provider and independent durable emergency-quarantine implementation before either phone mode receives production egress.
 
 **Possible later adapter:** ODK Central may feed the canonical API if production-grade disconnected field collection becomes urgent. ODK identifiers must not become IRAAC's enterprise data model.
 
@@ -151,6 +165,8 @@ The current static website points to Google Forms and has no governed backend. G
 - KTD13. **The selected stack has a measured acceptance gate.** Build a thin U1-U3 vertical slice of the real V1 web/phone contract, then compare it with a Qualtrics Australian-region trial/quote against recorded mandatory thresholds for accessibility, interruption/resume, consent evidence, phone parity, immutable releases, export, incident recovery, cost and operator burden. Record the evidence and named go/no-go decision before U4, U5 or U8 expands the system. Governs R4-R5, R9-R14.
 - KTD14. **Admin access is simple but attributable.** Use `https://admin.iraac-aco.com/login`, invite-only named Supabase Auth accounts, mandatory MFA, server-validated sessions and RLS-backed roles. Require recent step-up MFA for publication, withdrawal, rollback, invitation, role and privileged recovery actions; use dual control for publisher recovery, CSRF-resistant mutations, short-lived single-use invitations and immediate session revocation on removal. Add the public footer link only after DNS, TLS, callbacks, login and direct API-denial readiness pass. Reject a shared or static-site PIN because it is bypassable and cannot support individual audit. Governs R19, R25.
 - KTD15. **Suggestions enter governance, not the survey.** G05 remains one inert canonical answer. Only final submission creates one suggestion workflow record referencing that answer, without copying the raw text; partial or abandoned text is not monitored. A named reviewer may link the record internally to an issue or write a neutral successor proposal through U5; the untrusted label persists and no suggestion alters an active definition. Every submitted non-empty G05 response enters trained human triage under approved staffed-hours, throughput, queue-age and response-time limits. Deterministic rules may raise priority but never dismiss safety risk, and an LLM cannot make that decision. Exceeding the safe backlog threshold disables G05 for new sessions and presents the human pathway. Governs R1-R2, R7, R20, R24.
+- KTD16. **The suppression command, not a phone adapter, owns a stop.** A canonical voice endpoint is the provider-confirmed dialled Australian number normalised to E.164, represented in lookup indexes by a versioned HMAC-SHA-256 key whose secret is held in an approved key manager, and linked deny-wins across formatting variants, duplicates and shared-number records. Ambiguous regional inputs are quarantined rather than guessed; dual-read key rotation and collision/migration tests preserve existing stops. A service-authenticated, idempotent command resolves that endpoint, atomically appends `VOICE_DO_NOT_CALL`, updates the current deny projection and audit record, and returns an explicit committed or unavailable result. Phone runtimes may append idempotent stop events but cannot inspect or remove suppressions; campaign services receive allow/deny only; ordinary staff cannot enumerate raw endpoints. V1 implements and tests this provider-neutral contract against synthetic endpoints. The later live-calling release must bind it to an independently durable encrypted emergency outbox and provider cancellation. Re-import, contact merge and ordinary consent cannot clear a stop; any verified number-reassignment or explicit re-permission process is a separately approved future workflow requiring proof of endpoint control, a new channel-specific receipt, a named compliance role, recent MFA, dual approval and an append-only supersession event. Governs R9-R11, R19, R26.
+- KTD17. **Phone adapters are non-production conformance simulators in V1.** Neither human-phone nor AI-phone code receives production telephony credentials, provider endpoints or outbound network egress. A server-side capability gate is disabled in every production environment, and build/deployment tests prove an origin call cannot be made. Live activation requires a separate approved implementation plan covering legal classification, consent, staff training, emergency quarantine, provider cancellation, incident response and production acceptance. Governs R4, R7, R26.
 
 ### High-Level Technical Design
 
@@ -165,6 +181,10 @@ flowchart TB
   S --> A
   H --> A
   V --> A
+  H --> X["Suppression command API"]
+  V --> X
+  X --> P
+  X -. "central write unavailable" .-> Q["Emergency quarantine contract; production binding deferred"]
   A --> P["Supabase Postgres in Sydney"]
   P --> R["Approved de-identified reporting views"]
   G["Draft, diff, preview and review"] --> D
@@ -188,6 +208,11 @@ flowchart TB
 - Sensitive branches require a named accountable safety owner, staffed hours, escalation destinations, response-time commitments, training evidence, incident audit and shutdown authority before activation.
 - Anonymous responses cannot be directly recontactable; follow-up requires a separately protected pseudonymous contact link.
 - Offline queues can increase device-loss risk. Keep full disconnected collection deferred unless its encrypted-device controls are funded and tested.
+- Live calling remains launch-blocked until a separate plan selects and proves
+  an independently durable encrypted emergency-deny outbox, dispatch-epoch and
+  final pre-provider suppression checks, provider cancellation/callback races,
+  maximum interruption latency, phone-number reassignment governance and the
+  legally/community-approved success and failure acknowledgements.
 
 ### Research Sources
 
@@ -222,20 +247,20 @@ flowchart TB
 ### U2. Build the governed database boundary
 
 - **Goal:** Create the response, contact, consent, release and audit system of record.
-- **Requirements:** R3, R9-R12, R14, R19, R24-R25.
-- **Files:** `supabase/migrations/0001_identity_contact.sql`, `supabase/migrations/0002_survey_releases.sql`, `supabase/migrations/0003_sessions_answers.sql`, `supabase/migrations/0004_consent_receipts.sql`, `supabase/migrations/0005_safety_and_audit.sql`, `supabase/migrations/0006_rls.sql`, `supabase/migrations/0007_suggestions.sql`, `supabase/tests/survey_rls.sql`.
-- **Approach:** Use separate schemas/policies, append-only grant/refusal/withdrawal/expiry/supersession events, authoritative suppressions, idempotency keys, release hashes, a human-triaged suggestion queue and approved de-identified reporting views. Define a role/action/data matrix and a retention/disposal schedule for every domain, including exports and backups. The workflow record follows the answer's correction, withdrawal, deletion and expiry state; it retains only the minimum audit tombstone after source removal. Reviewer summaries keep lineage and are re-reviewed or withdrawn when their source changes. An open safety incident follows its separately approved retention rule.
-- **Test scenarios:** Valid anonymous API write succeeds; every direct public table access fails; each staff, partner, publisher and service identity is denied outside its scope; partial submission creates no consent; withdrawal suppresses queued contact; expired data is removed from primary stores and backups on schedule; sparse-community fixtures enforce disclosure controls; repeated submit creates one completion; a non-empty G05 answer has exactly one linked suggestion workflow record while blank G05 creates none; correction, withdrawal, deletion and expiry update the workflow/summary state without an orphan or retained raw-text copy.
+- **Requirements:** R3, R9-R12, R14, R19, R24-R26.
+- **Files:** `supabase/migrations/0001_identity_contact.sql`, `supabase/migrations/0002_survey_releases.sql`, `supabase/migrations/0003_sessions_answers.sql`, `supabase/migrations/0004_consent_receipts.sql`, `supabase/migrations/0005_safety_and_audit.sql`, `supabase/migrations/0006_rls.sql`, `supabase/migrations/0007_suggestions.sql`, `supabase/migrations/0009_contact_suppressions.sql`, `supabase/tests/survey_rls.sql`, `supabase/tests/contact_suppressions.sql`.
+- **Approach:** Use separate schemas/policies, append-only grant/refusal/withdrawal/expiry/supersession events, authoritative endpoint-level suppressions, idempotency keys, release hashes, a human-triaged suggestion queue and approved de-identified reporting views. `VOICE_DO_NOT_CALL` is deny-wins across human and AI phone modes and remains effective across contact merges, deletion/re-import and ordinary future consent. Define a role/action/data matrix and a retention/disposal schedule for every domain, including exports and backups. The workflow record follows the answer's correction, withdrawal, deletion and expiry state; it retains only the minimum audit tombstone after source removal. Reviewer summaries keep lineage and are re-reviewed or withdrawn when their source changes. An open safety incident follows its separately approved retention rule.
+- **Test scenarios:** Valid anonymous API write succeeds; every direct public table access fails; each staff, partner, publisher and service identity is denied outside its scope; partial submission creates no consent; withdrawal suppresses queued contact; phone formatting variants and duplicate/shared contact rows resolve to the same `VOICE_DO_NOT_CALL`; deletion/re-import and ordinary later consent cannot reactivate it; expired data is removed from primary stores and backups on schedule while the minimum suppression tombstone remains; sparse-community fixtures enforce disclosure controls; repeated submit creates one completion; a non-empty G05 answer has exactly one linked suggestion workflow record while blank G05 creates none; correction, withdrawal, deletion and expiry update the workflow/summary state without an orphan or retained raw-text copy.
 - **Verification:** Migration, RLS and restore tests pass in a non-production Sydney project.
 
 ### U3. Implement the canonical engine and API
 
 - **Goal:** Make all modes use the same validated state transitions.
-- **Requirements:** R3-R7, R10-R12, R24.
+- **Requirements:** R3-R7, R10-R12, R24, R26.
 - **Dependencies:** U1, U2.
-- **Files:** `packages/surveys/src/engine.ts`, `packages/contracts/src/survey-session.ts`, `apps/survey/app/api/public/survey/session/route.ts`, `apps/survey/app/api/public/survey/answer/route.ts`, `apps/survey/app/api/public/survey/resume/route.ts`, `apps/survey/app/api/public/survey/complete/route.ts`.
-- **Approach:** Keep branch calculation server-verifiable, checkpoint answers with monotonic revisions, issue rotating hashed same-device resume credentials and place public writes behind short-lived challenges, privacy-preserving rate limits and quarantine. The idempotent final-submission transaction keeps G05 in the canonical answer set and, when non-empty, creates exactly one suggestion workflow record that references the answer ID rather than copying its text. A failure rolls back completion so a retry can safely finish once.
-- **Test scenarios:** Out-of-order answer revision is rejected; two resumes cannot overwrite data; stolen, replayed and expired credentials fail; request/body limits stop abuse; valid accessibility fallback remains; poisoned responses stay out of reports; a suspended or retracted release follows its approved in-flight rule; deterministic safety logic survives AI outage; absent, whitespace-only, deleted-before-submit and abandoned G05 text create no suggestion; disconnect/retry creates no duplicate; database failure creates neither a completion nor an orphan suggestion; sustained and burst submissions cannot starve legitimate safety triage; crossing the safe backlog threshold disables G05 for new sessions without hiding help routes.
+- **Files:** `packages/surveys/src/engine.ts`, `packages/contracts/src/survey-session.ts`, `packages/contracts/src/contact-suppression.ts`, `apps/survey/app/api/public/survey/session/route.ts`, `apps/survey/app/api/public/survey/answer/route.ts`, `apps/survey/app/api/public/survey/resume/route.ts`, `apps/survey/app/api/public/survey/complete/route.ts`, `apps/survey/app/api/internal/contact-preferences/voice-stop/route.ts`, `apps/survey/tests/integration/voice-stop-route.test.ts`.
+- **Approach:** Keep branch calculation server-verifiable, checkpoint answers with monotonic revisions, issue rotating hashed same-device resume credentials and place public writes behind short-lived challenges, privacy-preserving rate limits and quarantine. Add KTD16's service-authenticated, idempotent suppression command: accept the provider-confirmed dialled endpoint and call correlation, normalise and resolve it server-side, atomically append the stop/projection/audit state, and return deterministic committed/unavailable outcomes. The route is inaccessible to public or ordinary staff identities. The idempotent final-submission transaction keeps G05 in the canonical answer set and, when non-empty, creates exactly one suggestion workflow record that references the answer ID rather than copying its text. A failure rolls back completion so a retry can safely finish once.
+- **Test scenarios:** Out-of-order answer revision is rejected; two resumes cannot overwrite data; stolen, replayed and expired credentials fail; request/body limits stop abuse; valid accessibility fallback remains; poisoned responses stay out of reports; a suspended or retracted release follows its approved in-flight rule; deterministic safety logic survives AI outage; absent, whitespace-only, deleted-before-submit and abandoned G05 text create no suggestion; disconnect/retry creates no duplicate; database failure creates neither a completion nor an orphan suggestion; sustained and burst submissions cannot starve legitimate safety triage; crossing the safe backlog threshold disables G05 for new sessions without hiding help routes; public, ordinary staff, replayed and malformed voice-stop commands fail; an authorised repeated command creates one effective deny state and returns the same result; a central-store timeout returns unavailable without falsely reporting success.
 - **Verification:** Vitest contract and integration suites pass with synthetic fixtures. KTD13's comparison evidence and named go/no-go decision are recorded before dependent expansion begins.
 
 ### U8. Establish the admin authentication boundary
@@ -251,12 +276,12 @@ flowchart TB
 ### U4. Build and test participant and operator adapters
 
 - **Goal:** Deliver accessible web, staff and phone experiences with proven parity.
-- **Requirements:** R4-R8.
+- **Requirements:** R4-R8, R26.
 - **Dependencies:** U3, U8.
 - **Files:** `apps/survey/app/survey/page.tsx`, `apps/survey/components/SurveyJsAdapter.tsx`, `apps/admin/app/surveys/assisted/page.tsx`, `packages/surveys/src/adapters/human-phone.ts`, `packages/surveys/src/adapters/ai-voice.ts`, `apps/survey/tests/e2e/have-your-say.spec.ts`, `apps/survey/tests/e2e/mobile-accessibility.spec.ts`.
-- **Approach:** Use SurveyJS for web presentation, approved versioned spoken scripts for phone and shared fixture histories for adapter conformance. Use neutral titles/URLs, no-store caching, restrictive referrers, no third-party tracking or session replay, inert free-text rendering and safe verified follow-up.
-- **Test scenarios:** Keyboard-only completion, screen-reader labels, 320px viewport, 200% zoom, interrupted connection, shared-device quick exit, Back/history/cache checks, stored-XSS and prompt-injection fixtures, mistyped/shared contact destination, spoken option order and clarification, human handover and equivalent phone/web branches.
-- **Verification:** Playwright, Axe and manual accessibility evidence pass the release threshold.
+- **Approach:** Use SurveyJS for web presentation, approved versioned spoken scripts for phone and shared fixture histories for adapter conformance. Put a code-owned stop-intent guard and human-operator stop control ahead of normal phone dialogue in every state; the LLM may flag candidate wording but cannot continue, narrow or reverse a stop. Barge-in cancels generated speech, conservative interim-ASR and approved semantic patterns favour stopping over continuing, and the adapter invokes KTD16's command. On a committed result, the fixed acknowledgement is: "I'm sorry. I'm ending the call now. IRAAC has recorded that this number must not be called again. This is IRAAC's own list, not the Australian Government's Do Not Call Register. Goodbye." On an unavailable result it must not claim success: "I'm sorry. I'm ending the call now. IRAAC has blocked any retry and alerted our team to complete your request. Goodbye." It asks no further question and the simulator exercises the future emergency-quarantine contract. Enforce KTD17 with no production telephony secrets or egress and a server-side disabled capability. Use neutral titles/URLs, no-store caching, restrictive referrers, no third-party tracking or session replay, inert free-text rendering and safe verified follow-up. Operational logs retain only the suppression event ID, endpoint HMAC, rule/version ID, timestamp, call correlation and outcome; raw audio, transcripts, recognition alternatives and full stop phrases are excluded by default.
+- **Test scenarios:** Keyboard-only completion, screen-reader labels, 320px viewport, 200% zoom, interrupted connection, shared-device quick exit, Back/history/cache checks, stored-XSS and prompt-injection fixtures, mistyped/shared contact destination, spoken option order and clarification, human handover and equivalent phone/web branches; direct and indirect stop phrases—including "I'm on the Do Not Call Register"—interrupt opening, consent, every survey question and closing; accent, noise, overlap, partial-utterance, paraphrase, low-confidence and negation fixtures prove the conservative recognition policy; generated speech stops within the approved latency after the guard emits; no further question is asked; human and AI modes use the same success or failure acknowledgement selected from the command result; a simulated write outage terminates, emits emergency-quarantine work and blocks retry; repeated stop events remain idempotent; logs contain no raw audio, transcript, recognition alternatives or full phrase; production has no credentials/egress and cannot originate a call.
+- **Verification:** Playwright, Axe and manual accessibility evidence pass the release threshold; phone conformance evidence is synthetic only and proves the production-origin-call denial gate.
 
 ### U5. Build change review and publication controls
 
@@ -280,11 +305,11 @@ flowchart TB
 ### U7. Run dual-run, cutover and operational acceptance
 
 - **Goal:** Replace Google Forms only after end-to-end production evidence exists.
-- **Requirements:** R1-R25.
+- **Requirements:** R1-R26.
 - **Dependencies:** U1-U6, U8.
 - **Files:** `docs/runbooks/survey-cutover.md`, `docs/runbooks/survey-rollback.md`, `docs/privacy/data-flow.md`, deployment records outside Git for secrets and real test identifiers.
 - **Approach:** Run an approved parity period, verify a controlled production smoke submission, exercise rollback, activate `/survey` and monitor errors. The rollback target must itself be a frozen approved release with compatible privacy, age, consent and safety wording; otherwise show an IRAAC-owned maintenance page that collects no sensitive answers.
-- **Test scenarios:** New platform outage returns to the old route; smoke data is identified and removed through the approved process; live logs contain no answers or secrets.
+- **Test scenarios:** New platform outage returns to the old route; smoke data is identified and removed through the approved process; live logs contain no answers or secrets; synthetic phone evidence covers stop phrases, central-store outage, emergency-quarantine output, cancellation-race states and production-origin-call denial.
 - **Verification:** Named release sign-off records the exact deployment, database, release and redirect hashes.
 
 ---
@@ -306,6 +331,9 @@ Release evidence must include:
 - a live link crawl showing every Have Your Say action resolves through the IRAAC-owned route;
 - auth denial tests for unauthenticated, expired, non-MFA and wrong-role sessions; and
 - proof that G05 suggestions enter human review without changing the active release hash.
+- phone-adapter evidence that every stop phrase causes immediate termination,
+  canonical endpoint suppression and no retry, including the fail-closed
+  quarantine path.
 
 ---
 
@@ -313,7 +341,9 @@ Release evidence must include:
 
 - U1-U8 meet their test scenarios and verification clauses.
 - The exact V1 content, privacy/consent wording and safety response model have named human approvals.
-- One immutable active survey release serves web and assisted modes; phone adapters pass conformance tests but live AI calling remains disabled.
+- One immutable active survey release serves web and assisted modes; both phone adapters pass only synthetic conformance tests and all live human/AI outbound calling remains disabled.
+- Phone adapters implement the reviewed `VOICE_DO_NOT_CALL` interrupt and
+  cannot claim to register a number on the Australian Government's Register.
 - Supabase primary data storage and server execution are configured for Sydney, with vendor/subprocessor review recorded separately.
 - Abuse controls, least-privilege roles, safe resume, no-tracking shared-device behaviour, retention/deletion and verified contact paths pass their release tests.
 - The public site uses the IRAAC-owned `/survey` route and retains a tested rollback.

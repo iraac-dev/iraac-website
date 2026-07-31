@@ -232,6 +232,95 @@ unsubscribe experience must also offer a clear way to stop all future IRAAC
 outreach. A global stop, complaint, wrong-person result or safety suppression
 overrides every channel.
 
+### Contact preferences and IRAAC's internal do-not-call list
+
+Every community newsletter, government report email and staff/partner report
+email carries a clear, no-login preference link. The preference page offers:
+
+- unsubscribe from that email series;
+- stop all IRAAC newsletter/report email;
+- stop all human and AI calls from IRAAC;
+- manage channel- and purpose-specific choices; and
+- stop all non-essential IRAAC outreach.
+
+The link uses a signed opaque token, contains no email address, phone number,
+Aboriginal status or other personal data, and reveals no contact details on an
+invalid or forwarded link. A recipient can unsubscribe without creating an
+account, paying a fee or providing extra personal information. Email replies
+such as "unsubscribe", provider complaints and SMS `STOP` enter the same
+canonical preference service. IRAAC applies a valid request immediately as its
+service standard and always within the legally applicable maximum period.
+Subscribed/marketing email also implements authenticated RFC 8058
+`List-Unsubscribe` and `List-Unsubscribe-Post` headers where required by the
+receiving ecosystem. A normal body-link `GET` shows a confirmation page rather
+than mutating state, so security scanners cannot unsubscribe someone; the
+authenticated one-click header `POST` is idempotent and does not redirect.
+Government and staff distribution lists are not exceptions: unsubscribing
+removes the endpoint from that report manifest. If a role must continue to
+receive an essential governance notice, an administrator must assign another
+approved recipient or use a separately approved essential-notice category; the
+system must not silently resubscribe the person.
+
+`VOICE_DO_NOT_CALL` is an endpoint-level, deny-wins suppression covering all
+future outbound human and AI calls by or for IRAAC. It is created whenever a
+recipient says "do not call", "don't call again", "take me off your call list",
+"I'm on the Do Not Call Register", or otherwise indicates that the call should
+end. No identity proof, survey completion or repeated confirmation is required.
+The deterministic call controller interrupts every conversational state,
+writes the suppression, cancels all controllable queued calls and terminates
+the call. The LLM may recognise candidate wording, but it cannot decide to
+ignore, narrow or reverse a stop request.
+
+The approved acknowledgement is brief. After a confirmed suppression write:
+
+> I'm sorry. I'm ending the call now. IRAAC has recorded that this number must
+> not be called again. This is IRAAC's own list, not the Australian
+> Government's Do Not Call Register. Goodbye.
+
+If the authoritative write is unavailable, do not falsely claim that it was
+recorded:
+
+> I'm sorry. I'm ending the call now. IRAAC has blocked any retry and alerted
+> our team to complete your request. Goodbye.
+
+Do **not** say that IRAAC has added the number to the Australian Government's
+Do Not Call Register. Only the account holder, nominee or authorised officer
+can register an eligible number through the official service. If the recipient
+specifically asks about the national Register, provide the approved official
+website or contact route after recording IRAAC's suppression, without delaying
+termination or making another pitch.
+
+If the suppression write fails, the controller still apologises and hangs up,
+places the canonical phone endpoint in an independently durable, encrypted
+fail-closed emergency outbox/quarantine, prevents retry and raises an operator
+incident. Loss of that independent protection pauses the whole campaign. The
+permanent event is reconciled before
+any future eligibility check can pass. Store only the minimum evidence needed:
+canonical endpoint reference, scope, source channel, request and effective
+times, reason category, policy/script version, call/provider correlation and
+actor type. Raw audio or a full transcript is not required to honour the stop.
+An authorised, separately audited re-permission flow may supersede an internal
+suppression only after legal/governance approval; ordinary imports, staff edits,
+new consent receipts or provider retries cannot do so.
+
+The statutory Do Not Call Register and IRAAC's internal list are separate
+controls. Where a call's legal classification requires list washing, the
+eligibility engine records the wash result and date as additional evidence.
+An exemption or research-call classification never overrides IRAAC's internal
+stop. A person saying they are on the Register is treated as an immediate IRAAC
+voice stop even if the number appears to be a business number or the proposed
+call may otherwise be permitted.
+
+Canonical phone lookup uses a versioned HMAC-SHA-256 key derived from the
+provider-confirmed E.164 endpoint with its secret held in an approved key
+manager; never use a reversible URL identifier or an unkeyed phone-number hash.
+Phone runtimes may append idempotent stop events but cannot inspect or remove
+suppressions. Campaign services receive only allow/deny eligibility. Ordinary
+staff cannot enumerate raw endpoints. Exceptional reinstatement for a verified
+number reassignment or later explicit re-permission requires proof of endpoint
+control, a new channel-specific receipt, named compliance approval, recent MFA,
+dual control and an append-only supersession event.
+
 People and organisations remain separate. A person answering on behalf of a
 business does not silently convert business contact eligibility into personal
 citizen consent. Moving into Path 2 requires the same express consent intake
@@ -597,6 +686,16 @@ government report email ends with the same governed listening invitation:
 > IRAAC and may inform a future report, investigation or governed survey
 > revision.
 
+It then shows a governed contact-preference footer with three prominent actions:
+
+> **Your contact choices**
+>
+> [Unsubscribe from these emails] · [Stop IRAAC calls] · [Manage all contact
+> preferences]
+
+The exact link labels may be refined in accessibility testing, but none may be
+hidden, preselected, bundled with survey participation or routed through login.
+
 Use a monitored IRAAC `Reply-To` address. Inbound replies are untrusted content
 and enter a suggestion queue with source, audience, message/report version,
 received time and acknowledgement state. They do not count as report approval,
@@ -810,6 +909,10 @@ The main areas:
   research calls and exempt callers still follow the Telemarketing and
   Research Calls Industry Standard, including calling times, identification,
   caller ID, termination and source-information requirements.
+  IRAAC cannot add a person's number to the statutory Register. A verbal
+  request instead creates an immediate `VOICE_DO_NOT_CALL` entry in IRAAC's
+  internal suppression ledger, ends the call and blocks future IRAAC calls.
+  This trust rule applies even where a research or other exemption may exist.
 - **Privacy Act 1988 and the Australian Privacy Principles (APPs).** IRAAC
   needs a clear, published privacy policy covering what we collect, why, how
   long we keep it, and how someone can request access or deletion.
@@ -926,7 +1029,8 @@ The baseline to validate through Architecture Decision Records (ADRs) is:
 
 The core data model includes: organisations, people/contact identities,
 organisation relationships, pathway memberships, channel endpoints,
-source/provenance records, consent receipts, suppression entries, survey
+source/provenance records, consent receipts, suppression entries, statutory
+DNCR check evidence, signed preference-link tokens, survey
 definitions/releases/questions/options, survey-release questions, reporting taxonomies,
 survey review decisions, survey sessions/answers, Terms/Privacy/response-use
 versions, campaign cycles,
@@ -1005,6 +1109,12 @@ The voice state machine is explicit:
 AI_DISCLOSURE → CONSENT_RECONFIRM → SURVEY_Q[n] → ANSWER_CONFIRM/RETRY →
 COMPLETE`, with global exits for withdrawal, suppression, human transfer,
 callback, link, distress and failure.
+
+`VOICE_DO_NOT_CALL` is a priority exit from every state, including the opening
+and voicemail/answer-classification boundary where recipient speech is
+available. The acknowledgement contains no claim that IRAAC controls the
+Australian Government's Register. Suppression is committed before normal
+hang-up where possible; failure still terminates and quarantines the endpoint.
 
 The AI never owns survey order or arbitrary writes. It can call only
 constrained tools to get the next approved question, repeat/clarify approved
@@ -1152,6 +1262,15 @@ quiet-hour/frequency/DNCR policy tests, survey parity across completion modes,
 10,000-contact load tests, backup/restore drill, accessibility/mobile operator
 tests, AI disclosure and human-handoff tests, report reproducibility,
 de-identification and small-cell suppression.
+
+The suppression suite must also prove that every approved verbal stop phrase
+and a generic "I don't want to continue" interrupt every AI-call state; a
+shared/wrong-person endpoint is not redialled; a failed database write causes
+hang-up plus fail-closed quarantine; an accepted-provider race cannot retry;
+email unsubscribe needs no login or extra data; forwarded/expired preference
+links reveal no identity; report-series, all-email, voice-only and global stops
+have the intended scopes; and no agent, import or fresh consent silently
+reactivates a suppressed endpoint.
 
 ## 16. Guidance for other agents joining this project
 

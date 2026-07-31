@@ -47,6 +47,15 @@ with the same optional prompt. Suggestions enter a human-reviewed queue and
 may inform a future report, investigation or governed survey release; they do
 not automatically rewrite the live questionnaire.
 
+Every planned community, government and staff/partner report distribution also
+includes clear no-login contact controls: unsubscribe from that email series,
+stop calls from IRAAC and manage all non-essential contact preferences. A
+verbal request to stop during a future human or AI call ends the call and adds
+the phone endpoint to IRAAC's internal do-not-call list. That is deliberately
+separate from Australia's statutory Do Not Call Register; IRAAC must never
+claim it registered the number nationally. These controls are roadmap
+requirements and are not yet live in this static repository.
+
 ## Project planning
 
 - [`ROADMAP.md`](ROADMAP.md) is the canonical product, governance, consent,

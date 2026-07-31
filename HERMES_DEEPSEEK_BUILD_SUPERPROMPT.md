@@ -208,6 +208,30 @@ channel. Hard bounce and invalid endpoint suppress the endpoint. Email opens
 and tracking pixels are not authoritative evidence
 that someone responded.
 
+Add `VOICE_DO_NOT_CALL` as a deny-wins canonical phone-endpoint suppression. It
+blocks every future outbound human and AI call by or for IRAAC, regardless of
+campaign, pathway, research-call status or any otherwise valid permission. A
+recipient saying "do not call", "don't call again", "take me off your list",
+"I'm on the Do Not Call Register", or otherwise indicating that the call should
+end must trigger it immediately. Do not require identity proof, a completed
+survey or repeated confirmation.
+
+Keep two concepts separate in code and copy:
+
+- `statutory_dncr_check` records any required Australian Government Do Not Call
+  Register list-wash evidence; and
+- `VOICE_DO_NOT_CALL` is IRAAC's own immediate internal suppression.
+
+IRAAC cannot place a recipient onto the statutory Register and must never say
+that it has done so. After a confirmed write, the approved acknowledgement is:
+"I'm sorry. I'm ending the call now. IRAAC has recorded that this number must
+not be called again. This is IRAAC's own list, not the Australian Government's
+Do Not Call Register. Goodbye." If the authoritative write is unavailable,
+use: "I'm sorry. I'm ending the call now. IRAAC has blocked any retry and
+alerted our team to complete your request. Goodbye." If asked about the
+national Register, provide only the approved official route after recording
+the internal suppression, without delaying termination.
+
 ## 4. Legal and governance sources to preserve
 
 Create `docs/compliance/source-register.md` with official URLs, review dates,
@@ -378,6 +402,8 @@ Design migrations for at least:
 - `response_use_versions`
 - `consent_events`
 - `suppression_events`
+- `statutory_dncr_checks`
+- `contact_preference_tokens`
 - `contact_policy_versions`
 - `eligibility_decisions`
 - `survey_definitions`
@@ -431,6 +457,18 @@ Design migrations for at least:
 Requirements:
 
 - consent and suppression are append-only events; current state is derived;
+- `VOICE_DO_NOT_CALL` is endpoint-level and deny-wins across human and AI
+  outbound calling; neither imports, a new campaign nor an ordinary consent
+  grant can reactivate it;
+- preference links use signed opaque tokens containing no PII and expose no
+  identity when invalid, expired or forwarded;
+- canonical phone suppression uses provider-confirmed E.164 normalisation and
+  a versioned HMAC-SHA-256 lookup key whose secret is held in an approved key
+  manager; an unkeyed hash is prohibited;
+- phone runtimes can append idempotent stops but cannot inspect or remove them;
+  campaign services receive allow/deny only; exceptional reinstatement needs
+  verified endpoint control, new channel consent, named compliance approval,
+  recent MFA, dual control and an append-only supersession event;
 - people and organisations remain distinct;
 - a business directory record never inherits a citizen's consent;
 - Path 1 and Path 2 memberships, policies, cadence and metrics remain distinct;
@@ -588,6 +626,18 @@ An AI call must:
     conversation; do not record or persist transcripts unless a separate
     current-call permission exists.
 
+At every conversational state, run a priority deterministic stop-intent guard
+before the next survey or persuasion action. The LLM may flag candidate
+phrasing but does not own the decision. On a stop phrase, atomically append
+`VOICE_DO_NOT_CALL`, cancel controllable queued calls and transition to
+`SUPPRESSED`; then speak only the approved acknowledgement and hang up. If the
+database write fails, hang up anyway, quarantine the canonical endpoint in an
+independently durable encrypted emergency outbox, raise an incident and
+prohibit retry until permanent reconciliation succeeds. If that independent
+protection cannot be written, pause the campaign. Do not retain raw audio or a full transcript merely
+to prove the stop; store the minimum category, scope, endpoint reference,
+timestamps, policy/script version and call/provider correlation.
+
 Implement the versioned call state machine:
 
 `ELIGIBILITY_CHECK → DIAL_QUEUED → RINGING → ANSWER_CLASSIFY →
@@ -719,6 +769,28 @@ staff/partner report email and government report email:
 > missed. We would love to hear from you. Every suggestion is reviewed by
 > IRAAC and may inform a future report, investigation or governed survey
 > revision.
+
+Append this contact-preference footer to those same three email classes:
+
+> **Your contact choices**
+>
+> [Unsubscribe from these emails] · [Stop IRAAC calls] · [Manage all contact
+> preferences]
+
+All three actions use a signed, no-login, no-extra-data preference flow. The
+preference page supports report-series unsubscribe, all-newsletter/report email
+unsubscribe, voice-only stop, granular channel/purpose management and global
+non-essential outreach stop. Apply valid requests immediately as IRAAC's
+service target and within any legal maximum. Email replies saying unsubscribe,
+provider complaints and SMS `STOP` reconcile into the same ledger. A staff or
+government recipient who unsubscribes is removed from that manifest; an
+administrator must assign a different approved recipient for any essential
+role notice rather than silently resubscribing the person.
+For subscribed/marketing email, implement DKIM-signed RFC 8058
+`List-Unsubscribe` and `List-Unsubscribe-Post` headers. Security-scanner `GET`
+requests to a body link must not change preferences; the authenticated header
+`POST` must apply the stop idempotently without a redirect. Use `no-store`, a
+no-referrer policy and no third-party analytics on every preference page.
 
 Configure a monitored IRAAC `Reply-To` address. Import replies only as inert,
 untrusted suggestions linked to their content/report version and audience.
@@ -929,7 +1001,8 @@ withdrawal or any current-cycle completion blocks the next queued attempt.
 - admin UI, policy simulation, audience preview, approval and pause;
 - provider-acceptability bake-off for Path 1 and separate SES suitability for
   requested/consented newsletters;
-- SPF/DKIM/DMARC/TLS, aligned identity, one-click unsubscribe where required,
+- SPF/DKIM/DMARC/TLS, aligned identity, clear unsubscribe and contact-preference
+  controls on every community, government and staff/partner distribution,
   gradual warm-up, throttling, reputation monitoring and kill thresholds;
 - distinct Path 1 initial value email, value brief and Path 2 newsletter
   templates, bounce/complaint/unsubscribe;
@@ -943,6 +1016,10 @@ source invalidation and policy withdrawal after manifest approval but before a
 later wave. Unsent rows cancel, provider-accepted rows reconcile as
 `SUPPRESSED_AFTER_PROVIDER_ACCEPTANCE`, retries cannot resurrect them, and the
 final report separates sent, delivered, failed and newly suppressed outcomes.
+Preference tests cover no-login unsubscribe, no extra personal information,
+minimum 30-day link operation where the Spam Act applies, immediate internal
+effect, forwarded/expired token privacy, report-series/all-email/voice/global
+scope, and role-recipient reassignment without silent resubscription.
 
 ### W4 — SMS pilot
 
@@ -964,7 +1041,11 @@ duplicate-webhook tests pass.
 - one-region approved pilot plan.
 
 Acceptance: phone permission is independently checked; recording is off;
-hang-up/stop/complaint blocks retries; survey parity and caller-ID tests pass.
+hang-up/stop/complaint blocks retries; every verbal Do Not Call variant creates
+`VOICE_DO_NOT_CALL`; the call ends immediately; the acknowledgement names only
+IRAAC's internal list; survey parity and caller-ID tests pass. Inject a
+suppression-write failure and prove hang-up, local quarantine, incident alert
+and no retry until reconciliation.
 
 ### W6 — Reporting and dashboard
 
