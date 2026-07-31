@@ -6,6 +6,14 @@
 > anything. Everything downstream (copy, UX, data model, infrastructure
 > choices) should be traceable back to the framing in the first two sections.
 
+Companion documents:
+
+- [`AI_CONTACT_CENTRE_ARCHITECTURE_RESEARCH.md`](AI_CONTACT_CENTRE_ARCHITECTURE_RESEARCH.md)
+  contains the platform comparison, cost model, Australian design constraints,
+  voice state machine and source register.
+- [`HERMES_DEEPSEEK_BUILD_SUPERPROMPT.md`](HERMES_DEEPSEEK_BUILD_SUPERPROMPT.md)
+  converts this roadmap into a guarded, multi-bot execution brief.
+
 ---
 
 ## 1. Mission and framing: the listening-and-advocacy model
@@ -34,7 +42,7 @@ work?"
 
 ## 2. Where the site is today
 
-The public site is a flat, static, seven-page HTML build hosted on Vercel with
+The public site is a flat, static, eleven-page HTML build hosted on Vercel with
 zero configuration. Each page (`index.html`, `about.html`, `programs.html`,
 `governance.html`, `insights.html`, `support.html`, `news.html`,
 `contact.html`, `book-a-call.html`, `survey.html`, `offices.html`) is
@@ -58,6 +66,27 @@ The survey today points to a Google Form (`SURVEY_URL` in `build.py`). This is
 the piece that changes in the next phase — the form becomes the front door of
 the entire listening loop, not just a passive feedback collector.
 
+### Current capability matrix
+
+| Capability | State now | Important boundary |
+|---|---|---|
+| Public website | Live | Static public front door only |
+| Have Your Say | External Google Form | Exact current consent wording is not verified in this repository |
+| In-repo survey page | Demonstration | Does not store production answers |
+| Contact/home-visit form | Demonstration | Does not submit to a governed system |
+| Book a Call | Public pathway | No production scheduling/call-centre backend in this repo |
+| Insights/reports | Hand-authored | No automated data pipeline or approval workflow |
+| Central contact/consent store | Not built | Spreadsheets are staging only |
+| Email/SMS/voice campaigns | Not built | No provider integration, eligibility engine or suppression ledger |
+| Phone operator console | Not built | No canonical phone-assisted survey workflow |
+| Admin/auth/audit | Not built | No backend, roles, migrations or audit log |
+| Reporting automation | Not built | AI may draft only after governed aggregate pipeline exists |
+
+The repo is public and has no backend, database schema, authentication, job
+runner, provider integration, automated tests, privacy policy or operational
+runbooks. No bot should mistake an HTML interaction for a production
+capability.
+
 ---
 
 ## 3. What we are building next: the community listening loop
@@ -73,8 +102,9 @@ plain terms:
    is currently an Excel spreadsheet; it needs to move to something the rest
    of the system can query.
 3. On a rolling monthly basis, a subset of that stored community is contacted
-   through a multi-channel funnel — newsletter, email, SMS, and finally an
-   outbound phone call — and asked to answer a short set of survey questions.
+   through the channels for which each person has given current, specific
+   permission — newsletter/email, SMS, and finally an outbound human or
+   AI-assisted phone call — and asked to answer a short set of survey questions.
    Not everyone is contacted every month; the target is around **30% of the
    consented pool per month**, rotating so nobody gets over-contacted.
 4. Survey responses are aggregated into insights — for example, "housing is
@@ -107,41 +137,74 @@ The funnel is designed to escalate gently from cheap, low-friction contact to
 more expensive, higher-touch contact, and to stop escalating the moment
 someone responds.
 
-**Stage 1 — Monthly newsletter.** Everyone in the consented pool receives a
-monthly newsletter. At the end of each newsletter is a clear call-to-action:
-please fill in this month's short survey. Many responses will come from here
-and the rest of the funnel becomes unnecessary for those people.
+**Stage 1 — Monthly newsletter.** People with current newsletter-email
+permission receive the monthly newsletter. This audience is separate from the
+monthly survey-chase sample. The newsletter contains a voluntary survey link,
+but receiving it does not automatically place someone into SMS or call
+follow-up.
 
-**Stage 2 — Follow-up email.** For anyone who did not open the newsletter or
-did not click through to the survey, a follow-up email goes out a week or so
-later. The tone is direct: "We need your perspective on this. Can you take
-three minutes?"
+**Stage 2 — Survey follow-up email.** Only the separately approved rotating
+survey sample enters the survey-chase journey. A follow-up email may go out
+where there is no verified survey completion, reply, opt-out or other terminal
+response. Opens, clicks and tracking pixels never trigger escalation.
 
-**Stage 3 — SMS.** If the email doesn't land, a short text message is sent
-with a link to the survey. Australian sender ID and unsubscribe rules apply
-(see §11).
+**Stage 3 — SMS.** If the email doesn't land and the person has separately
+consented to SMS, a short text message is sent with a link to the survey.
+Australian sender ID, identification and unsubscribe rules apply (see §11).
 
-**Stage 4 — Outbound phone call.** If nothing else has worked, a teleoperator
-calls. The script opens: "Hi, I'm calling on behalf of IRAAC — is now a good
-time for a couple of quick questions?" The operator runs through the same
-survey questions verbally and records the responses.
+**Stage 4 — Outbound phone call.** If nothing else has worked and the person
+has separately consented to the relevant call type, a trained operator or an
+approved AI voice system calls. The call identifies IRAAC and, for an
+automated or AI call, identifies the technology immediately, asks whether it
+is a good time and offers a human pathway. The caller runs the same versioned
+survey questions verbally and records the answers directly into the governed
+survey system. Call recording and persistent transcript storage are off by
+default. Autonomous voice necessarily uses disclosed transient audio and
+speech-to-text processing; the AI-call permission covers that processing.
+Storing audio or transcripts requires a separate current-call choice.
 
 **Second audience: the Aboriginal business database.** Separately, there is a
 publicly-available database of approximately ten thousand Aboriginal
 businesses in Australia. These are not consented individuals — they are
 business contacts, and the outreach to them is compliance-different (business
 communications sit differently under the Spam Act and the Do Not Call
-Register). They go through the same funnel — email, SMS, call — but with
-different copy and different consent handling. Their responses feed the same
-insights layer.
+Register). A verified number used primarily for business generally cannot be
+registered on the DNCR, but the Telemarketing and Research Calls Industry
+Standard still applies to questionnaire calls. A publicly listed business
+email may support a narrowly relevant business message in some circumstances;
+mere publication is not blanket permission. SMS is also an electronic message,
+and a newsletter that promotes IRAAC services, events or donations may be
+commercial even when a survey invitation is not.
+
+The business cohort therefore uses a **channel-by-channel eligibility gate**,
+not an assumed consent funnel:
+
+1. Record the source, licence or permission, collection date, public context,
+   business-use evidence and any "no unsolicited contact" statement.
+2. Classify the exact message and purpose before treating it as commercial,
+   research, advocacy or service information.
+3. An approved, relevant first business invitation may be sent only through a
+   channel the policy engine and legal review permit.
+4. Email, SMS and voice are evaluated independently. No channel is unlocked
+   merely because another was allowed or unanswered.
+5. Every message identifies IRAAC, explains the source where required, offers
+   a simple opt-out and stops immediately after a response, opt-out, complaint
+   or suppression.
+6. Business respondents who want ongoing citizen or community participation
+   enter the same express-consent intake as everyone else.
+
+The exact classifications and launch permissions are Phase 0 legal decisions,
+not assumptions embedded in code. This roadmap is an implementation plan, not
+legal advice.
 
 ---
 
 ## 5. Consent, intake, and data flow
 
 Consent is the load-bearing wall of the entire system. Without valid,
-recorded, revocable consent, we cannot call anyone. Everything else in this
-project depends on getting consent capture right.
+recorded, revocable consent, we cannot contact a community participant through
+a restricted channel. Everything else in this project depends on getting
+consent capture right.
 
 **Intake channels.** A community member enters the system through one of:
 - **The website form** (`survey.html` → currently Google Forms → will need to
@@ -153,38 +216,69 @@ project depends on getting consent capture right.
 - **A community event** where consent is captured on paper and transcribed, or
   digitally on the spot.
 
-**What we capture at intake.** At minimum: name, mobile number, postcode or
-office region, and *explicit* consent to be contacted for follow-up surveys.
-Optional: preferred contact method, language preference, best time of day to
-call, topics the person cares most about.
+**What we capture at intake.** At minimum: name or chosen identifier, contact
+details the person volunteers, postcode or office region, privacy notice
+acceptance, and the survey answers. The form then presents separate, optional,
+unticked choices for:
+
+- newsletter and survey email;
+- survey SMS;
+- a call from an IRAAC staff member;
+- an automated or AI-assisted survey call, with an immediate AI disclosure;
+- future follow-up surveys and closing-the-loop research; and
+- call recording or persistent transcript storage, only if IRAAC later enables
+  it. The AI-call choice separately explains the transient audio and
+  speech-to-text processing needed for a live autonomous voice conversation.
+
+Completing the survey does **not** itself create contact permission. The legal
+and operational basis is the person's express choice in the survey. Declining
+any contact choice must not prevent survey completion or reduce service access.
+The wording must be plain, voluntary, current and specific. It must explain
+who will contact the person, the purpose, likely frequency, use of AI, how
+answers will be used in reports, how to reach a human, and how to withdraw.
+Optional: preferred channel, language, accessibility needs, safe time of day
+and topics the person cares about.
+
+Every affirmative choice creates an immutable **consent receipt** recording
+the person/contact identifier, channel, purpose, contact type (human or AI),
+disclosure and survey versions, exact displayed wording, capture mode
+(web/in-person/drop-in/phone/paper import), staff/operator if applicable,
+timestamp, evidence hash, review or expiry date, and later withdrawal. Consent
+is rechecked immediately before every contact attempt.
 
 **Where the data lives today.** In an Excel spreadsheet. Mobile numbers and
 consent flags are columns in that sheet.
 
-**Where the data needs to live.** In a proper store — likely Airtable or
-Supabase (Postgres) in the short term, so that the campaign runner and the
-admin dashboard can query it without anyone maintaining a spreadsheet by hand.
-This choice is one of the open decisions in §12.
+**Where the data needs to live.** In one governed Postgres store. Supabase in
+the Sydney region is the reference implementation, subject to the Phase 0
+privacy, Indigenous Data Sovereignty and vendor reviews. Excel and Google
+Sheets are import/export staging tools, never a second source of truth.
 
-**Monthly extract.** Each month a job pulls the subset of consented mobile
-numbers scheduled for contact that cycle (see §6) and combines them with the
-appropriate slice of the business database. That combined list is what feeds
-the outreach funnel.
+**Monthly extract.** Each month a job builds separate, immutable audience
+snapshots for (a) consented community participants and (b) approved business
+prospects. They are never combined into a single undifferentiated list. Each
+recipient/channel pair must pass the policy engine immediately before queueing
+and immediately before delivery.
 
 **Revocation.** Every outbound message — SMS, email, and voice — must offer a
-clear way to stop being contacted. Revocation must propagate back to the
-central store within 24 hours.
+clear way to stop being contacted. Revocation propagates to the central store
+immediately. IRAAC guarantees cancellation while an attempt remains in its own
+queue and uses best-effort provider cancellation after acceptance. Use
+short-lived dispatch leases, an atomic final eligibility check at handoff,
+provider cancellation where supported, idempotent reconciliation and a
+`SUPPRESSED_AFTER_PROVIDER_ACCEPTANCE` audit state for unavoidable races.
+Statutory maximum timeframes remain outer limits, not the system target.
 
 ---
 
 ## 6. Monthly sampling: nobody gets called every month
 
 Contacting the whole consented pool every month would be onerous, annoying,
-and would rapidly degrade response rates. The plan is a rolling monthly
-sample: roughly **30% of the consented pool** is contacted in any given month,
-selected so that no individual is contacted more often than every three to
-four months except in unusual circumstances (for example, when a resurvey on a
-specific issue is being deliberately targeted).
+and would rapidly degrade response rates. The starting plan is a rolling
+monthly sample: roughly **30% of the eligible, consented pool** is invited in
+any given month, selected so that no individual is contacted more often than
+their consented frequency and the approved contact policy allow. This is
+normally every three to four months, not an automatic monthly AI call.
 
 Rotation is on a per-person basis, not per-region. The sampling logic should
 also cap contact frequency per household where possible — if two members of
@@ -218,9 +312,10 @@ the following:
   is actually doing about it. This is the piece that lets the loop close: when
   a resurvey goes out asking "has anything changed?", staff need to know what
   intervention that resurvey is measuring the effect of.
-- **Compose distribution.** Approve and send the monthly newsletter, the NGO
-  briefing, and the government-facing report. The dashboard should draft these
-  from the underlying data and let staff edit before sending.
+- **Compose distribution.** Generate, review, approve and send the monthly
+  newsletter, staff/partner briefing, and government-facing report. Every
+  output is a draft until a named administrator approves its exact dataset,
+  privacy treatment, recommendations, audience and recipient manifest.
 
 Auth is real. Passwords, sessions, role-based access at minimum (office staff
 vs. head office vs. read-only). PII handling must respect Indigenous Data
@@ -248,9 +343,14 @@ Explicitly linked to Local Decision Making outcomes: "You transferred these
 decisions to us because we can show you what community is actually telling
 us. Here it is." Longer-form, structured, referenced.
 
-All three outputs draw on the same underlying data. Producing them shouldn't
-be three separate manual efforts — the dashboard should generate an
-audience-appropriate draft of each and let staff shape it before sending.
+All three outputs draw on the same approved, de-identified dataset snapshot.
+Code calculates counts, rates and trends; AI may draft narrative from that
+bounded snapshot but may not invent statistics or receive raw contact details
+or unrestricted free text. Small-cell suppression, evidence-strength labels,
+privacy review and named human approval are required before publication or
+distribution. Producing the reports should not become three separate manual
+efforts, but the system must preserve separate versions, approvals, recipient
+lists and immutable distribution manifests for each audience.
 
 ---
 
@@ -285,27 +385,60 @@ getting a working consent-and-storage layer in place first, then adding
 outreach channels one at a time from cheapest to most expensive, then
 layering the dashboard and reporting on top.
 
-**Phase 1 — Proper consent capture and storage.** Replace the Google Form
-with a first-party form on the site that writes to a real store (Airtable or
-Supabase). Migrate the existing Excel data into the store. Give home-visit
-and drop-in officers a mobile-friendly version of the same form.
+**Phase -1 — Reconcile the public site.** Before several bots edit the public
+site, reconcile `build.py` with the eleven production HTML pages. A current
+dry-run rewrites all pages and risks restoring stale placeholders and copy.
+Update the README, verify every Have Your Say link, and mark the public repo as
+front-door source only. No private data or operational secrets enter this
+public repository.
 
-**Phase 2 — Newsletter and email outreach.** Wire the store to an email
-platform. Build the monthly newsletter template. Send the first newsletters
-and measure open/click/response rates.
+**Phase 0 — Authority, consent and safety.** Obtain Board/community data-use
+authority and Australian legal review. Approve citizen consent wording,
+business-source classifications, contact policies, AI disclosure and
+human-escalation scripts, youth/sensitive-data handling, retention/deletion
+rules, report privacy thresholds, incident handling and production release
+roles. No real outreach launches before this gate is signed.
 
-**Phase 3 — SMS outreach.** Add SMS as a follow-up channel via an Australian
-SMS gateway. Wire unsubscribe/opt-out back to the store.
+**Phase 1 — Proper consent capture and storage.** Build a first-party,
+mobile-friendly form and governed store. Run it alongside the existing Google
+Form until schema parity, reconciliation and migration are verified; do not
+break the live intake path. Import the existing Excel data as untrusted staging
+records and preserve its provenance. Do not import old generic consent as AI
+voice consent. Give home-visit, phone and drop-in officers the same versioned
+survey and consent flow.
 
-**Phase 4 — Outbound calling.** Choose and integrate a calling platform (see
-§12). Build the operator script. Train initial teleoperators. Start with a
-small pilot region before rolling out nationally.
+**Phase 2 — Control plane and email pilot.** Before production outreach, ship
+the minimum admin controls: authentication, roles, consent/suppression
+timeline, audience preview, test contacts, approval gate, pause/stop control,
+audit log and incident path. Wire an approved email provider, build the
+templates, and pilot with internal/synthetic contacts before a small approved
+community and business cohort. Opens and clicks are supporting signals, never
+the sole reason to escalate.
 
-**Phase 5 — Admin dashboard.** Build the logged-in staff app. Start with the
-minimum: response viewer, per-office KPIs, and topic insights. Add program
-tracking and distribution composer once the basics are solid.
+**Phase 3 — SMS outreach.** Add SMS through an approved Australian-capable
+provider, register the IRAAC sender ID if used, and support immediate STOP
+handling. Pilot only with channel-eligible contacts.
 
-**Phase 6 — Closing-the-loop tracking.** Formalise the issue-tagging and
+**Phase 4 — Phone-assisted surveys.** Integrate the approved calling platform
+and operator workspace. Human calls come first. The workspace shows masked
+identity, provenance, permitted call type, previous attempts, survey version
+and next safe action. Build dispositions, attempt caps, quiet hours, live
+opt-out, distress/complaint escalation and human handoff. Pilot in one approved
+region.
+
+**Phase 5 — AI-assisted calling.** Only after the human pilot, enable a small,
+approved AI voice pilot for people with a valid AI-call consent receipt. The
+AI identifies itself and IRAAC immediately, asks permission to continue,
+offers a human, follows the exact approved survey, never gives legal, health
+or crisis advice, and escalates ambiguity, distress, complaint or withdrawal.
+Recording/transcription remains disabled without separate permission.
+
+**Phase 6 — Reporting and full admin dashboard.** Add response review,
+per-office operational measures, topic insights, deterministic analytics,
+three audience-specific draft reports, privacy review, approval, publication
+and distribution manifests.
+
+**Phase 7 — Closing-the-loop tracking.** Formalise the issue-tagging and
 intervention-tracking model. Build the resurvey scheduler. Publish the first
 government-facing report that uses before/after data.
 
@@ -320,15 +453,54 @@ Australia-specific compliance is non-optional and needs early legal review.
 The main areas:
 
 - **Do Not Call Register (DNCR).** Cold-calling numbers on the DNCR is
-  restricted. Research and charity calls have narrow exemptions but the
-  conditions matter. Business numbers sit differently from residential.
+  restricted. Numbers used primarily for business generally cannot be
+  registered, but dual-use/mobile provenance must be checked. Questionnaire
+  research calls and exempt callers still follow the Telemarketing and
+  Research Calls Industry Standard, including calling times, identification,
+  caller ID, termination and source-information requirements.
 - **Privacy Act 1988 and the Australian Privacy Principles (APPs).** IRAAC
   needs a clear, published privacy policy covering what we collect, why, how
   long we keep it, and how someone can request access or deletion.
 - **Spam Act 2003.** Commercial electronic messages (email, SMS) require
   consent, sender identification, and a functional unsubscribe. Advocacy and
-  charity communications may qualify for narrower rules but the safe default
-  is Spam Act compliance across the board.
+  charity communications or a pure research invitation may be classified
+  differently, but content controls classification. A public business email
+  is not blanket permission: conspicuous publication is narrow, must be
+  relevant to the person's work, and cannot carry a no-unsolicited-contact
+  statement. Address-harvested lists are prohibited. The safe operational
+  baseline is clear identity, provenance, relevance and opt-out across the
+  board.
+- **AI and synthetic voice.** Use of AI does not remove the underlying
+  telemarketing, research-call or privacy obligations. IRAAC's stronger
+  community standard is immediate AI disclosure, permission to continue,
+  human alternative, caller ID, return contact, approved script and auditable
+  consent. Consent wording must state its duration: DNCR express-consent rules
+  make the difference between a stated period and the default position
+  important. External counsel must confirm final wording, duration, scripts
+  and classifications.
+- **Research and charity classifications.** A factual non-commercial survey
+  invitation may fall outside Spam Act commercial-message rules. If IRAAC is
+  currently an ACNC-registered charity, designated-message and designated-call
+  exemptions may also apply to exact qualifying content. Neither status is
+  assumed. Phase 0 must confirm the entity, sender, content, linked pages and
+  supplier conditions with counsel. IRAAC still applies identity, relevance,
+  opt-out and suppression as a community-trust standard.
+- **Audio processing and retention.** Federal, state and territory
+  interception and surveillance rules can differ. Call recording and
+  persistent transcript storage are off by default. Autonomous voice still
+  requires disclosed transient audio and speech-to-text processing, covered
+  by the specific AI-call permission. Persisting audio or transcripts requires
+  a separate current-call choice, an unrecorded human alternative, short
+  retention and a state/territory legal review. Use ephemeral buffers, prohibit
+  provider training, verify deletion and regional processing, and keep
+  transcripts out of logs and handoff summaries unless separately approved.
+- **Cross-border processing.** "Sydney region" does not prove every inference,
+  support path, subprocessor, log and backup stays in Australia. APP 8 and
+  Indigenous governance require a complete data map and contractual review.
+- **SMS Sender ID Register.** If IRAAC uses a branded alphanumeric sender ID,
+  it and the sending provider must meet the Australian registration regime
+  applying from 1 July 2026. A two-way number or other approved opt-out path
+  is required because many branded sender IDs cannot receive "STOP".
 - **Indigenous Data Sovereignty.** The CARE Principles (Collective benefit,
   Authority to control, Responsibility, Ethics) and the Maiam Nayri Wingara
   Indigenous Data Sovereignty principles need to shape how community data is
@@ -346,48 +518,102 @@ launch without it.
 
 ---
 
-## 12. Open decisions requiring deep research
+## 12. Reference architecture and decisions
 
-These are the choices that need proper investigation before we commit. Each
-one has cost, ethics, and operational implications and should not be made on
-the fly.
+The baseline to validate through Architecture Decision Records (ADRs) is:
 
-- **Telephony platform.** Twilio, Vonage, Plivo, Aircall, JustCall,
-  Zendesk-native. Some are Australia-hosted; some are not. Considerations:
-  per-call cost at scale, Australian caller ID, call recording legality,
-  operator seat model vs. programmable voice, ability to hand off between
-  automated intro and live operator, integration with the store.
-- **Live operator vs. IVR vs. hybrid.** A hybrid model (automated intro
-  identifying IRAAC and asking permission to proceed, then handing to a live
-  operator for the actual survey) is probably right, but the split needs
-  testing. IVR-only will have terrible completion rates for this audience.
-- **Store and CRM layer.** Airtable is fast to build on but expensive at
-  volume. Supabase is a proper Postgres with row-level security and free-tier
-  headroom. Retool + Postgres is another route. A hosted CRM (HubSpot,
-  Salesforce non-profit tier) is heavier but comes with campaign tooling.
-- **Email platform.** Mailchimp, MailerLite, Brevo, Klaviyo, ConvertKit,
-  Postmark for transactional. Considerations: Australian data residency,
-  segment/tag flexibility for the sampling logic, cost per contact, template
-  editor for staff.
-- **SMS gateway.** MessageMedia, ClickSend, Twilio SMS, Cellcast. Australian
-  short codes vs. alphanumeric sender ID, cost per message, unsubscribe
-  handling.
-- **Dashboard framework.** Next.js + Supabase (custom, most control),
-  Retool (fast, licence cost, less control), Django admin (fast if we have
-  Django elsewhere, ugly UI), Refine, or a no-code option like Softr or
-  Glide on Airtable. Choose based on how much of the campaign runner logic
-  needs to live in the same app.
-- **Campaign runner / scheduler.** Where does the "send this month's
-  newsletter, then a week later email non-responders, then a week after that
-  SMS the still-non-responders, then a week later queue for calling" logic
-  live? Options: a small cron-driven service, a workflow tool like n8n or
-  Zapier, a purpose-built job queue, or the CRM itself if it has campaigns.
+- **Public front door:** keep this static site on Vercel.
+- **Admin and operator application:** a separate private TypeScript/Next.js
+  application with mobile-friendly phone-assisted survey mode.
+- **System of record:** Supabase Postgres in Sydney with Auth, Row Level
+  Security, encrypted backups, append-only audit events and private object
+  storage.
+- **Campaign execution:** a Postgres-backed durable state machine/outbox.
+  AWS EventBridge/Step Functions, a self-hosted worker in an approved
+  Australian region, or equivalent may schedule jobs, but no third-party
+  automation tool owns consent, suppression, approvals or journey state.
+- **Email:** Amazon SES is the initial bulk-email candidate. Its public base
+  price is about US$0.10 per 1,000 messages, compared with Amazon Connect
+  Customer's current US$0.080 per email. Deliverability, staff editing,
+  replies, complaints and unsubscribe still require implementation.
+- **SMS:** compare Sinch MessageMedia's Australian gateway/two-way messaging
+  with AWS End User Messaging. Register the IRAAC sender ID and retain a
+  reply-capable STOP path.
+- **Human contact centre:** Amazon Connect Customer in Sydney is the leading
+  production candidate for progressive/predictive calling, human queues,
+  transfers, monitoring and call operations.
+- **AI voice:** time-box a technical bake-off between Amazon Connect AI agents
+  and Telnyx's current Australian Voice AI locality offering. Twilio
+  ConversationRelay is the programmable challenger if an additional benchmark
+  is justified. All remain behind IRAAC provider adapters.
+- **Reports:** deterministic SQL/TypeScript aggregates into bounded,
+  de-identified snapshots; an approved LLM may draft narrative; humans approve
+  all releases.
+- **Operations:** typed API contracts, structured logs, error monitoring,
+  encrypted secrets manager, backups, restore tests and environment-separated
+  test/sandbox/production accounts.
 
-The recommendation is to run a structured evaluation on each of these — cost
-model at target volume, Australian legal fit, integration friction,
-maintenance burden — and pick the smallest number of pieces that cover the
-whole loop. The default assumption should be one integrated stack, not seven
-best-of-breed tools stitched together.
+The core data model includes: organisations, people/contact identities,
+channel endpoints, source/provenance records, consent receipts, suppression
+entries, survey definitions/versions/questions, survey sessions/answers,
+campaigns, audience snapshots, journeys, contact attempts, provider events,
+call tasks/sessions/dispositions, issues, interventions, report snapshots,
+report versions, approvals, distributions, incidents and audit events.
+
+The campaign lifecycle is:
+`draft → eligibility snapshot → compliance validation → audience hash →
+human approval → scheduled → running/paused → completed/cancelled →
+reconciled`.
+
+The per-contact journey is:
+`eligible → email → timed out/responded/completed/opted out → SMS (if
+separately eligible) → call queue (if separately eligible) →
+completed/unreachable/opted out/escalated`.
+
+The report lifecycle is:
+`dataset snapshot → deterministic calculations → AI draft → privacy and
+small-cell review → community/governance review → named approval →
+publish/send → immutable distribution manifest`.
+
+### Research conclusion and remaining proof
+
+The detailed comparison is in
+[`AI_CONTACT_CENTRE_ARCHITECTURE_RESEARCH.md`](AI_CONTACT_CENTRE_ARCHITECTURE_RESEARCH.md).
+Amazon Connect Sydney is the strongest contact-centre baseline; Telnyx is the
+strongest current Australian Voice AI locality challenger; Twilio is the best
+programmable comparison; Talkdesk and Genesys are managed-enterprise quote
+benchmarks. Google and Microsoft become more attractive only if IRAAC adopts
+their wider ecosystems.
+
+The production pattern is deliberately hybrid. One vendor does not need to own
+every channel. IRAAC owns consent and orchestration, SES handles economical
+bulk email, an approved Australian SMS adapter handles texts, and Connect
+handles human/AI voice. The adapter boundary prevents lock-in.
+
+Before a platform contract:
+
+1. obtain data maps, DPAs, subprocessors, support access, training use,
+   deletion/backup, breach, exit/export and Australian processing commitments;
+2. prove Australian caller ID, SMS sender registration, reply/STOP and quotas;
+3. prove outbound AI survey + answer-machine classification + human transfer;
+4. test at least 200 voice cases covering Aboriginal names/places, diverse
+   accents, noise, overlap, silence, wrong person, DTMF, opt-out, distress,
+   prompt injection and provider/tool failure;
+5. compare full cost at 10,000 emails plus eligible SMS/calls, including
+   carrier, agent, number, storage, monitoring and support costs; and
+6. keep recording off and confirm whether any AI inference crosses regions.
+
+The voice state machine is explicit:
+`ELIGIBILITY_CHECK → DIAL_QUEUED → RINGING → ANSWER_CLASSIFY →
+AI_DISCLOSURE → CONSENT_RECONFIRM → SURVEY_Q[n] → ANSWER_CONFIRM/RETRY →
+COMPLETE`, with global exits for withdrawal, suppression, human transfer,
+callback, link, distress and failure.
+
+The AI never owns survey order or arbitrary writes. It can call only
+constrained tools to get the next approved question, repeat/clarify approved
+wording, commit/correct an answer, pause, withdraw, request a human or
+complete. Two low-confidence recognitions fall back to DTMF, a human or a
+secure link.
 
 ---
 
@@ -416,7 +642,81 @@ The static site is the front door. Everything else is new build.
 
 ---
 
-## 14. Guidance for other agents joining this project
+## 14. Agent-native control plane
+
+The API has two technically separate roles:
+
+- `agent_build_test` can inspect masked data, build, validate, use synthetic
+  fixtures, send only to allowlisted test destinations, generate drafts and
+  request approval; and
+- `human_production_operator` can perform approved production actions.
+
+Hermes and build agents receive only `agent_build_test`. Their credentials
+must be technically incapable of production queueing, starting, publishing or
+distribution. Production actions require a human-only role, two-person
+approval, an environment-bound signed approval artifact, exact audience hash,
+expiry, rate limit and a server-side interlock. No prompt instruction is
+treated as a security boundary.
+
+Agent build/test capabilities include:
+
+- `contacts.import`, `contacts.validate`, `contacts.dedupe`;
+- `consent.record`, `consent.revoke`, `consent.check`;
+- `suppression.add`, `suppression.check`;
+- `survey.begin`, `survey.record_answer`, `survey.complete`;
+- `campaign.plan`, `campaign.validate`, `campaign.request_approval`;
+- `email.preview/test`, `sms.preview/test`, `call.preview/test`;
+- `report.generate`, `report.validate`, `report.request_approval`;
+- `audit.search` and `incident.raise`.
+
+Every mutation requires a stable object ID, actor and agent-run ID, reason,
+idempotency key and structured result. Dry-run is required where meaningful.
+Agents can draft, test and request approval; they cannot approve their own
+campaigns, legal classifications, consent wording, report claims or
+production distributions. Human-only decisions include law and policy,
+Aboriginal community data authority, ambiguous identity/consent, sensitive
+interpretation, distress/complaints, government recommendations, credentials
+and destructive changes.
+
+## 15. Multi-bot delivery protocol
+
+The control-plane build lives in a new private repository or a clearly bounded
+private monorepo, proposed as:
+
+```text
+apps/admin
+apps/api
+workers/campaigns
+packages/contracts
+packages/provider-adapters
+supabase/migrations
+docs/adr
+docs/privacy
+work-orders
+```
+
+Before any bot edits:
+
+1. Read this roadmap, the root `AGENTS.md`, current ADRs and `BOT_TASKS.md`.
+2. Claim one task ID, one branch/worktree and explicit files. Record
+   dependencies, acceptance tests and status.
+3. Pull/rebase before work. Never force-push or undo another bot's changes.
+4. Keep commits small; migrations are append-only and sequential.
+5. Put no secrets, contact lists or raw survey data in prompts, logs, commits
+   or fixtures. Use synthetic contacts.
+6. Run tests and attach evidence to the work order and pull request.
+7. Require reviewer approval and the production release gate. No bot may send
+   real email/SMS/calls or publish a report as part of implementation testing.
+8. Write a handoff noting decisions, files changed, tests, risks and next task.
+
+Required release tests include API/provider contract tests, RLS/role tests,
+consent and suppression race tests, idempotency and duplicate-webhook tests,
+quiet-hour/frequency/DNCR policy tests, survey parity across completion modes,
+10,000-contact load tests, backup/restore drill, accessibility/mobile operator
+tests, AI disclosure and human-handoff tests, report reproducibility,
+de-identification and small-cell suppression.
+
+## 16. Guidance for other agents joining this project
 
 If you are an AI agent picking up work in this repo, read this section
 carefully before making changes.
@@ -439,15 +739,15 @@ of the clean production domain. When confirming a push has landed:
 Never use the preview URL as the source of truth. The clean production
 domain is the only address that reflects current state.
 
-**Sitewide edits.** The seven HTML files share nav, footer, and styles. Use
+**Sitewide edits.** The eleven HTML files share nav, footer, and styles. Use
 `build.py` where possible. For direct multi-file edits, use a Python
 `glob.glob('*.html')` loop, not `sed` — the CSS blocks contain characters
 that trip up sed.
 
-**Git operations.** Remote is HTTPS with a token embedded in the URL:
-`https://rhy-collab:[TOKEN]@github.com/rhy-collab/iraac-website.git`. The
-GitHub account is `rhy-collab`. The PAT is not stored between sessions and
-must be re-pasted at the start of each session before pushing.
+**Git operations.** Use the repository's approved GitHub authentication or a
+credential manager. Never place access tokens in remotes, prompts,
+documentation, logs or commits. Use one branch/worktree per work item and
+submit changes through review.
 
 **Interpreting Rhys.** Instructions often arrive via voice-to-text and
 carry transcription noise (words dropped, homophones swapped, occasional
@@ -464,3 +764,25 @@ the defaults for anything asking community members to share.
 anything that touches outbound contact — email, SMS, voice — check §11
 first. Do not ship an outbound channel without a compliance review having
 happened.
+
+---
+
+## 17. Definition of ready for real outreach
+
+The system is not ready to contact a real person or business until all of the
+following are true:
+
+- Phase 0 legal, Board/community authority and data-governance approvals are
+  recorded;
+- the exact list source, message purpose, channel eligibility and templates
+  have named approval;
+- citizen consent wording and AI disclosure are versioned and tested;
+- consent, suppression and audience snapshots are reproducible and auditable;
+- a staff member can preview the exact recipients and messages;
+- sandbox, internal and small pilot tests pass with no raw PII in logs or LLM
+  prompts;
+- pause, opt-out, complaint, distress and incident paths have been rehearsed;
+- reports are de-identified drafts with evidence-strength labels and require
+  named approval; and
+- the production interlock requires environment, approval token, audience hash
+  and rate limit, preventing an agent or operator from bypassing the gate.
