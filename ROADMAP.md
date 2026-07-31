@@ -590,6 +590,39 @@ or protected environment configuration, never in this public repository. A
 later access-group or single-sign-on option may simplify onboarding without
 removing individual accountability.
 
+The approved bootstrap contact is `info@iraac-aco.com`. Create its Auth identity
+with a short-lived, single-use `inviteUserByEmail` flow from a restricted,
+audited server-only operator action. The Supabase secret key stays in the
+approved secret manager and never reaches a browser, `NEXT_PUBLIC` value, Git,
+documentation, logs, tickets, prompts or deployment output. The invitation is
+bound to the exact email, intended bootstrap role, approved admin origin and
+callback allowlist. Login, invitation and recovery responses do not reveal
+whether an account exists.
+
+Do not configure or reuse the password disclosed during planning. Treat it as
+compromised, rotate it anywhere IRAAC has already used it, check repository
+history and generated/build artefacts for accidental copies, and record
+credential-closure evidence without retaining the secret. The invite lets the
+custodian establish a new unique password outside planning/chat. Its first
+authenticated AAL1 session may reach only activation, password creation, MFA
+enrolment/challenge, recovery status and sign-out. Dashboard pages, private
+APIs, storage and data require an authorised role plus AAL2 at middleware, API
+and restrictive RLS layers.
+
+The generic mailbox is never a shared everyday staff identity. Interactive
+bootstrap sign-in is permitted only when a governance record binds it to one
+named human custodian with exclusive mailbox access and an individual MFA
+factor. Otherwise it is notification-only and cannot authenticate. The
+bootstrap role cannot read survey, contact, safety or report data; export,
+approve, publish, invite arbitrary users, grant roles, recover another account
+or elevate itself. A restricted operator invite creates at least two separately
+verified named administrators with separate MFA before production. The
+bootstrap principal then moves atomically to `bootstrap_notification_only`, all
+sessions and refresh tokens are revoked, stale claims are rejected, and
+interactive sign-in is disabled. Privileged recovery requires two named
+custodians, recent strong authentication, out-of-band notification and an
+append-only audit record.
+
 The reference production entry point is
 `https://admin.iraac-aco.com/login`. The private deployment owns that origin,
 its cookies and authentication callbacks. DNS, TLS, callback allowlists,

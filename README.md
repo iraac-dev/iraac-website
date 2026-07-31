@@ -39,7 +39,11 @@ partner and government reports remain private in the future admin dashboard.
 When that authenticated dashboard is live, the public footer will add an
 **Admin** link beneath **Contact Us**. The link will open an invite-only login;
 no shared password or private dashboard data will be stored in this static
-public repository.
+public repository. The approved bootstrap contact will receive a one-time
+managed-authentication invitation and cannot use the disclosed planning
+password. It becomes non-interactive before production, after two named,
+MFA-protected administrators are active. No live administrator credential
+currently exists in this codebase.
 
 Every newsletter and report email will invite recipients to reply with an
 issue or survey question they believe IRAAC has missed. The stable survey ends

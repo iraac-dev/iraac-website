@@ -298,6 +298,17 @@ changes and privileged recovery; use dual control for publisher recovery and
 revoke all sessions when access is removed. The footer readiness gate verifies
 DNS, TLS, callbacks, login protection and a direct unauthenticated API denial.
 
+Use the generic address only as an approved bootstrap contact. Provision its
+Auth identity through an audited server-only `inviteUserByEmail` operator
+action with a secret-manager-held key and no password parameter. Treat a
+password disclosed in planning as compromised and reject it. AAL1 reaches only
+activation and MFA setup. Interactive bootstrap sign-in requires one recorded
+exclusive human custodian; otherwise the mailbox is notification-only. After
+two named AAL2 administrators are verified, demote it atomically to a
+non-interactive, no-data notification role, revoke every session and deny stale
+claims. This preserves individual attribution and prevents a shared mailbox
+from becoming a permanent recovery or privilege-escalation path.
+
 ### Deterministic policy engine
 
 Before audience selection, queueing and delivery, ask:

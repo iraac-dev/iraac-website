@@ -81,6 +81,17 @@ The current static website points to Google Forms and has no governed backend. G
   internal do-not-call list; it must also make clear that IRAAC is not adding
   the number to the Australian Government's Do Not Call Register. A failed
   central write must still terminate and fail closed.
+- R27. The approved bootstrap contact is `info@iraac-aco.com`. Provision its
+  Auth identity only through an audited server-only, single-use invitation;
+  never configure or reuse a password disclosed in planning. Treat that
+  password as compromised and complete credential closure without retaining
+  it. AAL1 may access setup-only routes; all dashboard data requires an
+  authorised role plus AAL2. Interactive bootstrap sign-in requires one named
+  custodian with documented exclusive mailbox control and an individual MFA
+  factor; otherwise the mailbox is notification-only. Before production, at
+  least two separately verified named administrators must be active and the
+  bootstrap identity must be demoted to a non-interactive, no-data notification
+  state with all sessions revoked.
 
 **Governed change**
 
@@ -124,6 +135,13 @@ The current static website points to Google Forms and has no governed backend. G
   canonical endpoint, uses the approved IRAAC-internal-list acknowledgement
   and terminates; if the store is unavailable, it terminates, quarantines the
   endpoint and blocks retry.
+- AE12. **Covers R27:** Given bootstrap provisioning begins, when setup
+  completes, then the Auth identity was created only by the approved
+  server-side invitation action; no password, invitation/session token or
+  privileged key appears in repositories, builds, client configuration or
+  logs; the disclosed password is rejected; AAL1 reaches setup routes only;
+  two named AAL2 administrators are active; and the bootstrap principal is
+  non-interactive, no-data and unable to use any stale session.
 
 ### Success Criteria
 
@@ -167,6 +185,19 @@ The current static website points to Google Forms and has no governed backend. G
 - KTD15. **Suggestions enter governance, not the survey.** G05 remains one inert canonical answer. Only final submission creates one suggestion workflow record referencing that answer, without copying the raw text; partial or abandoned text is not monitored. A named reviewer may link the record internally to an issue or write a neutral successor proposal through U5; the untrusted label persists and no suggestion alters an active definition. Every submitted non-empty G05 response enters trained human triage under approved staffed-hours, throughput, queue-age and response-time limits. Deterministic rules may raise priority but never dismiss safety risk, and an LLM cannot make that decision. Exceeding the safe backlog threshold disables G05 for new sessions and presents the human pathway. Governs R1-R2, R7, R20, R24.
 - KTD16. **The suppression command, not a phone adapter, owns a stop.** A canonical voice endpoint is the provider-confirmed dialled Australian number normalised to E.164, represented in lookup indexes by a versioned HMAC-SHA-256 key whose secret is held in an approved key manager, and linked deny-wins across formatting variants, duplicates and shared-number records. Ambiguous regional inputs are quarantined rather than guessed; dual-read key rotation and collision/migration tests preserve existing stops. A service-authenticated, idempotent command resolves that endpoint, atomically appends `VOICE_DO_NOT_CALL`, updates the current deny projection and audit record, and returns an explicit committed or unavailable result. Phone runtimes may append idempotent stop events but cannot inspect or remove suppressions; campaign services receive allow/deny only; ordinary staff cannot enumerate raw endpoints. V1 implements and tests this provider-neutral contract against synthetic endpoints. The later live-calling release must bind it to an independently durable encrypted emergency outbox and provider cancellation. Re-import, contact merge and ordinary consent cannot clear a stop; any verified number-reassignment or explicit re-permission process is a separately approved future workflow requiring proof of endpoint control, a new channel-specific receipt, a named compliance role, recent MFA, dual approval and an append-only supersession event. Governs R9-R11, R19, R26.
 - KTD17. **Phone adapters are non-production conformance simulators in V1.** Neither human-phone nor AI-phone code receives production telephony credentials, provider endpoints or outbound network egress. A server-side capability gate is disabled in every production environment, and build/deployment tests prove an origin call cannot be made. Live activation requires a separate approved implementation plan covering legal classification, consent, staff training, emergency quarantine, provider cancellation, incident response and production acceptance. Governs R4, R7, R26.
+- KTD18. **Bootstrap access is invitation-only and expires into a no-data
+  state.** Use one audited server-only `inviteUserByEmail` operator action with
+  a secret-manager-held Supabase key and an exact allowlisted redirect; never
+  pass a password. AAL1 is setup-only. The bootstrap role has an explicit deny
+  on survey/contact/safety/report reads, exports, approvals, publication,
+  arbitrary invitations, role grants, recovery and self-elevation. Interactive
+  sign-in exists only for one recorded exclusive custodian; otherwise the
+  mailbox is notification-only. After two separately verified named AAL2
+  administrators pass role and recovery checks, atomically assign
+  `bootstrap_notification_only`, revoke sessions/refresh tokens and reject
+  stale claims from authoritative role/session-version state. Privileged
+  recovery requires two named custodians and cannot be approved by the affected
+  account. Governs R19, R25, R27.
 
 ### High-Level Technical Design
 
@@ -266,11 +297,11 @@ flowchart TB
 ### U8. Establish the admin authentication boundary
 
 - **Goal:** Protect every staff and privileged route before an admin surface can be deployed.
-- **Requirements:** R19, R25.
+- **Requirements:** R19, R25, R27.
 - **Dependencies:** U2.
 - **Files:** `apps/admin/app/login/page.tsx`, `apps/admin/app/auth/activate/page.tsx`, `apps/admin/app/auth/mfa/page.tsx`, `apps/admin/app/auth/recovery/page.tsx`, `apps/admin/middleware.ts`, `apps/admin/lib/auth.ts`, `supabase/migrations/0008_admin_roles.sql`, `supabase/tests/admin_auth.sql`, `apps/admin/tests/e2e/admin-auth.spec.ts`, `docs/design/admin-access-flow.md`, `docs/runbooks/admin-access-and-recovery.md`.
-- **Approach:** Configure the dedicated admin origin, invite-only named accounts, mandatory AAL2 sessions, server and database role checks, recent step-up for sensitive actions, CSRF-resistant mutations, account-change session rotation, short-lived invitations, dual-controlled publisher recovery, removal revocation and audited lifecycle events. Specify invited-user activation, password creation, MFA enrolment/challenge/step-up, ordinary sign-in/out, invalid credentials, wrong-role/removal denial, session expiry, lost-factor request, dual-control recovery pending/approved/denied and safe support. Each state has accessible focus, error summary and recovery status; successful sign-in lands on the least-privileged authorised dashboard. Nothing under `apps/admin` is deployable until the denial matrix passes.
-- **Test scenarios:** Invitation activation succeeds once; expired and replayed invitations fail safely; MFA enrolment, challenge and step-up work with keyboard and screen reader; invalid, expired, non-MFA, removed and wrong-role sessions cannot read data or call private APIs; session expiry preserves no unsaved sensitive action and explains how to sign in again; forged cross-origin mutations, stale assurance, replayed approvals and concurrent artefact changes fail; unilateral publisher recovery fails while pending/approved/denied outcomes are visible; removal revokes existing sessions.
+- **Approach:** Configure the dedicated admin origin, invite-only named accounts, mandatory AAL2 data access, server and database role checks, recent step-up for sensitive actions, CSRF-resistant mutations, account-change session rotation, short-lived invitations, dual-controlled recovery, removal revocation and audited lifecycle events. Implement KTD18 as one restricted server-only operator command using `inviteUserByEmail`, a secret-manager-held Supabase key, exact email/role/origin/callback bindings, custom SMTP and non-enumerating responses. It emits an append-only event with named operator, independent approver, target, role before/after, AAL, request/session identifier, timestamp and result, but no password, token, factor or key. AAL1 can reach only activation, password creation, MFA enrol/challenge, recovery status and sign-out. Role plus AAL2 is enforced at middleware, API and restrictive RLS before dashboard/data access. Record the exclusive custodian or make the mailbox notification-only; create and verify two named administrators; exercise dual control; then atomically demote the bootstrap principal, increment its session/auth version and revoke all sessions. Specify ordinary sign-in/out, invalid credentials, wrong-role/removal denial, session expiry, lost-factor request, dual-control recovery pending/approved/denied and safe support. Nothing under `apps/admin` is deployable until the denial matrix and bootstrap closure pass.
+- **Test scenarios:** Invitation activation succeeds once; expired, wrong-recipient, wrong-role, wrong-origin and replayed invitations fail safely; login/invite/reset responses do not enumerate accounts; the bootstrap identity is created only from the restricted server action; the disclosed password is rejected and credential-closure evidence contains no secret; password, invite/session tokens, factors and Supabase keys are absent from source, generated assets, logs and deployment output; the service key never reaches a client or `NEXT_PUBLIC` value; AAL1 reaches setup routes only; MFA enrolment, challenge and session refresh work with keyboard and screen reader; bootstrap and notification-only roles cannot read/export survey, contact, safety or report data, publish, approve, invite, grant roles, recover accounts or self-elevate; two separate named AAL2 accounts satisfy role and dual-control checks; bootstrap demotion revokes refresh sessions and stale AAL2 tokens fail at API and RLS layers; invalid, expired, non-MFA, removed and wrong-role sessions cannot read data or call private APIs; password/MFA recovery requires two independent named approvers, replaces affected factors, revokes sessions, notifies the owner and cannot be approved by the affected account; forged cross-origin mutations, stale assurance, replayed approvals and concurrent artefact changes fail.
 - **Verification:** The negative authorisation matrix passes at middleware, API and RLS layers on the verified admin origin.
 
 ### U4. Build and test participant and operator adapters
@@ -305,11 +336,11 @@ flowchart TB
 ### U7. Run dual-run, cutover and operational acceptance
 
 - **Goal:** Replace Google Forms only after end-to-end production evidence exists.
-- **Requirements:** R1-R26.
+- **Requirements:** R1-R27.
 - **Dependencies:** U1-U6, U8.
 - **Files:** `docs/runbooks/survey-cutover.md`, `docs/runbooks/survey-rollback.md`, `docs/privacy/data-flow.md`, deployment records outside Git for secrets and real test identifiers.
 - **Approach:** Run an approved parity period, verify a controlled production smoke submission, exercise rollback, activate `/survey` and monitor errors. The rollback target must itself be a frozen approved release with compatible privacy, age, consent and safety wording; otherwise show an IRAAC-owned maintenance page that collects no sensitive answers.
-- **Test scenarios:** New platform outage returns to the old route; smoke data is identified and removed through the approved process; live logs contain no answers or secrets; synthetic phone evidence covers stop phrases, central-store outage, emergency-quarantine output, cancellation-race states and production-origin-call denial.
+- **Test scenarios:** New platform outage returns to the old route; smoke data is identified and removed through the approved process; live logs contain no answers or secrets; cutover is blocked until two named AAL2 administrators pass role/recovery checks and the bootstrap principal is notification-only with stale sessions denied; synthetic phone evidence covers stop phrases, central-store outage, emergency-quarantine output, cancellation-race states and production-origin-call denial.
 - **Verification:** Named release sign-off records the exact deployment, database, release and redirect hashes.
 
 ---
@@ -348,6 +379,10 @@ Release evidence must include:
 - Abuse controls, least-privilege roles, safe resume, no-tracking shared-device behaviour, retention/deletion and verified contact paths pass their release tests.
 - The public site uses the IRAAC-owned `/survey` route and retains a tested rollback.
 - The public Admin link appears only with a verified protected sign-in route; all dashboard access is attributable to named MFA-protected accounts.
+- The approved bootstrap contact is provisioned through managed Auth,
+  rejects the disclosed password, allows AAL1 setup only, exposes no secret,
+  activates two named AAL2 administrators, and is non-interactive/no-data with
+  all sessions revoked before production.
 - G05 is optional, its text is handled as untrusted data, and accepted suggestions still require the normal governed survey-change process.
 - Google Forms is retired only after the approved acceptance window and data-retention decision.
 - Runbooks, diagrams and data dictionaries match the deployed system.

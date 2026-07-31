@@ -1089,6 +1089,30 @@ state without a named human decision.
 - use a CSRF-resistant mutation design, bind approvals to exact artefact hashes,
   rotate sessions after authentication changes and revoke them on removal;
 - audit sign-in, access, review, change and approval actions by named actor;
+- use `info@iraac-aco.com` as the approved bootstrap contact and provision it
+  only through an audited server-only `inviteUserByEmail` operator action whose
+  Supabase secret key is held in the approved secret manager;
+- bind the single-use invitation to the exact email, intended bootstrap role,
+  approved admin origin and callback allowlist, and use non-enumerating login,
+  invite and recovery responses;
+- never configure or reuse a password supplied in a planning conversation;
+  treat it as compromised, require closure evidence and let the custodian set a
+  new unique password through the one-time activation flow;
+- let AAL1 reach only activation, password creation, MFA enrol/challenge,
+  recovery status and sign-out; require authorised role plus AAL2 for every
+  dashboard page, private API, storage object and data row;
+- permit interactive bootstrap sign-in only when one named human custodian has
+  documented exclusive mailbox control and an individual MFA factor;
+  otherwise make the mailbox notification-only;
+- deny the bootstrap role all survey/contact/safety/report reads, exports,
+  approvals, publication, arbitrary invitations, role grants, account recovery
+  and self-elevation;
+- before production, activate at least two separately verified named
+  administrators with separate MFA, then atomically move the bootstrap
+  principal to `bootstrap_notification_only`, revoke all sessions/refresh
+  tokens and reject stale claims;
+- require two named custodians, recent strong authentication, out-of-band
+  notification and an append-only record for privileged recovery;
 - never embed a password or shared PIN in HTML, JavaScript, Git or client
   configuration.
 
@@ -1097,7 +1121,10 @@ data or call private APIs; roles cannot cross office/data boundaries; removal
 revokes access; the public bundle contains no credential or bypass; the footer
 link is absent until DNS, TLS, callback, login and direct API-denial readiness
 checks pass. Forged cross-origin mutations, stale MFA, replayed approvals and
-concurrent artefact changes are denied.
+concurrent artefact changes are denied. The bootstrap account cannot read
+dashboard data at AAL1 or through its bootstrap role; the disclosed planning
+password is rejected rather than provisioned; stale sessions fail after
+demotion; and routine actions are attributable to individual named accounts.
 
 ### W7 — AI voice pilot
 
