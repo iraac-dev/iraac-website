@@ -4,9 +4,11 @@
 
 **Research date:** 31 July 2026
 
-**Scope:** citizen survey intake and recontact, approximately 10,000 Aboriginal
-business prospects, email → SMS → human/AI voice journeys, phone-assisted
-surveys, reporting and multi-agent implementation.
+**Scope:** two coordinated pathways: approved Aboriginal-business value email
+→ value brief → policy-eligible AI survey call, and citizen intake/consent →
+newsletter → separately permitted SMS → separately permitted AI survey call;
+plus rotating sampling, phone-assisted surveys, reporting and multi-agent
+implementation.
 
 This document is research and technical planning, not legal advice. No real
 outreach is authorised by it.
@@ -17,8 +19,11 @@ Use a **hybrid, provider-neutral architecture**:
 
 1. IRAAC owns one Australian-hosted contact, provenance, consent, suppression,
    survey, campaign, audit and reporting system.
-2. Amazon SES is the initial email candidate because 10,000 messages cost
-   roughly US$1 at its current base rate, before optional services and data.
+2. Amazon SES is the initial candidate for requested/consented newsletters
+   because 10,000 messages cost roughly US$1 at its current base rate, before
+   optional services and data. Do not assume SES will accept a cold public
+   directory: production-access guidance expects recipients to have requested
+   mail, so Path 1 needs a provider-acceptability and deliverability bake-off.
 3. Sinch MessageMedia is the preferred SMS comparison because it offers an
    Australian gateway, two-way messaging and Australian sender-ID support.
    AWS End User Messaging remains the integrated comparison.
@@ -79,10 +84,17 @@ However, the lawful pathway may be broader than ordinary consumer marketing:
   can change the classification.
 
 Phase 0 must confirm IRAAC's current entity/ACNC status and classify the exact
-business email, SMS, voice and newsletter content. Even where an exemption
-exists, IRAAC should keep clear identity, source disclosure where required,
-reply-capable opt-out, immediate suppression, limited attempts and respectful
-contact hours as community-trust rules.
+one-time business invitation, recurring newsletter, value brief, linked pages
+and research-only AI call. "Value-first" does not itself determine
+classification; promotional content or linked pages can change it. Even where
+an exemption exists, IRAAC should keep clear identity, source disclosure where
+required, reply-capable opt-out, immediate suppression, limited attempts and
+respectful contact hours as community-trust rules.
+
+The default business pathway has two value-bearing emails and no SMS. An
+unanswered email never creates voice permission. A business AI call must stay
+within the approved research/questionnaire classification; promotional content
+can make it dual-purpose or telemarketing.
 
 ## Platform comparison
 
@@ -134,7 +146,19 @@ contract and request regional restrictions where available.
 
 ```mermaid
 flowchart LR
-  A["Public site / staff intake / phone survey"] --> B["IRAAC API"]
+  A1["Path 1: approved business audience"] --> B1["Value newsletter/report email"]
+  B1 --> B2["30% rotating chase sample"]
+  B2 --> B3["Value brief email"]
+  B3 --> B4["Policy-eligible AI survey call"]
+  A2["Path 2: web / QR / worker / visit / drop-in"] --> C1["Canonical survey + separate consent"]
+  C1 --> C2["Newsletter"]
+  C2 --> C3["30% rotating chase sample"]
+  C3 --> C4["Separately eligible SMS"]
+  C4 --> C5["Separately eligible AI survey call"]
+  B4 --> B["IRAAC API"]
+  C5 --> B
+  C1 --> B
+  B1 --> B
   B --> C["Australian Postgres system of record"]
   C --> D["Consent and contact-policy engine"]
   D -->|"ALLOW plus reason and policy version"| E["Durable journey worker and outbox"]
@@ -158,24 +182,94 @@ flowchart LR
   P --> Q
 ```
 
+Both lanes share the survey, policy, completion-correlation, suppression and
+reporting core. They do not share assumed permission, cadence or templates.
+The wider newsletter audiences remain separate from the rotating survey-chase
+samples.
+
 ### System-of-record boundary
 
 The contact-centre and messaging providers do not decide eligibility. IRAAC's
 database holds:
 
 - people and organisations as separate entities;
+- pathway memberships and organisation-contact relationships;
 - contact points and exact provenance;
 - business-use/mixed-use evidence;
 - consent wording and immutable consent events;
 - suppressions, complaints, hard bounces and wrong-person events;
 - surveys, versions, sessions and structured answers;
-- campaigns, audience snapshots, journeys and attempts;
+- survey/question/option/topic-cycle reviews; Terms, Privacy Notice and
+  response-use versions;
+- campaign cycles, content artefacts/versions, audience snapshots, sample
+  assignments, journeys/stages, survey invitations, completion correlations,
+  terminal responses and attempts;
 - provider events and call dispositions;
-- report snapshots, approvals and distributions;
+- report snapshots, derived views, versions, review threads/comments,
+  approvals, publications and distributions;
+- KPI definitions/snapshots, dashboard targets and trend-comparability
+  decisions;
 - incidents and append-only audit events.
 
 The provider receives the minimum short-lived data needed for an approved
 attempt. Provider callbacks are signature-checked, replay-safe and idempotent.
+
+### Canonical survey and response store
+
+Use one server-rendered/mobile-first survey runtime against a published,
+immutable survey version. A governed question bank and issue cycle let IRAAC
+prepare monthly, quarterly or annual priorities without changing historical
+meaning. Every response records pathway, completion mode, survey/question/
+option versions and a campaign-cycle completion key.
+
+Use the survey and session lifecycles defined in `ROADMAP.md`. Campaigns pin
+one canonical approved core version, including approved translation and
+delivery-script versions. Partial/abandoned sessions are not completions and
+are excluded from reports unless an approved methodology explicitly includes
+and labels them. Critical withdrawal blocks submission and invokes a reviewed
+recovery path; corrections always create a successor version.
+
+Separate identity/contact records from structured survey answers and give them
+different access policies. The public form is anonymous/no-account by default;
+contact details are optional unless follow-up is requested. It uses idempotent
+server-side writes and cannot read response tables. Record service-Terms
+acceptance where required, presentation of the Privacy Notice, the approved
+core response-use basis, optional secondary-research consent and each optional
+channel permission as distinct versioned events. Supabase RLS is enabled on
+every exposed table; privileged keys remain server-side; report queries read
+approved de-identified snapshots/views rather than contact rows.
+
+### Report authoring and publication
+
+One locked base dataset snapshot produces three audience-specific,
+de-identified derived views and versioned artefacts:
+
+- public business/community report and newsletter;
+- private IRAAC/affiliate/partner management report; and
+- private government advocacy report.
+
+Metrics are deterministic. The LLM receives bounded de-identified outputs and
+creates a draft/redline, never the source statistics. Review email contains a
+signed expiring dashboard link. Free-text replies may be imported only as
+untrusted comments; they never count as approval. Accepted comments create a
+new report version and invalidate affected approvals.
+
+After the required policy-defined approvals lock the dataset, narrative,
+public artefact and recipient manifest, a production service may publish the
+community version to
+the public Reports index and distribute the other approved versions. The
+public feed exposes only `audience=community_public` artefacts in
+approved/published state. Government or staff material intended for public
+release becomes a new community-public derivative with its own redaction and
+approval cycle. The previous `insights.html` route remains a compatibility
+redirect.
+
+Reviewers approve only through authenticated or equivalently strongly verified
+sessions; forwarded, expired or replayed notification links cannot approve.
+Private reports use authenticated portal access or expiring recipient-bound
+downloads, with no sensitive email attachment by default. Public publishing
+has explicit build, deployed-unverified, verified, failure, retry and rollback
+states so a failed release leaves the prior Reports index intact.
 
 ### Deterministic policy engine
 
@@ -189,6 +283,21 @@ human/AI type, consent/exemption and expiry, suppression, previous attempts,
 frequency, quiet hours, number type/DNCR rule, campaign approval, audience hash
 and policy version. Default is deny. Every decision has reason codes and
 evidence references.
+
+### Rotating sample and completion correlation
+
+Create separate Path 1 and Path 2 survey-chase pools. The monthly 30% figure is
+a configurable target/cap, not an independent random draw and not evidence of
+representativeness. Use seeded, reproducible rotation without replacement, an
+initial 90-day cooldown, organisation/household caps, capacity limits and
+governance-approved strata. Record selection probability, inclusion/exclusion
+reason, contact mode, response propensity and any weighting.
+
+Newsletter membership is separate from survey-chase membership. A canonical
+`campaign_cycle_completion_key` links web, QR, staff, SMS and phone completion
+so any verified current-cycle completion or terminal response cancels every
+controllable remaining chase step. Mode effects and non-response bias must be
+tested before pooling channel results as though they were interchangeable.
 
 ### Deterministic AI survey
 
@@ -352,18 +461,26 @@ judge compliance and cultural safety.
 Use formulas, not a fixed budget:
 
 ```text
-email_cost =
-  eligible_email_recipients × provider_email_rate
+path1_newsletter_email_cost =
+  approved_path1_newsletter_recipients × provider_email_rate
 
-sms_cost =
-  eligible_sms_recipients × segments_per_message × provider_sms_rate
+path1_value_brief_cost =
+  selected_path1_chase_members_without_terminal_response × provider_email_rate
+
+path2_newsletter_email_cost =
+  consented_path2_newsletter_recipients × provider_email_rate
+
+path2_sms_cost =
+  selected_path2_chase_members_still_sms_eligible
+  × segments_per_message × provider_sms_rate
 
 human_voice_cost =
   connected_minutes × (contact_centre_rate + telephony_rate)
   + agent_hours × loaded_staff_rate
 
 ai_voice_cost =
-  connected_minutes × (contact_centre_or_ai_rate + telephony_rate)
+  separately_voice_eligible_path1_and_path2_connected_minutes
+  × (contact_centre_or_ai_rate + telephony_rate)
   + model/tool usage
 
 total =
@@ -380,10 +497,23 @@ Current public-price illustration only:
   charge, plus telephony;
 - the same 10,000 emails through Amazon Connect email: about US$800.
 
-This is why bulk email should not use Connect by default. It is not a quote and
-excludes replies, attachments, validation, deliverability tools, SMS carrier
-fees, telephone numbers, call termination, storage, support, staff and build
-cost.
+This is why bulk email should not use Connect by default. SES is not yet
+approved for Path 1: its production-access process asks senders to acknowledge
+that recipients requested the mail. The provider bake-off must test whether
+the approved business source and message class meet provider acceptable-use
+rules. The illustration is not a quote and excludes warm-up, authentication,
+validation, deliverability tools, replies, attachments, SMS carrier fees,
+telephone numbers, call termination, storage, support, staff and build cost.
+
+For high-volume email, implement SPF, DKIM, DMARC, TLS, aligned From identity,
+visible and one-click unsubscribe where applicable, paced warm-up, per-domain
+throttling, Postmaster/reputation monitoring, immediate bounce/complaint
+suppression and daily kill thresholds before approaching 10,000 recipients.
+
+Do not select Amazon Pinpoint journeys. AWS has announced that Pinpoint
+endpoints, segments, campaigns, journeys and analytics end support on 30
+October 2026. Use IRAAC's durable workflow, Amazon Connect Customer for
+approved multichannel execution and SES only where its policies fit.
 
 Twilio's current Australia public pricing illustrates the programmable trade:
 mobile outbound voice is listed at US$0.075/min and ConversationRelay at
@@ -430,6 +560,10 @@ before selection.
 - [DNCR registering numbers](https://www.donotcall.gov.au/consumers/register-your-numbers)
 - [ACMA SMS Sender ID Register](https://www.acma.gov.au/industry-rules-sms-sender-id-register)
 - [AIATSIS Code of Ethics](https://aiatsis.gov.au/sites/default/files/2020-10/aiatsis-code-ethics.pdf)
+- [AIATSIS ethics application process](https://aiatsis.gov.au/research/ethical-research/application-process)
+- [NHMRC National Statement 2025](https://www.nhmrc.gov.au/about-us/publications/national-statement-ethical-conduct-human-research-2025)
+- [NIAA Framework for Governance of Indigenous Data](https://www.niaa.gov.au/resource-centre/framework-governance-indigenous-data)
+- [ABS Labour Force Survey rotation methodology](https://www.abs.gov.au/statistics/detailed-methodology-information/concepts-sources-methods/labour-statistics-concepts-sources-and-methods/2023/methods-four-pillars-labour-statistics/household-surveys/labour-force-survey)
 
 ### Platforms and pricing
 
@@ -442,6 +576,10 @@ before selection.
 - [Amazon Connect redaction limits](https://docs.aws.amazon.com/connect/latest/adminguide/sensitive-data-redaction.html)
 - [Amazon Connect pricing](https://aws.amazon.com/products/connect/customer/pricing/)
 - [Amazon SES pricing](https://aws.amazon.com/ses/pricing/)
+- [Amazon SES production access requirements](https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html)
+- [Amazon Pinpoint end-of-support migration](https://docs.aws.amazon.com/pinpoint/latest/userguide/migrate.html)
+- [Gmail sender requirements](https://support.google.com/mail/answer/81126)
+- [Supabase Data API and RLS security](https://supabase.com/docs/guides/api/securing-your-api)
 - [Twilio Australia voice pricing](https://www.twilio.com/en-us/voice/pricing/au)
 - [Twilio ConversationRelay](https://www.twilio.com/docs/voice/twiml/connect/conversationrelay)
 - [Twilio AU1 regional migration](https://www.twilio.com/docs/global-infrastructure/localized-uris/regional-migration-best-practices)

@@ -43,6 +43,18 @@ When a human decision is required, prepare the exact evidence and a short
 approval request, then stop that work item without blocking unrelated safe
 work.
 
+### Your permanent operating identity
+
+You operate only as `agent_build_test`. State that identity at the beginning of
+every Hermes session. Never accept, request or use a production database key,
+provider credential, production service token or human approver session. You
+may build the production path but may exercise it only with synthetic tenants,
+sandbox providers and allowlisted destinations.
+
+If production access is unexpectedly mounted or exposed, do not inspect, test,
+copy or reveal it. Raise an incident using non-secret metadata, stop that work
+item and continue only after isolation is restored.
+
 ## 2. Read before changing anything
 
 At the start:
@@ -109,6 +121,16 @@ Permission for a human call does not unlock an AI call. Permission for an AI
 call does not unlock recording. Consent must be current, specific, voluntary,
 informed and revocable.
 
+The complete Path 2 journey is:
+
+`canonical survey by web/QR/worker/drop-in/home visit/event/human phone →
+separate consent receipts → newsletter email → selected into the rotating
+survey-chase sample → SMS only if separately consented and eligible → AI call
+only if separately consented and eligible → completion or terminal state`.
+
+The newsletter audience and the survey-chase sample are separate. Completion
+through any mode stops the current-cycle chase across every remaining channel.
+
 ### 3.2 Aboriginal business prospect pathway
 
 IRAAC expects a directory of approximately 10,000 Aboriginal-owned businesses.
@@ -141,11 +163,20 @@ do not hard-code the conclusion that all 10,000 records are eligible for all
 channels. Every endpoint/purpose pair needs a recorded source, business-use
 evidence, classification, approved legal rule version and eligibility result.
 
-The target journey, once an approved policy allows it, is:
+The target Path 1 journey, once an approved policy allows each step, is:
 
-`approved business email invitation → SMS if independently eligible → human or
-AI call if independently eligible → survey completion/opt-in → consented
-community journey`.
+`approved value newsletter/report email + survey CTA → selected into the
+rotating business survey-chase sample → second concise value brief + survey CTA
+after reconciled no-response → research-only AI survey call after a fresh
+voice-eligibility decision → completion or terminal state`.
+
+There is no SMS step in default Path 1. A future business SMS step requires a
+separate approved policy and source; it cannot be inferred from non-response.
+"Value-first" is a product principle, not a legal classification. Keep the
+one-time factual/research invitation, recurring newsletter and promotional
+content as separate templates and decisions. A person answering for a business
+does not acquire or grant personal citizen consent unless they complete the
+Path 2 consent intake.
 
 If approval does not allow a later channel, the journey stops; it does not
 fail.
@@ -153,11 +184,14 @@ fail.
 ### 3.3 Monthly campaigns
 
 "Monthly automated calls" means the platform may run a monthly campaign. It
-does not mean every person is called every month. Start with the roadmap's
-rotating sample of roughly 30% of eligible consented participants, normally
-contacting a person no more often than every three to four months. Frequency
-must be a policy rule linked to consent, past attempts, household protections,
-topic relevance, time zone and community governance.
+does not mean every contact is called monthly. Build separate Path 1 and Path 2
+survey pools and select roughly 30% from each as a configurable target/cap.
+Use a seeded, auditable rotation without replacement and an initial 90-day
+cooldown, with organisation/household caps, governance-approved strata and
+capacity limits. A typical eligible contact is actively chased about once
+every three to four months. The broader approved newsletter audiences may
+still receive the monthly value report; newsletter delivery does not place a
+recipient into the survey chase.
 
 Stop escalation immediately after survey completion, reply, opt-out,
 withdrawal, complaint, hard bounce, invalid endpoint, distress escalation or
@@ -202,6 +236,23 @@ owner and the exact system rule influenced by each source. Include at minimum:
   `https://docs.aws.amazon.com/connect/latest/adminguide/sensitive-data-redaction.html`
 - Amazon SES pricing:
   `https://aws.amazon.com/ses/pricing/`
+- Amazon SES production-access requirements:
+  `https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html`
+- Amazon Pinpoint end-of-support migration:
+  `https://docs.aws.amazon.com/pinpoint/latest/userguide/migrate.html`
+- Gmail sender requirements:
+  `https://support.google.com/mail/answer/81126`
+- Supabase Data API and Row Level Security guidance:
+  `https://supabase.com/docs/guides/api/securing-your-api`
+- AIATSIS Code of Ethics and ethics review process:
+  `https://aiatsis.gov.au/sites/default/files/2020-10/aiatsis-code-ethics.pdf`
+  and `https://aiatsis.gov.au/research/ethical-research/application-process`
+- NHMRC National Statement on Ethical Conduct in Human Research 2025:
+  `https://www.nhmrc.gov.au/about-us/publications/national-statement-ethical-conduct-human-research-2025`
+- NIAA Framework for Governance of Indigenous Data:
+  `https://www.niaa.gov.au/resource-centre/framework-governance-indigenous-data`
+- ABS rotating-sample methodology reference:
+  `https://www.abs.gov.au/statistics/detailed-methodology-information/concepts-sources-methods/labour-statistics-concepts-sources-and-methods/2023/methods-four-pillars-labour-statistics/household-surveys/labour-force-survey`
 - Telnyx Australia data locality and Sydney Voice AI:
   `https://telnyx.com/release-notes/australia-data-locality`
   and `https://telnyx.com/release-notes/sydney-gpu-voice-ai-agents`
@@ -220,16 +271,24 @@ Apply the CARE Principles and Maiam Nayri Wingara Indigenous Data Sovereignty
 principles through a human-approved governance document. Do not reduce them to
 a checkbox.
 
+Do not choose Amazon Pinpoint campaigns or journeys: those capabilities reach
+end of support on 30 October 2026. Keep orchestration and state in IRAAC's own
+durable workflow. Treat SES as a candidate for requested/consented email, not
+an automatic answer for the directory-derived Path 1 audience; provider
+acceptable-use approval is a separate launch gate.
+
 ## 5. Target platform and repository
 
 Propose this private monorepo:
 
 ```text
 apps/
+  survey/                # public mobile-first canonical survey runtime
   admin/                 # Next.js staff/admin/operator UI
   api/                   # server-only API/control plane
 workers/
   campaigns/             # durable journey and report workers
+  publication/           # approved public-report publisher and verifier
 packages/
   contracts/             # schemas, OpenAPI, typed tool contracts
   consent/               # eligibility and consent evaluator
@@ -255,10 +314,13 @@ Reference stack, subject to ADR approval:
 - Next.js and TypeScript for admin/operator UI and API;
 - Supabase Postgres in Sydney as the canonical store;
 - Supabase Auth with MFA, role-based access and Row Level Security;
+- RLS on every exposed table, server-only privileged keys, security-invoker
+  report views and explicit Data API grants rather than assumed exposure;
 - private object storage for approved report artifacts;
 - a Postgres-backed durable workflow/outbox with retries and idempotency;
-- Amazon SES as the initial email candidate, subject to deliverability and
-  staff-workflow ADR;
+- Amazon SES as the initial candidate for requested/consented email, subject to
+  deliverability and provider-acceptability ADRs; do not assume it accepts the
+  Path 1 directory-derived audience;
 - Sinch MessageMedia and AWS End User Messaging as the SMS comparison, with a
   two-way number and registered sender identity;
 - Amazon Connect Customer in Sydney as the human contact-centre baseline;
@@ -269,6 +331,12 @@ Reference stack, subject to ADR approval:
 - deterministic SQL/TypeScript analytics;
 - an approved LLM only for narrative drafting from bounded de-identified
   snapshots.
+
+For public report publication, prefer a narrowly scoped publisher that writes
+only the locked community artefact, index metadata and compatibility redirect
+to the public site's report paths, triggers the Vercel deployment, then verifies
+the deployed URL and content hash. It cannot access contact data, private report
+versions or recipient manifests.
 
 Do not use Airtable, Google Sheets, n8n, Zapier or a vendor CRM as the canonical
 consent, suppression, approval or audit system. They may be staging or
@@ -290,10 +358,14 @@ Design migrations for at least:
 - `people`
 - `organisations`
 - `organisation_contacts`
+- `pathway_memberships`
 - `contact_points`
 - `data_sources`
 - `source_records`
 - `consent_wording_versions`
+- `terms_versions`
+- `privacy_notice_versions`
+- `response_use_versions`
 - `consent_events`
 - `suppression_events`
 - `contact_policy_versions`
@@ -301,12 +373,24 @@ Design migrations for at least:
 - `survey_definitions`
 - `survey_versions`
 - `survey_questions`
+- `survey_question_options`
+- `survey_topic_cycles`
+- `survey_version_questions`
+- `survey_review_decisions`
 - `survey_sessions`
 - `survey_answers`
 - `campaigns`
+- `campaign_cycles`
+- `content_artifacts`
+- `content_versions`
 - `audience_snapshots`
 - `audience_members`
+- `sample_assignments`
 - `journeys`
+- `journey_stages`
+- `survey_invitations`
+- `completion_correlations`
+- `terminal_responses`
 - `contact_attempts`
 - `provider_events`
 - `call_tasks`
@@ -318,8 +402,16 @@ Design migrations for at least:
 - `report_runs`
 - `report_dataset_snapshots`
 - `report_versions`
+- `report_review_threads`
+- `report_comments`
+- `report_publications`
 - `approvals`
 - `distribution_manifests`
+- `distribution_attempts`
+- `metric_definitions`
+- `metric_snapshots`
+- `dashboard_targets`
+- `trend_comparability_decisions`
 - `incidents`
 - `audit_events`
 - `users`, `roles`, `offices` and user-office assignments.
@@ -329,9 +421,16 @@ Requirements:
 - consent and suppression are append-only events; current state is derived;
 - people and organisations remain distinct;
 - a business directory record never inherits a citizen's consent;
+- Path 1 and Path 2 memberships, policies, cadence and metrics remain distinct;
 - every list field has source/provenance and ingestion timestamp;
 - survey answers reference exact survey/question versions;
 - all completion modes write the same answer contract and record the mode;
+- a campaign-cycle completion key stops duplicate current-cycle surveys across
+  web, QR, staff, SMS, human phone and AI phone;
+- published survey versions are immutable and topic-cycle changes create a new
+  version with comparability metadata;
+- anonymous answers are never reidentified; optional contact details and
+  structured answers have separate access policies;
 - contact attempts have idempotency keys and provider IDs;
 - webhooks deduplicate and tolerate out-of-order delivery;
 - reports reference immutable dataset and code/version hashes;
@@ -390,6 +489,54 @@ Support save/resume, partial completion, accessible controls, low-bandwidth
 mobile use, language/accessibility preference, safe-time preference, a "prefer
 not to say" option and anonymous participation where the approved design
 allows it.
+
+The public experience is no-account, mobile-first and device-independent, with
+large tap targets, keyboard/screen-reader support, clear progress and error
+recovery. A lost connection or repeated submit must not lose confirmed answers
+or create a duplicate completion.
+
+Build a governed question bank and topic-cycle workflow for monthly, quarterly
+or annual issues. A draft survey records purpose, owner and intended reports,
+then passes cultural, privacy, ethics/methodology and branch testing. Publishing
+makes the version immutable. Every response retains exact survey, question,
+option, wording and topic-cycle versions, pathway and completion mode. Record
+comparability metadata so the dashboard does not show false trends across
+changed questions or populations.
+
+Implement the survey lifecycle `DRAFT → CULTURAL_REVIEW →
+PRIVACY_ETHICS_REVIEW → METHODOLOGY_REVIEW → BRANCH_TESTED → APPROVED →
+SCHEDULED → ACTIVE → RETIRED | WITHDRAWN`. A campaign pins one canonical core
+version plus approved translation/delivery-script versions. Existing sessions
+normally finish their pinned version; critical withdrawal blocks submission
+and shows the approved recovery path. Corrections create successors.
+
+Topic cycles use `PROPOSED → SCOPED → COMMUNITY_REVIEW →
+METHODOLOGY_APPROVED → SCHEDULED → ACTIVE → CLOSED → EVALUATED`, plus
+`REJECTED` and `URGENT_WITHDRAWAL`, with a decision owner, community authority,
+intended use, target population, evidence threshold and closing-the-loop date.
+
+Implement session states `STARTED → IN_PROGRESS → SAVED → RESUMED → SUBMITTED
+| EXPIRED | ABANDONED | WITHDRAWN_VERSION`. Resume tokens are opaque, expiring
+and revocable. Only successful submission creates a completion key. Exclude
+partial answers from reporting unless an approved methodology includes and
+labels them. An anonymous abandoned session grants no contact authority.
+
+The final screen records separately:
+
+1. service-Terms acceptance only if Phase 0 requires it;
+2. acknowledgement that the current Privacy Notice was presented;
+3. the approved acknowledgement or consent for the core collection and
+   de-identified reporting purpose;
+4. optional secondary-research consent where that purpose differs; and
+5. optional unticked future-contact permissions.
+
+Never bundle Terms acceptance into newsletter, SMS, human-call, AI-call,
+research-reuse or storage consent. Store distinct Terms, Privacy Notice,
+response-use and channel-consent versions and evidence hashes. Contact details
+are optional unless follow-up is requested; anonymous answers are never
+reidentified. Separate identity/contact data from structured answers, use
+idempotent server-side writes, enable RLS on every exposed Supabase table and
+deny public response reads.
 
 The operator console must show only the minimum needed:
 
@@ -470,11 +617,24 @@ Implement:
 `draft → eligibility snapshot → compliance validation → audience hash → human
 approval → scheduled → running/paused → completed/cancelled → reconciled`
 
-Per recipient:
+Path 1 per recipient:
 
-`eligible → email queued/sent/delivered → responded/completed/opted out/timed
-out → SMS only if independently eligible → call only if independently eligible
-→ completed/unreachable/opted out/escalated`
+`BUSINESS_VALUE_EMAIL_1 → ROTATING_CHASE_SELECTED → NO_RESPONSE_TIMEOUT →
+BUSINESS_VALUE_EMAIL_2 → NO_RESPONSE_TIMEOUT → BUSINESS_AI_CALL only after a
+fresh voice-policy ALLOW → COMPLETED | TERMINAL`
+
+Path 2 per recipient:
+
+`CITIZEN_INTAKE_AND_CONSENT → CITIZEN_NEWSLETTER → ROTATING_CHASE_SELECTED →
+NO_RESPONSE_TIMEOUT → CITIZEN_SMS only after a fresh consent/policy ALLOW →
+NO_RESPONSE_TIMEOUT → CITIZEN_AI_CALL only after a fresh consent/policy ALLOW
+→ COMPLETED | TERMINAL`
+
+Newsletter audience membership is not survey-chase membership. Path 1 has no
+default SMS state. Non-response is derived only after an approved waiting
+period and provider-event reconciliation; opens, pixels and clicks do not
+advance state. A canonical completion correlation stops all current-cycle
+steps across web, QR, staff, SMS and phone.
 
 Requirements:
 
@@ -495,20 +655,23 @@ Requirements:
 
 ## 10. Reporting system
 
-Generate three separate drafts from one approved de-identified dataset:
+Generate three separate drafts from one locked base dataset and three
+audience-specific de-identified derived views:
 
-1. community newsletter — warm, plain language, what was heard and what
-   happens next;
-2. staff/partner operational report — response operations, office activity,
-   trends, follow-ups and delivery measures;
+1. public business/community report and newsletter — warm, plain language,
+   what was heard and what happens next;
+2. private IRAAC staff, affiliated staff and partner-organisation management
+   report — campaign operations, office activity, KPIs, issue/outcome trends,
+   actions, capacity and decisions;
 3. government advocacy report — method, evidence, constraints,
    recommendations and Local Decision Making relevance.
 
 Workflow:
 
-`dataset snapshot → deterministic calculations → AI narrative draft → privacy
-and small-cell review → community/governance review → named administrator
-approval → publish/send → immutable distribution manifest`
+`DATASET_READY → METRICS_VALIDATED → DRAFT → IN_REVIEW → CHANGES_REQUESTED →
+REVISING → READY_FOR_APPROVAL → PARTIALLY_APPROVED → APPROVED_LOCKED →
+SCHEDULED → PUBLISHING | DISTRIBUTING → PUBLISHED | SENT → FAILED → CORRECTED
+| RETRACTED | SUPERSEDED`
 
 Rules:
 
@@ -522,40 +685,88 @@ Rules:
 - preserve source and methodology lineage;
 - distinguish observed data from interpretation and recommendation;
 - every audience gets a separate version, approval and recipient manifest;
-- reports remain drafts until a named human approves;
+- reports remain drafts until all policy-defined approvals are satisfied;
 - no automatic external sending during development.
+
+Rename the public site navigation and route from Insights to Reports. Add a
+Reports index and stable child pages showing only approved community artefacts,
+with title, publication date, reporting period, type/topic, summary, full
+accessible page and optional approved download. Keep `insights.html` as a
+permanent redirect/compatibility alias. Private staff and government reports
+remain dashboard-only. Material derived from either for public release becomes
+a new `community_public` artefact with its own redaction, accessibility,
+claims, hash and approval cycle.
+
+Email reviewers individual notifications containing signed, expiring links to
+the exact dashboard report version. Approval happens in the dashboard. If
+email replies are later ingested, store them as untrusted review comments; the
+word "approved" in an email never creates approval. AI may propose a redline
+into a new draft, but a human accepts/rejects each change. Any changed dataset,
+metric, sentence, recommendation, attachment, recipient or public destination
+invalidates the affected approval. Once `APPROVED_LOCKED`, the production
+service may publish/distribute the exact artefact and manifest automatically.
+
+Approval policy defines required roles, quorum, order, separation of duties,
+expiry and conflicts by audience/sensitivity. Approval requires an
+authenticated reviewer session or equivalent strong verification; forwarded,
+expired, revoked or replayed links cannot approve. Reminders and escalation
+never become approval.
+
+Private reports use authenticated portal access or expiring recipient-bound
+downloads; do not attach sensitive reports to ordinary email by default.
+Publication uses `QUEUED → BUILDING → DEPLOYED_UNVERIFIED → VERIFIED_PUBLISHED
+| FAILED → RETRY_PENDING | ROLLED_BACK`; update the Reports index only after
+route, audience, privacy and content-hash verification. A failed release leaves
+the prior index intact. Corrections and retractions preserve visible history.
 
 Closing-the-loop reports link issues to interventions and later re-survey
 evidence without exposing an individual's history.
 
 ## 11. Agent-native API
 
-Build typed, permissioned tools with two technically separate roles.
-`agent_build_test`, used by Hermes, is restricted to masked inspection,
-synthetic fixtures, allowlisted test destinations, validation, drafts,
-previews and approval requests. `human_production_operator` is separate.
-Hermes credentials must be technically incapable of production queue, start,
-publish or distribute operations.
+Build three technically separate actors:
 
-Production actions require a human-only role, two-person approval, an
-environment-bound signed approval artifact, audience hash, expiry, rate limit
-and server-side interlock. A prompt prohibition is not a security boundary.
+- `agent_build_test` prepares synthetic/test work, previews, drafts and
+  approval packets;
+- `human_production_approver` decides against the frozen packet; and
+- `production_campaign_service` executes only an approved,
+  environment-bound locked bundle within its audience, schedule, attempts,
+  rate and cost ceiling.
+
+A `human_production_operator` may activate, pause, stop or reconcile an
+approved bundle but cannot mutate it. Material change creates
+`STALE_REQUIRES_REAPPROVAL`. Hermes credentials cannot resolve production PII,
+provider endpoints, production IDs or production mutation tools.
 
 Hermes-facing tools:
 
-- contacts: import, validate, dedupe, inspect masked timeline;
-- consent: record, revoke, check;
-- suppression: add, check;
-- survey: begin, record answer, complete;
-- campaign: plan, validate and request approval;
-- channel: preview and test email/SMS/call to allowlisted destinations;
-- report: generate, validate and request approval;
-- audit: search;
-- incident: raise.
+- `test_contacts.import_synthetic`, `test_contacts.validate`,
+  `test_contacts.dedupe`, `contacts.inspect_masked`;
+- `test_consent.record`, `test_consent.revoke`, `consent.simulate_check`;
+- `test_suppression.add`, `suppression.simulate_check`;
+- `test_survey.begin`, `test_survey.record_answer`, `test_survey.complete`;
+- `campaign.plan`, `campaign.dry_run`, `campaign.validate`,
+  `campaign.build_approval_packet`, `campaign.request_approval`;
+- `channel.preview`, `channel.send_allowlisted_test`;
+- `report.generate_draft`, `report.validate`,
+  `report.build_approval_packet`, `report.request_approval`;
+- `approval.status`, `approval.read_feedback`,
+  `workflow.resume_after_decision`;
+- `audit.search_masked`, `incident.raise`.
+
+Production-only tools such as approval decision, release activation, campaign
+start/pause/stop and report publication/distribution are absent from agent
+credentials. A prompt prohibition is not a security boundary.
 
 Every mutation takes stable IDs, reason, actor/run ID and idempotency key.
 Return structured results and machine-readable denial codes. Support dry-run.
 Agents never receive raw database/provider credentials and never self-approve.
+
+At a human boundary, create a structured `ApprovalPacket`, request approval,
+record the request ID and move to `waiting_human`. Do not simulate approval,
+borrow a human browser session or treat silence/free-text assent as approval.
+After approval, re-fetch and verify the locked hashes; the production service,
+not Hermes, activates or distributes it.
 
 ## 12. Multi-bot working agreement
 
@@ -594,12 +805,17 @@ Create work orders in this dependency order.
 
 - reconcile `build.py`, the eleven HTML pages and README in the public repo;
 - verify every Have Your Say destination;
+- plan the public `Insights` → `Reports` route/navigation migration with an
+  `insights.html` compatibility redirect;
 - inventory the current Google Form consent wording through an authorised
   human/admin review;
 - confirm legal entity, ABN, current ACNC status, APP coverage and contracting
   party;
-- prepare counsel classification questions for citizen AI calls, business
-  email/SMS/voice, newsletters and mixed promotional content;
+- obtain the research/evaluation/community-consultation ethics determination
+  and Aboriginal-led data governance authority;
+- prepare counsel classification questions for citizen AI calls, Path 1's
+  one-time invitation, recurring newsletter, value brief and research-only
+  voice call, Path 2 SMS/AI voice and mixed promotional content;
 - create the 10,000-record provenance schema and validation plan without
   importing real records;
 - create the private platform repo after approval;
@@ -615,6 +831,8 @@ decisions have named human owners.
 - architecture ADRs;
 - schema/migrations/data dictionary;
 - Auth/MFA/RBAC/RLS;
+- environment separation, actor/service-principal roles, locked approval
+  bundles and production interlocks before provider adapters;
 - consent/suppression/audit ledgers;
 - encrypted secrets and backups;
 - synthetic fixtures and tests.
@@ -626,35 +844,53 @@ logs.
 ### W2 — Canonical survey and intake
 
 - versioned survey contracts;
-- web/staff/phone renderer;
+- governed question bank and monthly/quarterly/yearly topic-cycle workflow;
+- mobile-first web/QR/staff/drop-in/home-visit/human-phone/AI-phone renderer;
+- immutable published versions and question-comparability metadata;
+- survey/session/topic-cycle lifecycle states, emergency withdrawal and safe
+  in-flight-session handling;
+- separate Terms/Privacy acceptance, response-use acknowledgement and optional
+  future-contact choices;
+- identity/answer separation and idempotent completion correlation;
 - consent receipt UI/API;
 - import staging, validation, dedupe and reconciliation;
 - dual-run Google Form migration plan.
 
-Acceptance: all modes save identical answer shapes; declining contact still
-completes the survey; each affirmative choice grants only its precise channel;
-withdrawal blocks the next queued attempt.
+Acceptance: all devices/modes save the same versioned answer shape and record
+pathway/mode; a dropped/repeated submit does not lose or duplicate answers;
+partial/abandoned sessions are not counted as completions; a withdrawn version
+cannot accept a new submission; declining contact still completes the survey;
+Terms acceptance grants no
+contact channel; each affirmative choice grants only its precise channel;
+withdrawal or any current-cycle completion blocks the next queued attempt.
 
 ### W3 — Control plane and email pilot
 
 - admin UI, policy simulation, audience preview, approval and pause;
-- provider adapter and authenticated domain setup plan;
-- templates, bounce/complaint/unsubscribe;
+- provider-acceptability bake-off for Path 1 and separate SES suitability for
+  requested/consented newsletters;
+- SPF/DKIM/DMARC/TLS, aligned identity, one-click unsubscribe where required,
+  gradual warm-up, throttling, reputation monitoring and kill thresholds;
+- distinct Path 1 initial value email, value brief and Path 2 newsletter
+  templates, bounce/complaint/unsubscribe;
 - internal and synthetic pilot.
 
-Acceptance: no send without environment, approval, audience hash and policy
-pass; duplicate jobs do not double-send; report exact sandbox evidence.
+Acceptance: Path 1's second email can only follow rotating-sample assignment
+and reconciled no-response; no send without environment, approval, audience
+hash and policy pass; duplicate jobs do not double-send; report exact sandbox
+evidence.
 
 ### W4 — SMS pilot
 
-- SMS adapter;
+- Path 2-only SMS adapter;
 - sender-ID registration checklist;
 - two-way STOP or approved alternative;
 - independent SMS eligibility;
 - sandbox/internal pilot.
 
-Acceptance: email permission alone cannot queue SMS; STOP suppresses before
-the next attempt; quiet-hour and duplicate-webhook tests pass.
+Acceptance: Path 1 never queues SMS; Path 2 email permission alone cannot queue
+SMS; STOP suppresses before the next attempt; quiet-hour and
+duplicate-webhook tests pass.
 
 ### W5 — Human phone pilot
 
@@ -669,18 +905,29 @@ hang-up/stop/complaint blocks retries; survey parity and caller-ID tests pass.
 ### W6 — Reporting and dashboard
 
 - aggregate views;
-- response/office/channel operational views;
+- response/office/channel/pathway operational views and KPI trends;
+- versioned KPI registry, office-attribution rules, freshness/provisional
+  states and explicit insufficient-evidence/not-comparable trend states;
 - three report templates;
-- de-identification, small-cell and approval workflow;
-- immutable publication/distribution manifest.
+- email notifications with signed dashboard review links, section comments,
+  AI-proposed redlines into new versions and policy-defined approval workflow;
+- de-identification, small-cell and evidence/comparability labels;
+- public Reports index/child-page publication feed and Insights redirect;
+- immutable publication/distribution manifest;
+- authenticated or recipient-bound private report access, audited downloads,
+  public deployment verification, rollback, corrections and retractions.
 
-Acceptance: report is reproducible from snapshot; no PII reaches LLM; no
-report can publish/send without named approval.
+Acceptance: report is reproducible from snapshot; no PII reaches LLM; no email
+text creates approval; changed content/recipient hashes require reapproval; no
+report can publish/send without the required locked approval; only approved
+`community_public` reports appear publicly; failed publication leaves the prior
+Reports index intact; sensitive private reports are not ordinary attachments.
 
 ### W7 — AI voice pilot
 
 - AI disclosure script and cultural-safety review;
-- AI-call-specific consent;
+- Path 2 AI-call-specific consent and separately classified Path 1
+  research-only business-call rule;
 - Amazon Connect Sydney vs Telnyx AU bake-off, with an optional time-boxed
   Twilio ConversationRelay benchmark;
 - prove outbound AI flow, caller ID, answer-machine handling, transfer, data
@@ -691,19 +938,22 @@ report can publish/send without named approval.
 - synthetic/internal test, then separately approved small pilot.
 
 Acceptance: human-call consent does not enable AI; AI identifies itself at the
-start; stop/handoff works in every test; no recording without separate
-permission.
+start; Path 1 email timeout alone cannot enable a call; stop/handoff works in
+every test; no recording without separate permission.
 
 ### W8 — Closing the loop and scale
 
 - issue/intervention/resurvey links;
-- monthly rotation and frequency policies;
+- separate seeded Path 1/Path 2 rotation without replacement, 90-day cooldown,
+  strata, organisation/household caps and completion correlation;
 - 10,000-business approved-cohort cost/load/capacity model;
 - restore, incident and operational drills;
 - national rollout proposal, not automatic launch.
 
 Acceptance: re-survey lineage is auditable; contact fatigue protections pass;
-capacity and staffing are credible; governance signs the go/no-go.
+the same contact is not repeatedly selected while peers are missed; the 30%
+target is reported without claiming representativeness; capacity and staffing
+are credible; governance signs the go/no-go.
 
 ## 14. Verification suite
 
@@ -718,10 +968,18 @@ Do not mark work complete without proportional evidence:
 - quiet hours, DNCR, frequency and household caps;
 - RLS, role, audit and privilege tests;
 - survey parity and accessibility/mobile tests;
+- immutable survey-version, terms-versus-consent and cross-mode completion
+  correlation tests;
+- separate Path 1 and Path 2 state-machine tests, including no business SMS,
+  quarterly rotation and no escalation from tracking pixels;
 - opt-out, complaint, distress and human-handoff tests;
 - backup and restore drill;
 - 10,000-contact load/cost test;
 - de-identification, small-cell and report reproducibility tests;
+- report version/comment/reapproval, public-audience filtering, publication
+  hash and recipient-manifest mismatch tests;
+- `agent_build_test` cross-environment denial, locked-bundle invalidation and
+  production-service ceiling tests;
 - AI disclosure, consent and no-advice tests;
 - caller-speech and provider-event prompt-injection tests;
 - attempts to override opt-out, identity, policy, tool permissions or survey
@@ -759,6 +1017,14 @@ At the beginning, print:
 3. dependencies and whether they are met;
 4. exact acceptance tests;
 5. whether any human approval is required.
+
+When approval is required, create the approval packet and report the exact
+decision, reason, immutable artefact/audience/policy hashes, recipient count
+and channel, legal/governance source version, test evidence, risks,
+rollback/pause method and expiry. A message such as "looks good" is not a
+production token. Resume only when the approval API contains the required
+named signed decision. Continue unrelated safe work while the item is
+`waiting_human`.
 
 Then implement only the smallest complete dependency-safe unit. Do not merely
 write a plan when code can safely be written. Run tests. Review the diff.

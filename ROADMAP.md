@@ -22,7 +22,7 @@ IRAAC is an Aboriginal Community Organisation. It does not deliver services in
 the traditional sense — it *listens* to community members, *advocates* to
 government on their behalf, and *reports back* on what changed. That listen →
 advocate → report loop is the entire product. Everything the website, the
-outreach funnel, the phone surveys, the admin dashboard, and the insights
+outreach pathways, the phone surveys, the admin dashboard, and the reports
 system exist to do is make that loop faster, more evidenced, and more visible
 to the people involved in it.
 
@@ -89,113 +89,130 @@ capability.
 
 ---
 
-## 3. What we are building next: the community listening loop
+## 3. What we are building next: two pathways, one evidence loop
 
-The next major body of work is a full, closed community listening loop. In
-plain terms:
+IRAAC has two distinct outreach pathways. They use different entry rules and
+contact sequences, but they converge on one canonical Have Your Say survey,
+one governed evidence store, one suppression service and one reporting cycle.
 
-1. A community member gives IRAAC their contact details and consent through
-   one of four intake channels — filling out the form on the website, being
-   visited at home by an IRAAC officer, dropping into an IRAAC office, or
-   being reached during a community outreach event.
-2. Their contact details and consent status land in a central store. The store
-   is currently an Excel spreadsheet; it needs to move to something the rest
-   of the system can query.
-3. On a rolling monthly basis, a subset of that stored community is contacted
-   through the channels for which each person has given current, specific
-   permission — newsletter/email, SMS, and finally an outbound human or
-   AI-assisted phone call — and asked to answer a short set of survey questions.
-   Not everyone is contacted every month; the target is around **30% of the
-   consented pool per month**, rotating so nobody gets over-contacted.
-4. Survey responses are aggregated into insights — for example, "housing is
-   the most-raised concern in the Nowra area this quarter" or "bail conditions
-   came up in 40% of responses from young men aged 18–25."
-5. Those insights are distributed to three distinct audiences, each with its
-   own framing:
-   - **Community members** via the monthly newsletter — plain-English summary
-     of what was heard and what IRAAC is doing about it.
-   - **IRAAC staff and partner NGOs** — operational detail, cross-tabulated
-     data, project tracking.
-   - **Government** — formal advocacy reports, positioned as evidence for
-     policy change under Local Decision Making.
-6. **The loop closes when we re-survey.** The whole point is not to gather
-   complaints; it is to check whether the advocacy actually delivered change.
-   Every issue raised eventually becomes a follow-up question: "Last time you
-   told us housing was a problem. Has anything changed for you in the last six
-   months?"
+**Path 1 — Aboriginal business outreach.** IRAAC begins with an approved
+cohort drawn from the expected directory of approximately 10,000
+Aboriginal-owned businesses. "Approved" means the source, licence, message,
+recipient role and exact email or voice action have passed the recorded
+policy/legal classification; public listing or Aboriginal ownership alone is
+not permission. The value exchange comes first: an approved business receives
+the monthly business/community newsletter or report with current insights,
+what IRAAC heard, how IRAAC is returning that evidence to government and a
+survey link. Only the rotating survey-chase sample advances. If there is no
+verified completion or terminal response after the approved waiting period,
+IRAAC sends a second, shorter value-first brief with a fresh survey link. If
+there is still no completion, an AI survey call may occur only after an
+independent, current voice-eligibility decision. SMS is not part of the default
+Path 1 sequence.
 
-Nothing about the loop is novel individually — it's a survey program with a
-CRM and a newsletter. What is unusual is the emphasis on step 6 and on the
-tight framing of steps 4 and 5 around the listening-and-advocacy model. Both
-have to be visible in the product, not just implied.
+**Path 2 — direct citizen and community participation.** A person may complete
+the canonical survey through the website, a QR code or flyer, an IRAAC or NGO
+worker, a community visit, a home visit, a drop-in, an event, a human phone
+survey or another approved assisted mode. The survey includes separate,
+optional, unticked permissions for newsletter/survey email, SMS, human calls,
+AI survey calls and any later audio/transcript storage. Future outreach starts
+with the newsletter. Only a person selected into the rotating survey-chase
+sample advances to SMS, and then to an AI call, with a fresh eligibility check
+for each separately permitted channel.
+
+**One shared loop.** Both pathways write responses through the same versioned
+question and answer contract. Each month the platform automatically creates a
+de-identified dataset snapshot and three audience-specific drafts:
+
+- the **government advocacy report**;
+- the **IRAAC staff, affiliated staff and partner-organisation management
+  report**; and
+- the **business/community newsletter**.
+
+The platform calculates metrics deterministically and may draft narrative,
+but production distribution starts only after the required named approval has
+locked the exact dataset, claims, artefacts and recipient manifest. The
+approved production service may then distribute on schedule and write delivery
+evidence back to the audit ledger.
+
+The loop closes through re-surveying. Issues become recommendations to
+government, recommendations become tracked actions, and later surveys ask
+whether circumstances changed. The visible product promise remains:
+**You share → We listen → We recommend to government → We report back.**
 
 ---
 
-## 4. The multi-channel outreach funnel
+## 4. The two contact journeys
 
-The funnel is designed to escalate gently from cheap, low-friction contact to
-more expensive, higher-touch contact, and to stop escalating the moment
-someone responds.
+The two pathways use shared orchestration machinery but separate audience
+snapshots, policies, cadence, content, metrics and suppression decisions.
 
-**Stage 1 — Monthly newsletter.** People with current newsletter-email
-permission receive the monthly newsletter. This audience is separate from the
-monthly survey-chase sample. The newsletter contains a voluntary survey link,
-but receiving it does not automatically place someone into SMS or call
-follow-up.
+### Path 1 — approved Aboriginal business journey
 
-**Stage 2 — Survey follow-up email.** Only the separately approved rotating
-survey sample enters the survey-chase journey. A follow-up email may go out
-where there is no verified survey completion, reply, opt-out or other terminal
-response. Opens, clicks and tracking pixels never trigger escalation.
+1. **Approved value newsletter/report email.** Every recipient must pass the
+   business email policy. The email provides useful monthly findings and
+   explains how IRAAC turns community evidence into recommendations to
+   government. It ends with a voluntary survey link.
+2. **Rotating survey-chase selection.** Roughly 30% of the eligible business
+   survey pool is selected for active follow-up in a month. The newsletter
+   audience and the survey-chase sample are different objects.
+3. **Second value-first email.** After the approved waiting period, a selected
+   contact with no verified survey completion or other terminal response may
+   receive a concise report or insight brief, a summary of what changed and a
+   fresh survey link.
+4. **Policy-eligible AI survey call.** After another approved waiting period,
+   a selected contact may be called only when the exact number, purpose,
+   research/charity/message classification, AI call and time have passed a
+   fresh policy check. The email timeout is not permission. The AI identifies
+   itself and IRAAC immediately, gives the purpose, asks whether the person has
+   a spare minute, offers a human alternative and runs the same canonical
+   survey. If voice is not independently eligible, the journey ends without a
+   call.
 
-**Stage 3 — SMS.** If the email doesn't land and the person has separately
-consented to SMS, a short text message is sent with a link to the survey.
-Australian sender ID, identification and unsubscribe rules apply (see §11).
+The default Path 1 journey contains no SMS. A future business SMS step would
+need its own approved policy, source and eligibility rule; it cannot be inferred
+from an unanswered email.
 
-**Stage 4 — Outbound phone call.** If nothing else has worked and the person
-has separately consented to the relevant call type, a trained operator or an
-approved AI voice system calls. The call identifies IRAAC and, for an
-automated or AI call, identifies the technology immediately, asks whether it
-is a good time and offers a human pathway. The caller runs the same versioned
-survey questions verbally and records the answers directly into the governed
-survey system. Call recording and persistent transcript storage are off by
-default. Autonomous voice necessarily uses disclosed transient audio and
-speech-to-text processing; the AI-call permission covers that processing.
-Storing audio or transcripts requires a separate current-call choice.
+### Path 2 — citizen/community journey
 
-**Second audience: the Aboriginal business database.** Separately, there is a
-publicly-available database of approximately ten thousand Aboriginal
-businesses in Australia. These are not consented individuals — they are
-business contacts, and the outreach to them is compliance-different (business
-communications sit differently under the Spam Act and the Do Not Call
-Register). A verified number used primarily for business generally cannot be
-registered on the DNCR, but the Telemarketing and Research Calls Industry
-Standard still applies to questionnaire calls. A publicly listed business
-email may support a narrowly relevant business message in some circumstances;
-mere publication is not blanket permission. SMS is also an electronic message,
-and a newsletter that promotes IRAAC services, events or donations may be
-commercial even when a survey invitation is not.
+1. **Direct survey and consent intake.** The person completes Have Your Say by
+   web, QR, worker-assisted visit, drop-in, home visit, event, human phone or
+   another approved mode. Contact permissions remain optional and separate.
+2. **Newsletter email.** People with current email permission may receive the
+   monthly newsletter with findings, action updates and a survey link.
+3. **Rotating survey-chase selection.** Roughly 30% of the eligible citizen
+   survey pool is selected for active follow-up in a month.
+4. **SMS survey link.** After the waiting period and only with current SMS
+   permission, a selected person with no completion or terminal response may
+   receive a short identified text and survey link.
+5. **AI survey call.** After the next waiting period and only with current AI
+   voice permission, a selected person may receive the approved AI survey
+   call, including immediate AI identity, permission to continue and a human
+   pathway.
 
-The business cohort therefore uses a **channel-by-channel eligibility gate**,
-not an assumed consent funnel:
+### Shared transition rules
 
-1. Record the source, licence or permission, collection date, public context,
-   business-use evidence and any "no unsolicited contact" statement.
-2. Classify the exact message and purpose before treating it as commercial,
-   research, advocacy or service information.
-3. An approved, relevant first business invitation may be sent only through a
-   channel the policy engine and legal review permit.
-4. Email, SMS and voice are evaluated independently. No channel is unlocked
-   merely because another was allowed or unanswered.
-5. Every message identifies IRAAC, explains the source where required, offers
-   a simple opt-out and stops immediately after a response, opt-out, complaint
-   or suppression.
-6. Business respondents who want ongoing citizen or community participation
-   enter the same express-consent intake as everyone else.
+"Non-response" is a derived state after the waiting period and event
+reconciliation. It is never inferred from an email open, pixel, click or
+missing webhook. Every transition requires both no current-cycle completion or
+terminal response and a fresh eligibility decision for the next action.
 
-The exact classifications and launch permissions are Phase 0 legal decisions,
-not assumptions embedded in code. This roadmap is an implementation plan, not
-legal advice.
+Survey completion through any channel, reply, opt-out, complaint, withdrawal,
+distress, wrong person, invalid endpoint, hard bounce or suppression stops all
+controllable remaining chase attempts for that campaign cycle. Provider events
+may arrive late or out of order, so state changes use event time,
+deduplication, idempotency and reconciliation. One canonical completion key
+prevents web, SMS, staff and AI channels from asking the same current-cycle
+survey twice.
+
+People and organisations remain separate. A person answering on behalf of a
+business does not silently convert business contact eligibility into personal
+citizen consent. Moving into Path 2 requires the same express consent intake
+as every other citizen participant.
+
+The exact business classifications and launch permissions are Phase 0 legal
+decisions, not assumptions embedded in code. This roadmap is an implementation
+plan, not legal advice.
 
 ---
 
@@ -254,11 +271,12 @@ the Sydney region is the reference implementation, subject to the Phase 0
 privacy, Indigenous Data Sovereignty and vendor reviews. Excel and Google
 Sheets are import/export staging tools, never a second source of truth.
 
-**Monthly extract.** Each month a job builds separate, immutable audience
-snapshots for (a) consented community participants and (b) approved business
-prospects. They are never combined into a single undifferentiated list. Each
-recipient/channel pair must pass the policy engine immediately before queueing
-and immediately before delivery.
+**Monthly extract.** Each month a job builds four linked but distinct immutable
+snapshots: the approved Path 1 newsletter audience, the Path 1 survey-chase
+sample, the consented Path 2 newsletter audience and the Path 2 survey-chase
+sample. They are never combined into a single undifferentiated list. Each
+recipient/channel/action pair must pass the policy engine before inclusion,
+queueing and delivery.
 
 **Revocation.** Every outbound message — SMS, email, and voice — must offer a
 clear way to stop being contacted. Revocation propagates to the central store
@@ -271,79 +289,188 @@ Statutory maximum timeframes remain outer limits, not the system target.
 
 ---
 
-## 6. Monthly sampling: nobody gets called every month
+## 6. Monthly sampling: two rotating survey pools
 
-Contacting the whole consented pool every month would be onerous, annoying,
-and would rapidly degrade response rates. The starting plan is a rolling
-monthly sample: roughly **30% of the eligible, consented pool** is invited in
-any given month, selected so that no individual is contacted more often than
-their consented frequency and the approved contact policy allow. This is
-normally every three to four months, not an automatic monthly AI call.
+The monthly newsletter may reach the full approved Path 1 email audience and
+the full consented Path 2 newsletter audience. Active survey chasing is
+different: roughly **30% of each pathway's currently eligible survey pool** is
+selected each month.
 
-Rotation is on a per-person basis, not per-region. The sampling logic should
-also cap contact frequency per household where possible — if two members of
-the same household have both consented, we shouldn't call both in the same
-month.
+Path 1 and Path 2 are sampled independently. Selection is reproducible,
+auditable and without replacement until the relevant pool has been covered,
+subject to consent/policy expiry, suppression, household or organisation caps,
+topic relevance and operational capacity. A 90-day cooldown is the initial
+planning assumption, so a typical eligible contact is actively chased about
+once every three to four months rather than monthly.
 
-The 30% figure is a starting point. In practice it should be tuned to whatever
-volume the calling infrastructure can handle in a month, whatever gives us
-statistically meaningful sample sizes per region and per topic, and whatever
-keeps community goodwill intact.
+Pure randomness can repeatedly select some people while missing others. Use a
+seeded rotating sample with documented inclusion/exclusion reasons and, where
+the evidence purpose requires it, approved strata for region, age group,
+community, business type or other defensible dimensions. Weighting and quotas
+must not create misleading precision or expose small groups.
+
+The 30% figure is a configurable target and ceiling, not a promise or a proxy
+for representativeness. It is reduced when consent terms, policy, staff
+capacity, cultural governance, expected response burden or voice capacity
+require it. The monthly report states the eligible pool, selected sample,
+completion count, non-response and limitations separately for each pathway.
 
 ---
 
-## 7. IRAAC admin dashboard
+## 7. The canonical survey and admin dashboard
 
-IRAAC staff need a separate app — logged-in, not public — that lets them do
-the following:
+### Have Your Say is the source instrument
+
+Have Your Say is central to IRAAC's operation. Path 1 businesses and Path 2
+citizens answer the same current, published survey version. Web, QR, mobile,
+tablet, desktop, worker-assisted, drop-in, home-visit, human-phone and AI-phone
+modes all write the same answer contract and record the pathway and completion
+mode separately.
+
+The survey is mobile-first, device-independent, plain-language and as simple
+as the current Google Form. It requires no account. It supports large tap
+targets, keyboard and screen-reader use, save/resume where approved, clear
+progress, error recovery, low-bandwidth delivery and an immediate human/help
+path. A dropped connection must not lose already confirmed answers or create a
+duplicate completion.
+
+IRAAC identifies priority issues for a month, quarter or year, but published
+surveys are immutable. Staff select from a governed question bank, document the
+purpose and owner, run cultural/privacy/methodology review, test every branch,
+and publish a new version with an effective period. Historical answers always
+retain their exact survey, question, option, wording and topic-cycle versions.
+Trend comparisons are allowed only where questions and populations remain
+comparable; the system labels breaks in series.
+
+The survey lifecycle is `DRAFT → CULTURAL_REVIEW → PRIVACY_ETHICS_REVIEW →
+METHODOLOGY_REVIEW → BRANCH_TESTED → APPROVED → SCHEDULED → ACTIVE → RETIRED |
+WITHDRAWN`. One canonical core is active for a campaign, with approved,
+versioned translations and delivery scripts rather than divergent channel
+surveys. Each campaign and started session pins its exact version. A normal
+in-flight session finishes that version; a critical withdrawal blocks further
+submission and presents the approved recovery path. Corrections create a
+successor and an explicit comparability decision, never an edit in place.
+
+Topic cycles use `PROPOSED → SCOPED → COMMUNITY_REVIEW →
+METHODOLOGY_APPROVED → SCHEDULED → ACTIVE → CLOSED → EVALUATED`, with
+`REJECTED` and `URGENT_WITHDRAWAL`. Each cycle records its decision owner,
+community authority, intended use, target population, evidence threshold,
+survey versions, report outputs and closing-the-loop date.
+
+Survey sessions use `STARTED → IN_PROGRESS → SAVED → RESUMED → SUBMITTED |
+EXPIRED | ABANDONED | WITHDRAWN_VERSION`. Opaque resume tokens expire and
+contain no identity. A completion key exists only after a successful submit.
+Partial answers are excluded from monthly reporting unless an approved
+methodology includes and labels them. An abandoned anonymous session creates
+no permission to contact anyone.
+
+The final screen separately records:
+
+1. acceptance of service Terms only if Phase 0 determines Terms are genuinely
+   required;
+2. acknowledgement that the current Privacy Notice was presented;
+3. the approved acknowledgement or consent for the core collection and
+   de-identified reporting purpose;
+4. separate optional secondary-research consent if that purpose differs from
+   the core purpose; and
+5. optional, unticked, channel-specific future-contact permissions.
+
+A privacy-notice acknowledgement or Terms acceptance is not bundled consent
+for newsletters, SMS, human calls, AI calls, secondary research reuse or
+recording. Each optional permission remains voluntary and declining it does
+not block survey submission or services. The record stores distinct Terms,
+Privacy Notice, response-use and channel-consent versions and evidence hashes.
+Answers may be submitted anonymously. Contact details are optional unless the
+person requests follow-up; anonymous responses can contribute to safe
+aggregates but never to recontact.
+
+Identity/contact data is separated from structured answers through internal
+identifiers and stricter access policies. The write path is server-side,
+idempotent and validated; public clients never receive privileged database
+keys. RLS is enabled on exposed Supabase tables, production forms cannot read
+other responses, and report jobs use approved de-identified views/snapshots
+rather than querying raw contact records.
+
+### Private admin dashboard
+
+IRAAC staff need a separate logged-in app that lets them do the following:
 
 - **See survey activity.** How many surveys have gone out this month, how
   many have come back, what the response rates look like by channel (email
   vs SMS vs call), by region, and by demographic.
-- **Read individual responses.** With appropriate handling of anonymity
-  preferences.
+- **Access minimum necessary response detail.** Only for an approved
+  operational purpose. Anonymous responses are never reidentified. Sensitive
+  free text is masked by default; access is purpose-bound, logged and limited
+  by office/affiliate data-sharing rules. Report reviewers normally use
+  de-identified aggregates.
 - **Track KPIs per office.** Each IRAAC office needs to see its own numbers —
   surveys collected during home visits and drop-ins, response rates from its
   region, and how it compares to the sitewide picture.
-- **See topic insights.** An aggregated view of what issues are being raised —
+- **See topic and outcome trends.** An aggregated view of what issues are being raised —
   housing, bail, transport, education, health — with volume, trend, and
-  regional breakdown.
+  regional breakdown. Show better/worse/unchanged only where survey versions,
+  populations and evidence thresholds support the comparison.
 - **See program tracking.** For each surfaced issue, what IRAAC (or a partner)
   is actually doing about it. This is the piece that lets the loop close: when
   a resurvey goes out asking "has anything changed?", staff need to know what
   intervention that resurvey is measuring the effect of.
-- **Compose distribution.** Generate, review, approve and send the monthly
-  newsletter, staff/partner briefing, and government-facing report. Every
-  output is a draft until a named administrator approves its exact dataset,
-  privacy treatment, recommendations, audience and recipient manifest.
+- **Track engagement operations.** Email delivery, bounce, complaint and
+  unsubscribe rates; SMS delivery/STOP; call attempts, answers, survey
+  completions, transfers, callbacks and opt-outs; conversion by pathway,
+  channel, region and campaign stage; provider cost/capacity and incidents.
+- **Manage the report workflow.** Generate, compare, comment on, revise,
+  approve and schedule the community, staff/partner and government reports.
+  Every output is a draft until named approvers lock its dataset, privacy
+  treatment, claims, recommendations, artefact and recipient manifest.
 
 Auth is real. Passwords, sessions, role-based access at minimum (office staff
 vs. head office vs. read-only). PII handling must respect Indigenous Data
 Sovereignty principles (see §11).
 
+The dashboard distinguishes operational KPIs (attempts, delivery, response,
+timeliness, workload and cost) from community outcome indicators (whether an
+issue is becoming better, worse or unchanged). It never treats outreach volume
+as community impact or attributes change to IRAAC without supporting evidence.
+
+A versioned KPI registry defines each metric's purpose, formula, numerator,
+denominator, exclusions, owner, target, reporting window, timezone, source
+freshness, office-attribution rule and limitation. Dashboard values show
+`CURRENT`, `PROVISIONAL`, `STALE`, `BACKFILLED`, `SUPPRESSED` or
+`DATA_INCOMPLETE`. Trends are only `BETTER`, `WORSE` or `UNCHANGED` when the
+evidence supports them; otherwise they show `INSUFFICIENT_EVIDENCE`,
+`NOT_COMPARABLE`, `SUPPRESSED` or `DATA_INCOMPLETE`, with visible lineage.
+
 ---
 
-## 8. Insights and their three audiences
+## 8. Reports and their three audiences
 
 The same underlying survey data feeds three outputs, each shaped for a
 different reader.
 
-**Community newsletter.** Plain English, short, warm. "This month you told us
-X. Here's what we did with it." Linked from every page of the site; the
-canonical delivery mechanism for the "we report back" leg of the cycle. The
-end of every newsletter asks for the next round of input.
+**Business/community report and newsletter.** Plain English, short and warm:
+"This month you told us X. Here is what we did with it." The newsletter ends
+with the next survey invitation. Its approved public version is accessible to
+everyone through the website's Reports section.
 
-**Partner briefings.** Aimed at other Aboriginal Community Organisations, at
-NGOs working in the same regions, and at IRAAC staff. More operational
-detail, more cross-tabulation, more numbers. Format: a monthly or quarterly
-PDF or web report.
+**IRAAC staff, affiliated staff and partner-organisation management report.**
+More operational detail, safe cross-tabulation, service response, campaign and
+office KPIs, topic/outcome trends, actions, capacity and management decisions.
+It stays private in the admin dashboard and is distributed only to an approved
+recipient manifest.
 
-**Government advocacy reports.** Formal, cited, positioned as evidence.
+**Government advocacy report.** Formal, cited, positioned as evidence.
 Explicitly linked to Local Decision Making outcomes: "You transferred these
 decisions to us because we can show you what community is actually telling
-us. Here it is." Longer-form, structured, referenced.
+us. Here it is." It stays private in the admin dashboard unless a separately
+approved public version is created.
 
-All three outputs draw on the same approved, de-identified dataset snapshot.
+An internal government or staff artefact is never published directly. Any
+material intended for public release becomes a new `community_public`
+derivative with its own redaction, accessibility, claims, artefact hash and
+approval cycle.
+
+All three outputs draw on one locked base dataset snapshot and separate
+audience-specific de-identified derived views.
 Code calculates counts, rates and trends; AI may draft narrative from that
 bounded snapshot but may not invent statistics or receive raw contact details
 or unrestricted free text. Small-cell suppression, evidence-strength labels,
@@ -351,6 +478,64 @@ privacy review and named human approval are required before publication or
 distribution. Producing the reports should not become three separate manual
 efforts, but the system must preserve separate versions, approvals, recipient
 lists and immutable distribution manifests for each audience.
+
+### Public Reports section
+
+The public navigation label **Insights** becomes **Reports**. Create
+`reports.html` and keep `insights.html` as a permanent redirect or compatibility
+alias so old links do not break. The Reports index lists every approved public
+community report—not internal staff or government material—with title,
+publication date, reporting period, topic/type, short summary and a link to a
+full accessible web page and optional approved download. Reports are ordered
+newest first and have stable URLs and metadata.
+
+Publication is automatic only after the report has reached
+`APPROVED_LOCKED` with `audience=community_public`, passed privacy/small-cell checks and
+has an approved public artefact hash. The production publisher creates the
+page/index entry and then verifies the deployed URL and content hash. Withdrawal
+or correction creates a visible version/retraction record rather than silently
+rewriting history.
+
+Publication moves through `QUEUED → BUILDING → DEPLOYED_UNVERIFIED →
+VERIFIED_PUBLISHED | FAILED → RETRY_PENDING | ROLLED_BACK`. The Reports index
+changes only after route, audience, privacy status and deployed hash
+verification; failure leaves the previous index intact. Phase 0 must decide
+whether the publication source of truth is a reviewed Git/Vercel release, a CMS
+or an object-backed runtime feed.
+
+### Review, comments and approvals
+
+Email is a notification and comment-entry channel, not the authority source.
+Each reviewer receives an individual message with a signed, expiring link to
+the exact dashboard report version. They can approve, request changes or leave
+section-level comments. If IRAAC later ingests email replies, it stores the
+reply as an untrusted comment attached to the review thread; words such as
+"approved" in free text never create an approval event.
+
+AI may turn reviewer comments into a proposed redline against a new draft
+version. It does not silently edit an approved report. A human accepts or
+rejects each proposal in the dashboard. Changing a statistic, sentence,
+recommendation, attachment, audience, recipient or public page invalidates the
+affected approval and starts a new review round. Once the configured legal,
+privacy/community, program and report owners approve the locked version, the
+production service may publish or distribute it automatically.
+
+The full report lifecycle is `DATASET_READY → METRICS_VALIDATED → DRAFT →
+IN_REVIEW → CHANGES_REQUESTED → REVISING → READY_FOR_APPROVAL →
+PARTIALLY_APPROVED → APPROVED_LOCKED → SCHEDULED → PUBLISHING | DISTRIBUTING →
+PUBLISHED | SENT → FAILED → CORRECTED | RETRACTED | SUPERSEDED`. Required roles,
+quorum, order, separation of duties, expiry and conflicts are policy-defined by
+audience and sensitivity. Deadlines cause reminders and escalation, never
+automatic approval. Approval requires an authenticated reviewer session or
+equivalent strong verification; forwarded, expired, revoked or replayed links
+cannot approve.
+
+Private reports use authenticated portal access or expiring, recipient-bound
+downloads; notification email contains minimal metadata and no sensitive
+attachment by default. Access/downloads are audited. Removing a recipient is
+always permitted before dispatch; adding, substituting or correcting one
+changes the manifest and requires approval. Provider retries may use only the
+identical artefact, recipient and approved retry window.
 
 ---
 
@@ -393,11 +578,14 @@ front-door source only. No private data or operational secrets enter this
 public repository.
 
 **Phase 0 — Authority, consent and safety.** Obtain Board/community data-use
-authority and Australian legal review. Approve citizen consent wording,
-business-source classifications, contact policies, AI disclosure and
-human-escalation scripts, youth/sensitive-data handling, retention/deletion
-rules, report privacy thresholds, incident handling and production release
-roles. No real outreach launches before this gate is signed.
+authority, the appropriate research/ethics determination and Australian legal
+review. Confirm IRAAC's entity and ACNC status. Separately classify the exact
+Path 1 initial invitation, recurring newsletter, value brief, linked pages and
+research-only AI call. Approve citizen consent wording and duration, business
+sources, contact policies, AI disclosure and human-escalation scripts,
+youth/sensitive-data handling, retention/deletion rules, report privacy
+thresholds, incident handling and production release roles. No real outreach
+launches before this gate is signed.
 
 **Phase 1 — Proper consent capture and storage.** Build a first-party,
 mobile-friendly form and governed store. Run it alongside the existing Google
@@ -412,12 +600,18 @@ the minimum admin controls: authentication, roles, consent/suppression
 timeline, audience preview, test contacts, approval gate, pause/stop control,
 audit log and incident path. Wire an approved email provider, build the
 templates, and pilot with internal/synthetic contacts before a small approved
-community and business cohort. Opens and clicks are supporting signals, never
-the sole reason to escalate.
+community and business cohort. Run a provider-acceptability review before
+using SES for directory-derived Path 1 contacts; SES production-access rules
+expect requested email. Authenticate SPF, DKIM and DMARC, implement one-click
+unsubscribe where required, warm volume gradually, throttle by domain, monitor
+bounces/complaints/spam rate and stop automatically at approved thresholds.
+Opens and clicks are supporting signals, never the reason to escalate.
 
 **Phase 3 — SMS outreach.** Add SMS through an approved Australian-capable
-provider, register the IRAAC sender ID if used, and support immediate STOP
-handling. Pilot only with channel-eligible contacts.
+provider for Path 2, register the IRAAC sender ID/ABN relationship, prefer a
+two-way reply-capable number for STOP, and support immediate suppression. Pilot
+only with separately SMS-consented and eligible contacts. Path 1 has no SMS in
+the default sequence.
 
 **Phase 4 — Phone-assisted surveys.** Integrate the approved calling platform
 and operator workspace. Human calls come first. The workspace shows masked
@@ -434,7 +628,7 @@ or crisis advice, and escalates ambiguity, distress, complaint or withdrawal.
 Recording/transcription remains disabled without separate permission.
 
 **Phase 6 — Reporting and full admin dashboard.** Add response review,
-per-office operational measures, topic insights, deterministic analytics,
+per-office operational measures, topic/outcome trends, deterministic analytics,
 three audience-specific draft reports, privacy review, approval, publication
 and distribution manifests.
 
@@ -470,6 +664,11 @@ The main areas:
   statement. Address-harvested lists are prohibited. The safe operational
   baseline is clear identity, provenance, relevance and opt-out across the
   board.
+- **Value-first content is not automatically exempt.** Classification depends
+  on the entire message, presentation and linked content. Keep the one-time
+  factual/research invitation, recurring newsletter subscription and any
+  promotional material as distinct templates and policy decisions. A
+  commercial message cannot be used merely to ask for consent.
 - **AI and synthetic voice.** Use of AI does not remove the underlying
   telemarketing, research-call or privacy obligations. IRAAC's stronger
   community standard is immediate AI disclosure, permission to continue,
@@ -485,6 +684,12 @@ The main areas:
   assumed. Phase 0 must confirm the entity, sender, content, linked pages and
   supplier conditions with counsel. IRAAC still applies identity, relevance,
   opt-out and suppression as a community-trust standard.
+- **Research ethics and Indigenous governance.** Phase 0 must determine whether
+  the program is research, evaluation or community consultation and obtain the
+  appropriate ethics/governance review under the current NHMRC National
+  Statement, AIATSIS guidance and IRAAC's Aboriginal-led data authority. The
+  determination covers sampling, AI voice, intended reports, access, reuse and
+  secondary uses, not just the survey form.
 - **Audio processing and retention.** Federal, state and territory
   interception and surveillance rules can differ. Call recording and
   persistent transcript storage are off by default. Autonomous voice still
@@ -525,6 +730,10 @@ The baseline to validate through Architecture Decision Records (ADRs) is:
 - **Public front door:** keep this static site on Vercel.
 - **Admin and operator application:** a separate private TypeScript/Next.js
   application with mobile-friendly phone-assisted survey mode.
+- **Canonical survey runtime:** a public, no-account, mobile-first application
+  using the same versioned contracts as the staff and phone renderers. It
+  writes through a server API; public clients never receive database secrets or
+  response-read access.
 - **System of record:** Supabase Postgres in Sydney with Auth, Row Level
   Security, encrypted backups, append-only audit events and private object
   storage.
@@ -549,31 +758,61 @@ The baseline to validate through Architecture Decision Records (ADRs) is:
 - **Reports:** deterministic SQL/TypeScript aggregates into bounded,
   de-identified snapshots; an approved LLM may draft narrative; humans approve
   all releases.
+- **Public report publisher:** a narrowly scoped production service writes only
+  the locked community artefact and index metadata into stable public report
+  routes, triggers Vercel and verifies the deployed content hash. It cannot
+  access contacts, private report versions or internal recipient manifests.
 - **Operations:** typed API contracts, structured logs, error monitoring,
   encrypted secrets manager, backups, restore tests and environment-separated
   test/sandbox/production accounts.
 
 The core data model includes: organisations, people/contact identities,
-channel endpoints, source/provenance records, consent receipts, suppression
-entries, survey definitions/versions/questions, survey sessions/answers,
-campaigns, audience snapshots, journeys, contact attempts, provider events,
-call tasks/sessions/dispositions, issues, interventions, report snapshots,
-report versions, approvals, distributions, incidents and audit events.
+organisation relationships, pathway memberships, channel endpoints,
+source/provenance records, consent receipts, suppression entries, survey
+definitions/versions/questions/options, survey-version questions, topic cycles,
+survey review decisions, survey sessions/answers, Terms/Privacy/response-use
+versions, campaign cycles,
+content artefacts/versions, audience snapshots, sample assignments, journeys,
+journey stages, survey invitations, completion correlations, terminal
+responses, contact attempts, provider events, call tasks/sessions/dispositions,
+issues, interventions, report snapshots, report versions, approvals,
+review threads/comments, report publications, distribution attempts/manifests,
+metric definitions/snapshots, dashboard targets, trend-comparability decisions,
+incidents and audit events.
 
 The campaign lifecycle is:
 `draft → eligibility snapshot → compliance validation → audience hash →
 human approval → scheduled → running/paused → completed/cancelled →
 reconciled`.
 
-The per-contact journey is:
-`eligible → email → timed out/responded/completed/opted out → SMS (if
-separately eligible) → call queue (if separately eligible) →
-completed/unreachable/opted out/escalated`.
+The Path 1 journey is:
+`approved business value email 1 → selected into rotating chase sample →
+no-response timeout → business value email 2 → no-response timeout → AI call
+only if independently policy-eligible → completed/unreachable/terminal`.
 
-The report lifecycle is:
-`dataset snapshot → deterministic calculations → AI draft → privacy and
-small-cell review → community/governance review → named approval →
-publish/send → immutable distribution manifest`.
+The Path 2 journey is:
+`citizen intake and consent → newsletter → selected into rotating chase sample
+→ SMS only if separately consented and eligible → AI call only if separately
+consented and eligible → completed/unreachable/terminal`.
+
+"Non-response" is a reconciled state, not an assumption. A hard bounce,
+invalid endpoint or complaint suppresses that endpoint and does not authorise
+another channel. Soft bounces use a finite approved retry rule. Busy, no
+answer, voicemail, failed, wrong-person and callback-requested call outcomes
+have separate dispositions. A completion or terminal response received during
+a dispatch race cancels every controllable later step.
+
+The report workflow uses the policy-defined lifecycle in §8. A locked base
+snapshot produces three separate derived views and artefacts; each then carries
+its own reviews, approvals, publication or distribution state and immutable
+manifest.
+
+Report creation and distribution are separate releases. An approval packet
+freezes the source snapshot and query/code hashes, deterministic metrics,
+privacy treatment, exact narrative and recommendations, evidence-strength and
+limitations statement, attachment/page hashes and recipient manifest. Changing
+a statistic, sentence, recommendation, attachment, recipient or destination
+invalidates the affected approval and requires reapproval.
 
 ### Research conclusion and remaining proof
 
@@ -633,9 +872,10 @@ continues to generate the flat HTML pages. What changes:
 - **The campaign runner is a separate service**, again not in this repo. It
   runs on a schedule, reads the store, and drives the email/SMS/call
   platforms.
-- **Insights pages on the public site** (`insights.html` and any future
-  child pages) may eventually pull live summary numbers from the store via
-  a small read-only API. Until then they stay hand-authored.
+- **Reports on the public site.** Add `reports.html` and stable community-report
+  child pages. Keep `insights.html` as a compatibility redirect. Only approved
+  community artefacts reach the public site through a minimal read-only
+  publication feed; internal staff and government reports never appear there.
 - **Newsletter templates** live wherever the email platform requires them.
 
 The static site is the front door. Everything else is new build.
@@ -644,39 +884,78 @@ The static site is the front door. Everything else is new build.
 
 ## 14. Agent-native control plane
 
-The API has two technically separate roles:
+The platform has two operating paths and three technically separate actors.
 
-- `agent_build_test` can inspect masked data, build, validate, use synthetic
-  fixtures, send only to allowlisted test destinations, generate drafts and
-  request approval; and
-- `human_production_operator` can perform approved production actions.
+**Build/test — `agent_build_test`.** Hermes and other build agents may inspect
+masked data, use synthetic fixtures, implement software, simulate policy,
+create previews, validate release candidates and submit approval packets.
+Their credentials work only in development/test and against allowlisted
+provider destinations.
 
-Hermes and build agents receive only `agent_build_test`. Their credentials
-must be technically incapable of production queueing, starting, publishing or
-distribution. Production actions require a human-only role, two-person
-approval, an environment-bound signed approval artifact, exact audience hash,
-expiry, rate limit and a server-side interlock. No prompt instruction is
-treated as a security boundary.
+**Production decision — `human_production_approver`.** Named people review the
+legal/policy basis, exact audience, content, sequence, privacy treatment,
+recommendations, test evidence and rate/cost bounds. Approval freezes these
+inputs into a signed release bundle.
 
-Agent build/test capabilities include:
+**Production execution — `production_campaign_service`.** A non-interactive
+service principal executes only a current, environment-bound, signed bundle.
+It cannot create or approve a bundle, expand an audience, change content or
+eligibility, or exceed the approved schedule, attempts, rate or cost ceiling.
+A `human_production_operator` may activate an approved release and pause, stop
+or reconcile it, but cannot mutate it. Material changes move the release to
+`STALE_REQUIRES_REAPPROVAL`.
 
-- `contacts.import`, `contacts.validate`, `contacts.dedupe`;
-- `consent.record`, `consent.revoke`, `consent.check`;
-- `suppression.add`, `suppression.check`;
-- `survey.begin`, `survey.record_answer`, `survey.complete`;
-- `campaign.plan`, `campaign.validate`, `campaign.request_approval`;
-- `email.preview/test`, `sms.preview/test`, `call.preview/test`;
-- `report.generate`, `report.validate`, `report.request_approval`;
-- `audit.search` and `incident.raise`.
+Hermes credentials are technically incapable of accessing production PII or
+provider endpoints, queueing or starting production work, approving a release,
+publishing a page or distributing a report. A prompt prohibition is not a
+security boundary.
 
-Every mutation requires a stable object ID, actor and agent-run ID, reason,
-idempotency key and structured result. Dry-run is required where meaningful.
-Agents can draft, test and request approval; they cannot approve their own
-campaigns, legal classifications, consent wording, report claims or
-production distributions. Human-only decisions include law and policy,
-Aboriginal community data authority, ambiguous identity/consent, sensitive
-interpretation, distress/complaints, government recommendations, credentials
-and destructive changes.
+Hermes build/test capabilities are:
+
+- `test_contacts.import_synthetic`, `test_contacts.validate`,
+  `test_contacts.dedupe`, `contacts.inspect_masked`;
+- `test_consent.record`, `test_consent.revoke`, `consent.simulate_check`;
+- `test_suppression.add`, `suppression.simulate_check`;
+- `test_survey.begin`, `test_survey.record_answer`, `test_survey.complete`;
+- `campaign.plan`, `campaign.dry_run`, `campaign.validate`,
+  `campaign.build_approval_packet`, `campaign.request_approval`;
+- `channel.preview`, `channel.send_allowlisted_test`;
+- `report.generate_draft`, `report.validate`,
+  `report.build_approval_packet`, `report.request_approval`;
+- `approval.status`, `approval.read_feedback`,
+  `workflow.resume_after_decision`;
+- `audit.search_masked`, `incident.raise`.
+
+Production capabilities such as `approval.decide`,
+`production_release.activate`, `production_campaign.start`,
+`production_campaign.pause_or_stop` and
+`production_report.publish_or_distribute` do not exist in agent credentials.
+The server rejects cross-environment IDs even if an agent constructs a
+production endpoint manually.
+
+### Shared workflow contract
+
+Humans, agents and production services use the same typed workflow objects and
+append-only ledger. They do not maintain parallel spreadsheets or hidden
+provider-side state.
+
+The release lifecycle is:
+`DRAFT → VALIDATED → AWAITING_APPROVAL → CHANGES_REQUESTED → APPROVED_LOCKED →
+SCHEDULED → EXECUTING ↔ PAUSED → RECONCILING → COMPLETED | ABORTED`.
+Changing an approval-bound input creates `STALE_REQUIRES_REAPPROVAL`.
+
+Each approval packet includes the environment and action, campaign/report and
+policy versions, exact content/script and audience hashes, survey version,
+provider/regional configuration, schedule, quiet hours, retry/rate/cost bounds,
+privacy rules, test evidence, rollback/pause plan, named preparer and
+approver(s), timestamp and expiry. The production interlock verifies the bundle
+before queueing and provider handoff. Approval never replaces the final
+consent, suppression and eligibility check.
+
+Every mutation records a stable object ID, actor type, actor/run ID, reason,
+causal event, previous and next state, idempotency key, approval/policy IDs,
+artifact hashes and timestamp. Agents cannot approve their own campaigns,
+legal classifications, consent wording, report claims or distributions.
 
 ## 15. Multi-bot delivery protocol
 

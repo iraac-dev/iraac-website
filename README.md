@@ -10,6 +10,27 @@ in a separate private application.
 The repository has eleven self-contained HTML pages. Styles and scripts are
 inlined so the public site remains simple to deploy.
 
+## Planned listening platform
+
+The roadmap now defines two pathways feeding one canonical Have Your Say
+survey and reporting system:
+
+- approved Aboriginal-business outreach: value newsletter/report email,
+  rotating survey-chase selection, second value brief and a separately
+  policy-eligible AI survey call; and
+- direct citizen/community participation: web, QR, worker, drop-in, home visit
+  or phone survey, followed by separately consented email, SMS and AI-call
+  contact for the rotating sample.
+
+The wider approved newsletter audiences are separate from the roughly 30%
+monthly survey-chase samples. The shared private backend, survey builder,
+campaign engine, admin dashboard and report publisher are planned, not present
+in this static repository.
+
+The public **Insights** section is planned to become **Reports**, containing
+only approved community reports with stable index and detail pages. Staff,
+partner and government reports remain private in the future admin dashboard.
+
 ## Project planning
 
 - [`ROADMAP.md`](ROADMAP.md) is the canonical product, governance, consent,
