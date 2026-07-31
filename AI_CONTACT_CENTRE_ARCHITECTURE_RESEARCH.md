@@ -52,8 +52,9 @@ inside the survey. The person must actively select a separate, unticked,
 voluntary choice that identifies IRAAC, AI/synthetic voice, purpose, expected
 frequency, duration, withdrawal method, data use and human alternative.
 
-The operational evidence is the **affirmative consent receipt**. Survey
-completion without that affirmative choice is not enough. Permission for email,
+The operational evidence is the **affirmative consent receipt**, created only
+after successful survey submission. Survey completion without that affirmative
+choice is not enough. Permission for email,
 SMS, a human call, an AI call and persistent recording/transcript storage are
 separate. Autonomous voice still requires disclosed transient audio and
 speech-to-text processing.
@@ -261,6 +262,18 @@ received time and acknowledgement state. Human reviewers deduplicate and route
 accepted suggestions into the issue backlog, a supplemental investigation or
 the governed survey successor process; no email reply may mutate the active
 survey.
+
+Treat the raw reply body as restricted correspondence. Encrypt it in transit
+and at rest, expose it only to the named suggestion-reviewer role through
+audited, row-scoped access, and prohibit bulk export. The default raw-content
+retention period is 90 days from receipt. A versioned policy decision may
+shorten that period, while a documented legal hold may extend it. At expiry,
+automatically dispose of the raw body and retain only the minimum de-identified suggestion,
+classification, decision, provenance and audit metadata required by the
+approved records schedule. Raw replies never enter LLM prompts, external
+tickets, analytics exports or general agent tools. A separately approved
+minimisation step may provide de-identified excerpts to the governed drafting
+workflow, with the transformation and reviewer recorded.
 
 Metrics are deterministic. The LLM receives bounded de-identified outputs and
 creates a draft/redline, never the source statistics. Review email contains a
@@ -478,6 +491,7 @@ SUPPRESSED
 HUMAN_TRANSFER
 CALLBACK_BOOKED
 LINK_SENT
+WRONG_PERSON
 FAILED_RETRYABLE
 FAILED_FINAL
 DISTRESS_ESCALATION
@@ -703,7 +717,13 @@ before selection.
 - [NIAA Framework for Governance of Indigenous Data](https://www.niaa.gov.au/resource-centre/framework-governance-indigenous-data)
 - [ABS Labour Force Survey rotation methodology](https://www.abs.gov.au/statistics/detailed-methodology-information/concepts-sources-methods/labour-statistics-concepts-sources-and-methods/2023/methods-four-pillars-labour-statistics/household-surveys/labour-force-survey)
 
-### Platforms and pricing
+### Reference links: platforms and pricing
+
+These links support the initial comparison only. The canonical auditable
+register required by `HERMES_DEEPSEEK_BUILD_SUPERPROMPT.md` is
+`docs/compliance/source-register.md`; implementation must add the review date,
+named owner and exact enforced system rule for every source before the related
+production gate can pass.
 
 - [Amazon Connect Customer feature regions](https://docs.aws.amazon.com/connect/latest/adminguide/regions.html)
 - [Amazon Connect outbound campaigns](https://docs.aws.amazon.com/connect/latest/adminguide/how-to-create-campaigns.html)

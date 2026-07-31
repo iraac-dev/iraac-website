@@ -44,7 +44,7 @@ alter live evidence.
 | KoboToolbox | Strong field and offline collection | Good future option for remote/offline field work, but not the best canonical contact, consent, voice and reporting control plane. |
 | Qualtrics | Mature enterprise survey and offline features | Higher cost and lock-in; API/offline capabilities depend on licensing and do not remove IRAAC's custom governance needs. |
 | REDCap | Strong controlled research data collection | Requires an eligible institutional deployment and is not designed as IRAAC's public/community contact platform. |
-| Custom Next.js + SurveyJS + Supabase | Exact control, Australian region, proven web renderer and one IRAAC contract across modes | Requires disciplined engineering, tests and governance. This is acceptable because the instrument is stable and the wider private platform is already required. |
+| Custom Next.js + SurveyJS + Supabase | Exact control, Australian region, proven web renderer and one IRAAC contract across modes | The selected stack needs disciplined engineering, tests and governance. This is acceptable because the instrument is stable and the wider private platform is already required. |
 
 ## Selected components
 

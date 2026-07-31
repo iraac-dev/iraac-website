@@ -372,12 +372,15 @@ answers will be used in reports, how to reach a human, and how to withdraw.
 Optional: preferred channel, language, accessibility needs, safe time of day
 and topics the person cares about.
 
-Every affirmative choice creates an immutable **consent receipt** recording
+Only after a successful survey submission, every affirmative choice creates an
+immutable **consent receipt** recording
 the person/contact identifier, channel, purpose, contact type (human or AI),
 disclosure and survey versions, exact displayed wording, capture mode
 (web/in-person/drop-in/phone/paper import), staff/operator if applicable,
-timestamp, evidence hash, review or expiry date, and later withdrawal. Consent
-is rechecked immediately before every contact attempt.
+timestamp, evidence hash, and review or expiry date. Later withdrawal is a
+separate append-only event linked to the immutable receipt; it never edits the
+receipt. Consent is rechecked immediately before every contact attempt. An
+abandoned or failed submission creates no contact permission.
 
 **Where the data lives today.** In an Excel spreadsheet. Mobile numbers and
 consent flags are columns in that sheet.
@@ -516,8 +519,10 @@ limits. Never silently append rotating modules to Have Your Say. Reporting may
 classify emerging themes against an approved taxonomy without changing the
 respondent-facing instrument.
 
-Survey sessions use `STARTED → IN_PROGRESS → SAVED → RESUMED → SUBMITTED |
-EXPIRED | ABANDONED | WITHDRAWN_VERSION`. Opaque resume tokens expire and
+Survey sessions use `STARTED → IN_PROGRESS → SUBMITTED` for normal completion,
+with the optional resume path `IN_PROGRESS → SAVED → RESUMED → IN_PROGRESS →
+SUBMITTED`; `EXPIRED`, `ABANDONED` and `WITHDRAWN_VERSION` are terminal states.
+Opaque resume tokens expire and
 contain no identity. A completion key exists only after a successful submit.
 Partial answers are excluded from monthly reporting unless an approved
 methodology includes and labels them. An abandoned anonymous session creates
@@ -855,10 +860,10 @@ words.
 
 ## 10. Phased delivery
 
-Building this all at once is not realistic. The order below prioritises
-getting a working consent-and-storage layer in place first, then adding
-outreach channels one at a time from cheapest to most expensive, then
-layering the dashboard and reporting on top.
+Building this all at once is not realistic. The order below prioritises a
+working consent-and-storage layer first, adds lower-risk outreach channels one
+at a time, establishes reporting and full administrator controls, and only then
+enables the AI voice pilot.
 
 **Phase -1 — Reconcile the public site.** Before several bots edit the public
 site, reconcile `build.py` with the eleven production HTML pages. A current
@@ -892,7 +897,12 @@ audit log and incident path. Wire an approved email provider, build the
 templates, and pilot with internal/synthetic contacts before a small approved
 community and business cohort. Run a provider-acceptability review before
 using SES for directory-derived Path 1 contacts; SES production-access rules
-expect requested email. Authenticate SPF, DKIM and DMARC, implement one-click
+expect requested email. Written AWS acceptance and written Australian legal
+approval for this exact recipient class are launch-blocking prerequisites. If
+either is absent, SES is restricted to explicit opt-ins and must not send to
+directory-derived recipients; use only another provider and sequence that have
+their own recorded provider and legal approval. Authenticate SPF, DKIM and
+DMARC, implement one-click
 unsubscribe where required, warm volume gradually, throttle by domain, monitor
 bounces/complaints/spam rate and stop automatically at approved thresholds.
 Opens and clicks are supporting signals, never the reason to escalate.
@@ -910,17 +920,18 @@ and next safe action. Build dispositions, attempt caps, quiet hours, live
 opt-out, distress/complaint escalation and human handoff. Pilot in one approved
 region.
 
-**Phase 5 — AI-assisted calling.** Only after the human pilot, enable a small,
-approved AI voice pilot for people with a valid AI-call consent receipt. The
-AI identifies itself and IRAAC immediately, asks permission to continue,
-offers a human, follows the exact approved survey, never gives legal, health
-or crisis advice, and escalates ambiguity, distress, complaint or withdrawal.
-Recording/transcription remains disabled without separate permission.
-
-**Phase 6 — Reporting and full admin dashboard.** Add response review,
+**Phase 5 — Reporting and full admin dashboard.** Add response review,
 per-office operational measures, topic/outcome trends, deterministic analytics,
 three audience-specific draft reports, privacy review, approval, publication
 and distribution manifests.
+
+**Phase 6 — AI-assisted calling.** Only after the human pilot and the reporting
+and admin control plane are operating, enable a small, approved AI voice pilot
+for people with a valid AI-call consent receipt. The AI identifies itself and
+IRAAC immediately, asks permission to continue, offers a human, follows the
+exact approved survey, never gives legal, health or crisis advice, and
+escalates ambiguity, distress, complaint or withdrawal.
+Recording/transcription remains disabled without separate permission.
 
 **Phase 7 — Closing-the-loop tracking.** Formalise the issue-tagging and
 intervention-tracking model. Build the resurvey scheduler. Publish the first
@@ -1207,9 +1218,15 @@ or reconcile it, but cannot mutate it. Material changes move the release to
 `STALE_REQUIRES_REAPPROVAL`.
 
 Hermes credentials are technically incapable of accessing production PII or
-provider endpoints, queueing or starting production work, approving a release,
+production provider endpoints, queueing or starting production work, approving
+a release,
 publishing a page or distributing a report. A prompt prohibition is not a
 security boundary.
+
+Test and production provider credentials and destination allowlists are
+separate and enforced server-side. `channel.send_allowlisted_test` can use only
+synthetic fixtures, test credentials and approved test destinations; no value
+from an agent request can select a production credential or destination.
 
 Hermes build/test capabilities are:
 
@@ -1237,8 +1254,12 @@ production endpoint manually.
 ### Shared workflow contract
 
 Humans, agents and production services use the same typed workflow objects and
-append-only ledger. They do not maintain parallel spreadsheets or hidden
-provider-side state.
+append-only ledger. Providers necessarily retain execution and delivery state,
+but that state is non-authoritative and is reconciled through signed,
+idempotent provider events into IRAAC's append-only ledger. Provider state can
+never create, revoke or modify consent, suppression, approval or journey state.
+There are no parallel spreadsheets or hidden provider records that IRAAC treats
+as authoritative.
 
 The release lifecycle is:
 `DRAFT → VALIDATED → AWAITING_APPROVAL → CHANGES_REQUESTED → APPROVED_LOCKED →

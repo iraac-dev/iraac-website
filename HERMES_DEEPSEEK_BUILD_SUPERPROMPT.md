@@ -114,7 +114,9 @@ reconfirmation schedule approved by counsel; do not invent one in code.
 Declining any choice must not prevent the person completing the survey or
 receiving any available human support.
 
-An affirmative choice creates a versioned consent receipt. The receipt, not
+After successful survey submission, each affirmative choice creates a
+versioned immutable consent receipt. A later withdrawal is a separate
+append-only event linked to that receipt. The receipt, not
 the fact that the survey was completed, is the operational evidence that
 allows the relevant contact. Permission for email does not unlock SMS.
 Permission for a human call does not unlock an AI call. Permission for an AI
@@ -575,8 +577,10 @@ and shows the approved recovery path. Corrections create successors.
 If an urgent issue genuinely needs new questions, create a separate supplemental
 instrument with named human approval. Never silently append it to Have Your Say.
 
-Implement session states `STARTED → IN_PROGRESS → SAVED → RESUMED → SUBMITTED
-| EXPIRED | ABANDONED | WITHDRAWN_VERSION`. Resume tokens are opaque, expiring
+Implement normal session states `STARTED → IN_PROGRESS → SUBMITTED`, with the
+optional resume path `IN_PROGRESS → SAVED → RESUMED → IN_PROGRESS → SUBMITTED`;
+`EXPIRED`, `ABANDONED` and `WITHDRAWN_VERSION` are terminal states. Resume
+tokens are opaque, expiring
 and revocable. Only successful submission creates a completion key. Exclude
 partial answers from reporting unless an approved methodology includes and
 labels them. An anonymous abandoned session grants no contact authority.
@@ -649,6 +653,11 @@ Global exits from every conversational state:
 `WITHDRAWN`, `SUPPRESSED`, `HUMAN_TRANSFER`, `CALLBACK_BOOKED`, `LINK_SENT`,
 `WRONG_PERSON`, `DISTRESS_ESCALATION`, `IMMEDIATE_SAFETY_ESCALATION`,
 `CAPACITY_OR_MINOR_STOP`, `FAILED_RETRYABLE`, `FAILED_FINAL`.
+
+`WRONG_PERSON` may be detected during the initial `ANSWER_CLASSIFY` step or at
+any later conversational state if the callee corrects the identity. In either
+case it is the same global terminal disposition: disclose no survey or contact
+details, apply the required all-channel wrong-person suppression, and end.
 
 The LLM may use only constrained tools: `get_next_question`,
 `repeat_or_explain_approved`, `commit_answer`, `correct_answer`,
@@ -853,7 +862,10 @@ Build three technically separate actors:
 A `human_production_operator` may activate, pause, stop or reconcile an
 approved bundle but cannot mutate it. Material change creates
 `STALE_REQUIRES_REAPPROVAL`. Hermes credentials cannot resolve production PII,
-provider endpoints, production IDs or production mutation tools.
+production provider endpoints, production IDs or production mutation tools.
+Test and production credentials and destination allowlists are separate and
+enforced server-side; allowlisted test sends use only synthetic fixtures and
+approved test targets.
 
 Hermes-facing tools:
 
@@ -993,8 +1005,12 @@ shared conformance fixtures produce the same branch in every adapter;
 partial/abandoned sessions are not counted as completions; a withdrawn version
 cannot accept a new submission; declining contact still completes the survey;
 Terms acceptance grants no
-contact channel; each affirmative choice grants only its precise channel;
-withdrawal or any current-cycle completion blocks the next queued attempt.
+contact channel; each affirmative choice grants only its precise channel. A
+channel/purpose withdrawal, including `CHANNEL_STOP`, blocks only matching
+queued work and preserves separately authorised unrelated channels. A
+`GLOBAL_STOP`, complaint, wrong-person report or safety suppression blocks all
+channels. Any applicable withdrawal or current-cycle completion blocks the next
+matching queued attempt.
 
 ### W3 — Control plane and email pilot
 
@@ -1174,7 +1190,9 @@ Do not mark work complete without proportional evidence:
 - immutable survey-version, terms-versus-consent and cross-mode completion
   correlation tests;
 - separate Path 1 and Path 2 state-machine tests, including no business SMS,
-  quarterly rotation and no escalation from tracking pixels;
+  the configurable monthly cycle and 30% target/cap, seeded
+  without-replacement selection, the initial 90-day cooldown and no escalation
+  from tracking pixels;
 - opt-out, complaint, distress and human-handoff tests;
 - backup and restore drill;
 - 10,000-contact load/cost test;

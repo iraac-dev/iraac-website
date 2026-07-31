@@ -91,7 +91,7 @@ is not a diagnosis. You can skip the whole section.”
 |---|---|---|---|
 | D01 | Over the last month, how have things been going overall? | Going well; Mostly okay; Some days have been hard; Really struggling; Prefer not to say | Optional. |
 | D02 | Which areas have mattered to you, your family or community recently? | Housing or homelessness; Food; Money or bills; Work; Education or training; Transport; Physical health; Social and emotional wellbeing; Alcohol, drugs or gambling; Family support; Feeling safe; Domestic or family violence; Police, courts, bail, prison or returning to community; Disability support; Aged care; Young people; Culture and connection; Racism or discrimination; Access to services; Other; None of these; Prefer not to say | Optional; select all. `None` and `Prefer not to say` are exclusive. |
-| D03 | Which three areas should IRAAC raise most strongly with government? | Reuse D02 choices | Optional; maximum three. |
+| D03 | Which three areas should IRAAC raise most strongly with government? | Topic choices from D02 only | Optional; maximum three. Exclude `None of these` and `Prefer not to say`; those non-topic responses remain available only in D02. |
 | D04 | Over the last month, have you felt stressed about money or paying for things you need? | Not at all; A little; Sometimes; Often; Most days; Prefer not to say | Optional. |
 | D05 | Over the last month, has your housing or accommodation felt stable? | Yes; Mostly; Not sure; No; I do not currently have stable housing; Prefer not to say | Optional. |
 | D06 | Over the last month, have you had enough food and healthy meals? | Yes, most days; Sometimes; Not often; No; Prefer not to say | Optional. |
