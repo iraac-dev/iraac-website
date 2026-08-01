@@ -8,15 +8,19 @@
 
 Companion documents:
 
-- [`AI_CONTACT_CENTRE_ARCHITECTURE_RESEARCH.md`](AI_CONTACT_CENTRE_ARCHITECTURE_RESEARCH.md)
-  contains the platform comparison, cost model, Australian design constraints,
-  voice state machine and source register.
-- [`HERMES_DEEPSEEK_BUILD_SUPERPROMPT.md`](HERMES_DEEPSEEK_BUILD_SUPERPROMPT.md)
-  converts this roadmap into a guarded, multi-bot execution brief.
+- [`PRODUCTION_LAUNCH_PLAN.md`](PRODUCTION_LAUNCH_PLAN.md) is the concise,
+  agent-ready critical path, account sign-up checklist, work-package register
+  and release-gate plan for reaching production as quickly and safely as
+  possible.
 - [`docs/survey/IRAAC_SURVEY_PLATFORM_DECISION.md`](docs/survey/IRAAC_SURVEY_PLATFORM_DECISION.md)
   records the selected survey stack and rejected alternatives.
 - [`docs/survey/IRAAC_HAVE_YOUR_SAY_V1_DRAFT.md`](docs/survey/IRAAC_HAVE_YOUR_SAY_V1_DRAFT.md)
   is the complete stable V1 questionnaire draft for human approval.
+
+Earlier contact-centre research and the Hermes/DeepSeek super-prompt are
+superseded because they encode the retired “Path 1/Path 2” names and different
+chase sequences. Do not restore or execute them. This roadmap plus the
+production launch plan are the current agent instructions.
 
 ---
 
@@ -1052,6 +1056,13 @@ working consent-and-storage layer first, adds lower-risk outreach channels one
 at a time, establishes reporting and full administrator controls, and only then
 enables the AI voice pilot.
 
+For day-to-day execution, account setup, stable ticket IDs, indicative target
+windows and agent handoffs, use
+[`PRODUCTION_LAUNCH_PLAN.md`](PRODUCTION_LAUNCH_PLAN.md). It deliberately splits
+production into P1 Listen, P2 Email, P3 SMS + human phone and P4 AI phone so a
+completed lower-risk capability can operate without waiting for every later
+channel.
+
 **Buildability conclusion (August 2026).** A small team using ChatGPT/Codex as
 the primary builder and one independent coding agent can build the software,
 provided work is delivered as narrow end-to-end slices and the agents never
@@ -1477,9 +1488,9 @@ invalidates the affected approval and requires reapproval.
 
 ### Research conclusion and remaining proof
 
-The detailed comparison is in
-[`AI_CONTACT_CENTRE_ARCHITECTURE_RESEARCH.md`](AI_CONTACT_CENTRE_ARCHITECTURE_RESEARCH.md).
-Amazon Connect Sydney is the strongest contact-centre baseline; Telnyx is the
+The current build sequence and provider proof work are in
+[`PRODUCTION_LAUNCH_PLAN.md`](PRODUCTION_LAUNCH_PLAN.md). Amazon Connect Sydney
+is the strongest contact-centre baseline; Telnyx is the
 strongest current Australian Voice AI locality challenger; Twilio is the best
 programmable comparison; Talkdesk and Genesys are managed-enterprise quote
 benchmarks. Google and Microsoft become more attractive only if IRAAC adopts
