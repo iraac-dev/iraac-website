@@ -26,7 +26,7 @@ IRAAC is an Aboriginal Community Organisation. It does not deliver services in
 the traditional sense — it *listens* to community members, *advocates* to
 government on their behalf, and *reports back* on what changed. That listen →
 advocate → report loop is the entire product. Everything the website, the
-outreach pathways, the phone surveys, the admin dashboard, and the reports
+contact groups, the phone surveys, the admin dashboard, and the reports
 system exist to do is make that loop faster, more evidenced, and more visible
 to the people involved in it.
 
@@ -95,39 +95,40 @@ capability.
 
 ---
 
-## 3. What we are building next: two pathways, one evidence loop
+## 3. What we are building next: two contact groups, one evidence loop
 
-IRAAC has two distinct outreach pathways. They use different entry rules and
-contact sequences, but they converge on one canonical Have Your Say survey,
-one governed evidence store, one suppression service and one reporting cycle.
+IRAAC has two named contact groups: **Business Contacts** and **Citizen
+Contacts**. These names replace “Path 1” and “Path 2” everywhere in product
+copy, interfaces, schemas, reports and operating language. The groups retain
+different entry and eligibility rules, but selected members enter one shared
+monthly survey-chase workflow and converge on one canonical Have Your Say
+survey, one governed evidence store, one suppression service and one reporting
+cycle.
 
-**Path 1 — Aboriginal business outreach.** IRAAC begins with an approved
-cohort drawn from the expected directory of approximately 10,000
+**Business Contacts.** IRAAC begins with an approved cohort drawn from the
+expected directory of approximately 10,000
 Aboriginal-owned businesses. "Approved" means the source, licence, message,
 recipient role and exact email or voice action have passed the recorded
 policy/legal classification; public listing or Aboriginal ownership alone is
 not permission. The value exchange comes first: an approved business receives
 the monthly business/community newsletter or report with current insights,
 what IRAAC heard, how IRAAC is returning that evidence to government and a
-survey link. Only the rotating survey-chase sample advances. If there is no
-verified completion or terminal response after the approved waiting period,
-IRAAC sends a second, shorter value-first brief with a fresh survey link. If
-there is still no completion, an AI survey call may occur only after an
-independent, current voice-eligibility decision. SMS is not part of the default
-Path 1 sequence.
+survey link. Only the rotating survey-chase sample advances into the stronger
+email, SMS and AI-call sequence, with a fresh channel-eligibility decision
+before every step.
 
-**Path 2 — direct citizen and community participation.** A person may complete
-the canonical survey through the website, a QR code or flyer, an IRAAC or NGO
+**Citizen Contacts.** A person may complete the canonical survey through the
+website, a QR code or flyer, an IRAAC or NGO
 worker, a community visit, a home visit, a drop-in, an event, a human phone
 survey or another approved assisted mode. The survey includes separate,
 optional, unticked permissions for newsletter/survey email, SMS, human calls,
 AI survey calls and any later audio/transcript storage. Future outreach starts
 with the newsletter. Only a person selected into the rotating survey-chase
-sample advances to SMS, and then to an AI call, with a fresh eligibility check
-for each separately permitted channel.
+sample advances into the shared chase, with a fresh eligibility check for each
+separately permitted channel.
 
-**One shared loop.** Both pathways write responses through the same versioned
-question and answer contract. Each month the platform automatically creates a
+**One shared loop.** Both contact groups write responses through the same
+versioned question and answer contract. Each month the platform automatically creates a
 de-identified dataset snapshot and three audience-specific drafts:
 
 - the **government advocacy report**;
@@ -137,9 +138,10 @@ de-identified dataset snapshot and three audience-specific drafts:
 
 The approved business/community newsletter is a full-audience publication,
 not a 30% sample. The monthly campaign includes every email address that is
-currently eligible for that exact newsletter under the recorded Path 1 policy
-or Path 2 email permission, except unsubscribed, suppressed, invalid, duplicate,
-hard-bounced or otherwise ineligible addresses. New eligible addresses join the
+currently eligible for that exact newsletter under the recorded Business
+Contacts policy or Citizen Contacts email permission, except unsubscribed,
+suppressed, invalid, duplicate, hard-bounced or otherwise ineligible addresses.
+New eligible addresses join the
 next full monthly audience automatically. The platform creates one complete
 audience snapshot and campaign manifest, then may transmit it in controlled
 provider waves for deliverability, complaint handling and emergency pause.
@@ -157,56 +159,49 @@ whether circumstances changed. The visible product promise remains:
 
 ---
 
-## 4. The two contact journeys
+## 4. The monthly newsletter and locked survey chase
 
-The two pathways use shared orchestration machinery but separate audience
-snapshots, policies, cadence, content, metrics and suppression decisions.
+The monthly operation creates two different products. First, the newsletter
+goes to every contact currently eligible for that email. Second, the sampler
+selects 30% of the eligible Business Contacts chase base and 30% of the
+eligible Citizen Contacts chase base. The two stratum selections are then
+combined and locked as one monthly chase cohort. Cohort membership, survey
+version, sampling stratum and selection evidence never change after lock;
+current contactability never freezes and must be re-evaluated before each act.
 
-### Path 1 — approved Aboriginal business journey
+The shared chase sequence is:
 
-1. **Approved value newsletter/report email.** Every recipient must pass the
-   business email policy. The email provides useful monthly findings and
-   explains how IRAAC turns community evidence into recommendations to
-   government. It ends with a voluntary survey link. Every currently eligible
-   Path 1 address is included in the monthly newsletter campaign; the rotating
-   sample applies only to later survey chasing.
-2. **Rotating survey-chase selection.** Roughly 30% of the eligible business
-   survey pool is selected for active follow-up in a month. The newsletter
-   audience and the survey-chase sample are different objects.
-3. **Second value-first email.** After the approved waiting period, a selected
-   contact with no verified survey completion or other terminal response may
-   receive a concise report or insight brief, a summary of what changed and a
-   fresh survey link.
-4. **Policy-eligible AI survey call.** After another approved waiting period,
-   a selected contact may be called only when the exact number, purpose,
-   research/charity/message classification, AI call and time have passed a
-   fresh policy check. The email timeout is not permission. The AI identifies
-   itself and IRAAC immediately, gives the purpose, asks whether the person has
-   a spare minute, offers a human alternative and runs the same canonical
-   survey. If voice is not independently eligible, the journey ends without a
-   call.
+1. **Clear survey-chase email.** Every locked member who is currently eligible
+   for survey email receives a short, direct message that identifies IRAAC,
+   explains that IRAAC represents Aboriginal community views to government and
+   asks clearly: “We need your help. Please complete this month’s Have Your Say
+   survey.” It links to the cohort's pinned survey version and provides the
+   required unsubscribe and preference controls. This is the second monthly
+   email for a person who received the newsletter; it is not another newsletter.
+2. **SMS to remaining non-completers.** After the approved email response
+   window, only locked members who have not completed the survey and remain
+   independently eligible for SMS receive an identified, concise text with the
+   survey link: “IRAAC represents Aboriginal community views to government.
+   Please complete Have Your Say so we can continue to represent you: [survey].
+   Reply STOP to stop IRAAC texts, STOP ALL to stop all IRAAC contact, or manage
+   preferences: [link].” Use a reply-capable Australian number for the chase.
+   A registered branded Sender ID may be tested only with a working low-cost
+   alternative opt-out because alphanumeric IDs generally cannot receive STOP.
+3. **AI phone survey for remaining non-completers.** After the approved SMS
+   response window, only locked members who still have no verified completion
+   and pass a fresh voice, DNCR/classification, frequency, local-time and safety
+   check may be called. The opening identifies IRAAC, states the research
+   purpose and says it is IRAAC's automated AI survey assistant. It asks
+   permission to continue, offers a human/accessibility alternative and then
+   completes the exact same pinned survey over the phone. The call terminates
+   immediately on refusal or any stop request.
 
-The default Path 1 journey contains no SMS. A future business SMS step would
-need its own approved policy, source and eligibility rule; it cannot be inferred
-from an unanswered email.
-
-### Path 2 — citizen/community journey
-
-1. **Direct survey and consent intake.** The person completes Have Your Say by
-   web, QR, worker-assisted visit, drop-in, home visit, event, human phone or
-   another approved mode. Contact permissions remain optional and separate.
-2. **Newsletter email.** Every Path 2 person with current newsletter email
-   permission is included in the full monthly newsletter audience, with
-   findings, action updates, a survey link and a simple unsubscribe route.
-3. **Rotating survey-chase selection.** Roughly 30% of the eligible citizen
-   survey pool is selected for active follow-up in a month.
-4. **SMS survey link.** After the waiting period and only with current SMS
-   permission, a selected person with no completion or terminal response may
-   receive a short identified text and survey link.
-5. **AI survey call.** After the next waiting period and only with current AI
-   voice permission, a selected person may receive the approved AI survey
-   call, including immediate AI identity, permission to continue and a human
-   pathway.
+The launch cadence is configuration, not application code: newsletter on day
+0, cohort lock and chase email after newsletter reconciliation, SMS after a
+documented email-response window, and voice after a documented SMS-response
+window. Phase 0 must approve the actual intervals, maximum attempts and quiet
+hours before the pilot. Future steps stay in IRAAC's own cancellable queue
+rather than being pre-scheduled at providers.
 
 ### Shared transition rules
 
@@ -216,10 +211,11 @@ missing webhook. Every transition requires both no current-cycle completion or
 terminal response and a fresh eligibility decision for the next action.
 
 Survey completion through any channel or a terminal response stops all
-controllable remaining chase attempts for that campaign cycle. Terminal events
-are typed: `NEWSLETTER_EMAIL_UNSUBSCRIBE` suppresses the canonical email endpoint
-for IRAAC's newsletter purpose; `CHANNEL_STOP` suppresses the approved channel
-and purpose; `GLOBAL_STOP`, complaint, wrong-person or safety suppression stops
+controllable remaining chase attempts for that campaign cycle but does not by
+itself unsubscribe the person from the monthly newsletter. Terminal events
+are typed: `EMAIL_UNSUBSCRIBE` suppresses the canonical endpoint for all
+non-essential IRAAC email; `CHANNEL_STOP` suppresses the approved channel and
+purpose; `GLOBAL_STOP`, complaint, wrong-person or safety suppression stops
 every channel. Invalid endpoint and hard bounce suppress the affected endpoint.
 Provider events
 may arrive late or out of order, so state changes use event time,
@@ -227,9 +223,14 @@ deduplication, idempotency and reconciliation. One canonical completion key
 prevents web, SMS, staff and AI channels from asking the same current-cycle
 survey twice.
 
-Newsletter email suppression is channel- and purpose-specific. Unsubscribing
-from the newsletter stops future newsletter email but does not itself revoke a
-separately granted and still-current human-call or AI-call permission. Every
+Email suppression is channel-specific. An email unsubscribe stops all
+non-essential IRAAC email to that endpoint and does not itself revoke
+a separately granted and still-current SMS, human-call or AI-call permission.
+SMS `STOP` suppresses IRAAC SMS to that number. “Stop calling”, “do not call”
+or “I am on the Do Not Call Register” suppresses voice to that number. An
+unqualified “do not contact me again”, `STOP ALL`, complaint, wrong-person or
+safety result creates a global suppression. Ambiguous opt-out language fails
+closed into a contact hold and human review. Every
 unsubscribe experience must also offer a clear way to stop all future IRAAC
 outreach. A global stop, complaint, wrong-person result or safety suppression
 overrides every channel.
@@ -239,8 +240,7 @@ overrides every channel.
 Every community newsletter, government report email and staff/partner report
 email carries a clear, no-login preference link. The preference page offers:
 
-- unsubscribe from that email series;
-- stop all IRAAC newsletter/report email;
+- stop all non-essential IRAAC email;
 - stop all human and AI calls from IRAAC;
 - manage channel- and purpose-specific choices; and
 - stop all non-essential IRAAC outreach.
@@ -249,8 +249,13 @@ The link uses a signed opaque token, contains no email address, phone number,
 Aboriginal status or other personal data, and reveals no contact details on an
 invalid or forwarded link. A recipient can unsubscribe without creating an
 account, paying a fee or providing extra personal information. Email replies
-such as "unsubscribe", provider complaints and SMS `STOP` enter the same
-canonical preference service. IRAAC applies a valid request immediately as its
+such as "unsubscribe", provider complaints, SMS `STOP`, `STOP ALL` and
+free-text requests enter the same canonical preference service. The parser
+preserves the raw request and interpreted scope: an email unsubscribe changes
+all non-essential email only; `STOP` changes SMS only; `STOP ALL` or
+unqualified no-more-contact language changes every non-essential channel. A
+clear request takes effect without making the person click a second link.
+IRAAC applies a valid request immediately as its
 service standard and always within the legally applicable maximum period.
 Subscribed/marketing email also implements authenticated RFC 8058
 `List-Unsubscribe` and `List-Unsubscribe-Post` headers where required by the
@@ -324,9 +329,9 @@ control, a new channel-specific receipt, named compliance approval, recent MFA,
 dual control and an append-only supersession event.
 
 People and organisations remain separate. A person answering on behalf of a
-business does not silently convert business contact eligibility into personal
-citizen consent. Moving into Path 2 requires the same express consent intake
-as every other citizen participant.
+business does not silently convert Business Contacts eligibility into personal
+Citizen Contacts consent. Joining Citizen Contacts requires the same express
+consent intake as every other citizen participant.
 
 The exact business classifications and launch permissions are Phase 0 legal
 decisions, not assumptions embedded in code. This roadmap is an implementation
@@ -392,12 +397,13 @@ the Sydney region is the reference implementation, subject to the Phase 0
 privacy, Indigenous Data Sovereignty and vendor reviews. Excel and Google
 Sheets are import/export staging tools, never a second source of truth.
 
-**Monthly extract.** Each month a job builds four linked but distinct immutable
-snapshots: the full currently eligible Path 1 newsletter audience, the Path 1
-survey-chase sample, the full currently email-consented Path 2 newsletter
-audience and the Path 2 survey-chase sample. The two newsletter snapshots may
-be deduplicated into one full delivery manifest while retaining pathway and
-eligibility evidence for each address. The chase pools remain separate. Each
+**Monthly extract.** Each month a job builds the full currently eligible
+newsletter audience plus separate Business Contacts and Citizen Contacts chase
+population snapshots. It selects against the two populations independently,
+then combines the selected people into one immutable monthly cohort while
+retaining `sampling_stratum` and eligibility evidence on every member. The
+newsletter snapshots may be deduplicated into one full delivery manifest while
+retaining every contributing group and eligibility decision. Each
 recipient/channel/action pair must pass the policy engine before inclusion,
 queueing and delivery.
 
@@ -413,28 +419,32 @@ Statutory maximum timeframes remain outer limits, not the system target.
 
 ---
 
-## 6. Full monthly newsletter and two rotating survey-chase pools
+## 6. Full monthly newsletter and one stratified, locked survey-chase cohort
 
 The monthly newsletter goes to **100% of the currently eligible email audience**:
-all approved Path 1 business addresses and all Path 2 addresses with current
-newsletter email permission. This is one complete monthly audience, not a
+all approved Business Contacts addresses and all Citizen Contacts addresses
+with current newsletter email permission. This is one complete monthly audience, not a
 sample. It excludes duplicate, unsubscribed, suppressed, invalid, hard-bounced
 and policy-ineligible addresses. “Every email on file” is the audience-building
 goal, but an address being stored, found online or associated with an Aboriginal
 business is not by itself an eligibility decision.
 
-Recurring Path 1 newsletter eligibility fails closed unless the record contains
-the source URL or dataset and licence, observed date, published role/context,
+Recurring Business Contacts newsletter eligibility fails closed unless the
+record contains the source URL or dataset and licence, observed date, published role/context,
 absence of a no-unsolicited-contact statement, relevance to that role, entity
 and message classification, approved policy/legal-rule version, reviewer,
-expiry or revalidation date, and evidence hash. Path 2 requires a current
-newsletter-email consent receipt. Missing, stale or conflicting evidence denies
+expiry or revalidation date, and evidence hash. Citizen Contacts require a
+current newsletter-email consent receipt. Missing, stale or conflicting evidence denies
 inclusion.
 
-Active survey chasing is different: roughly **30% of each pathway's currently
-eligible survey pool** is selected each month. Newsletter delivery alone does
-not place an address into that sample and newsletter non-response does not
-create permission for SMS or voice.
+Active survey chasing is different: **30% of the contactable Business Contacts
+base and 30% of the contactable Citizen Contacts base** are targeted each
+month, using the approved integer-rounding rule. “Contactable base” means
+active, identity-resolved, uniquely assigned people who are not globally
+suppressed, have not already completed the pinned survey and have at least one
+independently eligible chase channel at the recorded cutoff. Newsletter
+delivery alone does not place a person into the sample, does not update sampling
+history and never creates permission for SMS or voice.
 
 The system creates one locked full-audience snapshot and send manifest for the
 newsletter. Delivery may be throttled into provider waves so IRAAC can preserve
@@ -447,35 +457,57 @@ reconciled outcome such as `SENT`, `DELIVERED`, `FAILED` or
 failed and newly suppressed counts separately.
 
 Deduplication uses one canonical email endpoint and newsletter purpose per
-campaign. Preserve every contributing person, organisation, pathway, provenance
-and eligibility decision, but send at most once. A denial, unsubscribe or
+campaign. Preserve every contributing person, organisation, contact group,
+provenance and eligibility decision, but send at most once. A denial, unsubscribe or
 suppression on any contributing record wins. Apply the most restrictive content
 and permission rule and do not personalise when ownership is ambiguous.
 
-Sampling Path 1 and Path 2 independently does not permit double chasing. A
-cross-path contact-pressure gate allows only one active chase assignment per
-canonical person or endpoint in a survey cycle and applies approved person,
-endpoint, household and organisation frequency caps while retaining both
-pathway memberships for analysis.
+Sampling the two groups independently does not permit double chasing. Each
+person has exactly one `primary_sampling_stratum` for quota purposes even when
+descriptive tags associate them with both groups. Ambiguous dual memberships
+are held for resolution rather than counted or contacted twice. The global
+person-level sampling history follows a person across group changes. A
+contact-pressure gate applies approved person, endpoint, household and
+organisation frequency caps while retaining all memberships for analysis.
 
-Path 1 and Path 2 are sampled independently. Selection is reproducible,
-auditable and without replacement until the relevant pool has been covered,
-subject to consent/policy expiry, suppression, household or organisation caps,
-topic relevance and operational capacity. A 90-day cooldown is the initial
-planning assumption, so a typical eligible contact is actively chased about
-once every three to four months rather than monthly.
+“At most once every three months” means no person can be selected in two of any
+three consecutive calendar-month cohorts: someone selected in January is
+excluded in February and March and becomes eligible again in April. This is a
+three-calendar-month start-to-start rotation, not three full intervening
+months. Thirty percent across three months covers about 90%, leaving 10%
+rotation capacity; a stricter three-full-month gap cannot sustain a 30% monthly
+target. In a stable pool most contacts will therefore be selected once every
+three to four months.
 
-Pure randomness can repeatedly select some people while missing others. Use a
-seeded rotating sample with documented inclusion/exclusion reasons and, where
-the evidence purpose requires it, approved strata for region, age group,
-community, business type or other defensible dimensions. Weighting and quotas
-must not create misleading precision or expose small groups.
+Selection is reproducible, auditable and fair. Rank never-selected people
+first, then oldest last-selected month, then lowest lifetime selection count,
+then a seeded stable hash tie-break. This rolls the unsampled 10% forward
+instead of creating three permanent buckets. Store the cutoff and timezone,
+population snapshot hash, survey and algorithm versions, percentage and
+rounding rule, targets, seed, ordered selections, exclusions and reason codes.
+The same snapshot, seed and algorithm version must return byte-for-byte
+identical ordered IDs. Where the evidence purpose requires it, use approved
+strata for region, age group, community, business type or other defensible
+dimensions. Weighting and quotas must not create misleading precision or expose
+small groups.
 
-The 30% figure is a configurable target and ceiling, not a promise or a proxy
-for representativeness. It is reduced when consent terms, policy, staff
-capacity, cultural governance, expected response burden or voice capacity
-require it. The monthly report states the eligible pool, selected sample,
-completion count, non-response and limitations separately for each pathway.
+The run calculates `target = round_half_up(0.30 × contactable_base)` separately
+for each contact group. Small pools cannot always equal 30%, so the dashboard
+shows target, achieved count and achieved percentage. If cooldown, suppression,
+consent, cultural-governance or capacity limits leave fewer candidates than the
+target, select all eligible candidates, record a shortfall and alert an
+administrator. Never break cooldown, revive a suppression, select an ambiguous
+identity or borrow quota from the other group. The 30% figure is a sampling
+target, not a claim of statistical representativeness.
+
+After selection, the platform validates no duplicate canonical person and no
+cooldown breach, combines both selections and locks the cohort. A later
+completion, unsubscribe, invalid endpoint or suppression changes the member's
+live journey state but never removes or replaces that historical member;
+backfilling would make the cohort drift and could exceed the recorded quota.
+The monthly report states eligible base, target, selected, shortfall,
+completion, non-response and limitations separately for Business Contacts and
+Citizen Contacts and for the combined chase.
 
 ---
 
@@ -483,11 +515,11 @@ completion count, non-response and limitations separately for each pathway.
 
 ### Have Your Say is the source instrument
 
-Have Your Say is central to IRAAC's operation. Path 1 businesses and Path 2
-citizens answer the same current, published survey version. Web, QR, mobile,
+Have Your Say is central to IRAAC's operation. Business Contacts and Citizen
+Contacts answer the same current, published survey version. Web, QR, mobile,
 tablet, desktop, worker-assisted, drop-in, home-visit, human-phone and AI-phone
-modes all write the same answer contract and record the pathway and completion
-mode separately.
+modes all write the same answer contract and record the contact group and
+completion mode separately.
 
 The survey is mobile-first, device-independent and plain-language. It requires
 no account. It supports large tap
@@ -717,7 +749,7 @@ passes.
   intervention that resurvey is measuring the effect of.
 - **Track engagement operations.** Email delivery, bounce, complaint and
   unsubscribe rates; SMS delivery/STOP; call attempts, answers, survey
-  completions, transfers, callbacks and opt-outs; conversion by pathway,
+  completions, transfers, callbacks and opt-outs; conversion by contact group,
   channel, region and campaign stage; provider cost/capacity and incidents.
 - **Manage the report workflow.** Generate, compare, comment on, revise,
   approve and schedule the community, staff/partner and government reports.
@@ -918,7 +950,7 @@ Active group members have three distinct governed uses:
    active group status supplies the approved recipient role, unless an
    applicable unsubscribe, suppression, removal or legal hold blocks delivery;
    and
-3. form the initial Path 2 staff/partner contact cohort with provenance
+3. form the initial Citizen Contacts staff/partner cohort with provenance
    `staff_affiliate_seed_2026_07_31`.
 
 Group membership is not SMS, human-call or AI-call consent and never overrides
@@ -1042,8 +1074,9 @@ public repository.
 **Phase 0 — Authority, consent and safety.** Obtain Board/community data-use
 authority, the appropriate research/ethics determination and Australian legal
 review. Confirm IRAAC's entity and ACNC status. Separately classify the exact
-Path 1 initial invitation, recurring newsletter, value brief, linked pages and
-research-only AI call. Approve citizen consent wording and duration, business
+Business Contacts initial invitation, recurring newsletter, survey-chase email,
+SMS, linked pages and research-only AI call. Approve Citizen Contacts consent
+wording and duration, business
 sources, contact policies, AI disclosure and human-escalation scripts,
 youth/sensitive-data handling, retention/deletion rules, report privacy
 thresholds, incident handling and production release roles. No real outreach
@@ -1081,7 +1114,7 @@ timeline, audience preview, test contacts, approval gate, pause/stop control,
 audit log and incident path. Wire an approved email provider, build the
 templates, and pilot with internal/synthetic contacts before a small approved
 community and business cohort. Run a provider-acceptability review before
-using SES for directory-derived Path 1 contacts; SES production-access rules
+using SES for directory-derived Business Contacts; SES production-access rules
 expect requested email. Written AWS acceptance and written Australian legal
 approval for this exact recipient class are launch-blocking prerequisites. If
 either is absent, SES is restricted to explicit opt-ins and must not send to
@@ -1093,10 +1126,11 @@ bounces/complaints/spam rate and stop automatically at approved thresholds.
 Opens and clicks are supporting signals, never the reason to escalate.
 
 **Phase 3 — SMS outreach.** Add SMS through an approved Australian-capable
-provider for Path 2, register the IRAAC sender ID/ABN relationship, prefer a
-two-way reply-capable number for STOP, and support immediate suppression. Pilot
-only with separately SMS-consented and eligible contacts. Path 1 has no SMS in
-the default sequence.
+provider for both Business Contacts and Citizen Contacts, register the IRAAC
+sender ID/ABN relationship, use a two-way reply-capable number for `STOP` and
+`STOP ALL`, and support immediate suppression. Pilot only with contacts whose
+exact SMS action has a current, recorded legal basis or consent; neither group
+membership nor unanswered email creates SMS permission.
 
 **Phase 4 — Phone-assisted surveys.** Integrate the approved calling platform
 and operator workspace. Human calls come first. The workspace shows masked
@@ -1142,18 +1176,45 @@ The main areas:
   request instead creates an immediate `VOICE_DO_NOT_CALL` entry in IRAAC's
   internal suppression ledger, ends the call and blocks future IRAAC calls.
   This trust rule applies even where a research or other exemption may exist.
+- **Call classification and times.** A pure standard-questionnaire or opinion
+  research call is not telemarketing, but a promotional, fundraising or other
+  dual purpose can change that classification. Exact scripts and linked content
+  require recorded counsel approval. The runtime applies the recipient's local
+  rules: research calls only 9:00–20:30 Monday–Friday and 9:00–17:00 Saturday
+  and Sunday; telemarketing only 9:00–20:00 Monday–Friday and 9:00–17:00
+  Saturday, never Sunday; neither on national public holidays. Unknown location
+  or timezone fails closed. A telemarketing list is DNCR-washed where required,
+  normally against a wash no older than 30 days, and the evidence is retained.
+- **Call identity and termination.** Every research or telemarketing caller
+  identifies the caller, IRAAC/employer and purpose at the required point,
+  discloses every purpose of a dual-purpose call, supplies requested contact and
+  complaint details, enables caller ID and uses a working return number that
+  provides the required information for at least 30 days. Any request or
+  indication not to continue ends the call immediately—no persuasion, extra
+  question or requirement to finish the survey.
 - **Privacy Act 1988 and the Australian Privacy Principles (APPs).** IRAAC
-  needs a clear, published privacy policy covering what we collect, why, how
-  long we keep it, and how someone can request access or deletion.
+  needs a clear, published privacy policy and a collection notice at or before
+  each intake covering IRAAC's identity, what is collected, purpose,
+  consequences of not supplying it, usual recipients/processors, practicable
+  overseas-country disclosures, access/correction/complaint routes and policy
+  location. If IRAAC is an APP entity, sensitive information requires a
+  reasonably necessary and proportionate purpose plus specific, informed,
+  voluntary and current consent unless a narrow exception applies. Design to
+  this standard regardless while Phase 0 records IRAAC's actual coverage.
 - **Spam Act 2003.** Commercial electronic messages (email, SMS) require
-  consent, sender identification, and a functional unsubscribe. Advocacy and
+  provable consent, accurate sender identification/contact details and a clear,
+  functional unsubscribe. The facility requires no fee, login, account or extra
+  personal information, remains functional for at least 30 days and is honoured
+  within five working days; IRAAC's service target is immediate. Advocacy and
   charity communications or a pure research invitation may be classified
   differently, but content controls classification. A public business email
   is not blanket permission: conspicuous publication is narrow, must be
   relevant to the person's work, and cannot carry a no-unsolicited-contact
   statement. Address-harvested lists are prohibited. The safe operational
   baseline is clear identity, provenance, relevance and opt-out across the
-  board.
+  board. V1 applies these safeguards even when counsel classifies a pure survey
+  message as non-commercial. Outsourcing delivery never outsources IRAAC's
+  responsibility.
 - **Value-first content is not automatically exempt.** Classification depends
   on the entire message, presentation and linked content. Keep the one-time
   factual/research invitation, recurring newsletter subscription and any
@@ -1166,7 +1227,13 @@ The main areas:
   consent. Consent wording must state its duration: DNCR express-consent rules
   make the difference between a stated period and the default position
   important. External counsel must confirm final wording, duration, scripts
-  and classifications.
+  and classifications. The calling standard expressly covers recorded and
+  synthetic voices; the automation must provide an in-call voice/key/human
+  mechanism to request the required organisation and contact information.
+  Current research did not identify a general standalone statutory phrase “I
+  am AI”, so the immediate AI disclosure remains IRAAC's mandatory
+  transparency and anti-deception control rather than being mislabelled as a
+  specific statute.
 - **Research and charity classifications.** A factual non-commercial survey
   invitation may fall outside Spam Act commercial-message rules. If IRAAC is
   currently an ACNC-registered charity, designated-message and designated-call
@@ -1193,9 +1260,16 @@ The main areas:
   support path, subprocessor, log and backup stays in Australia. APP 8 and
   Indigenous governance require a complete data map and contractual review.
 - **SMS Sender ID Register.** If IRAAC uses a branded alphanumeric sender ID,
-  it and the sending provider must meet the Australian registration regime
-  applying from 1 July 2026. A two-way number or other approved opt-out path
+  it and the sending provider must meet the Australian registration regime now
+  in force from 1 July 2026; an unregistered ID is labelled `Unverified`. A
+  two-way number or other approved opt-out path
   is required because many branded sender IDs cannot receive "STOP".
+- **NSW role and call recording.** Phase 0 must determine contract-by-contract
+  whether a NSW public-sector client or data arrangement applies PPIP Act
+  duties to IRAAC. Persistent audio recording or transcript storage remains off
+  by default. Before either is enabled, obtain explicit in-call permission,
+  offer a no-recording alternative and obtain NSW surveillance-law advice for
+  the autonomous agent, provider processing and downstream use.
 - **Indigenous Data Sovereignty.** The CARE Principles (Collective benefit,
   Authority to control, Responsibility, Ethics) and the Maiam Nayri Wingara
   Indigenous Data Sovereignty principles need to shape how community data is
@@ -1325,15 +1399,17 @@ used by policies are indexed; privileged keys never reach the browser. Raw
 responses, contact data, approvals and exports require a named account at AAL2.
 
 The core data model includes: organisations, people/contact identities,
-organisation relationships, pathway memberships, channel endpoints,
+organisation relationships, contact-group memberships and primary sampling
+strata, channel endpoints,
 source/provenance records, consent receipts, suppression entries, statutory
 DNCR check evidence, signed preference-link tokens, survey
 definitions/releases/questions/options, survey-release questions, reporting taxonomies,
 survey review decisions, survey sessions/answers, Terms/Privacy/response-use
-versions, campaign cycles,
+versions, campaign cycles, sampling runs, cohort members,
 content artefacts/versions, audience snapshots, sample assignments, journeys,
-journey stages, survey invitations, completion correlations, terminal
-responses, contact attempts, provider events, call tasks/sessions/dispositions,
+journey stages, dispatch intents/attempts, outbox events, survey invitations,
+completion correlations, terminal responses, provider receipts, call
+tasks/sessions/dispositions, human-review cases,
 issues, interventions, report snapshots, report versions, report approval
 packets, approvals, review groups/memberships/membership events, review
 notifications, monthly consultations, review threads/comments, report
@@ -1361,15 +1437,24 @@ The campaign lifecycle is:
 human approval → scheduled → running/paused → completed/cancelled →
 reconciled`.
 
-The Path 1 journey is:
-`approved business value email 1 → selected into rotating chase sample →
-no-response timeout → business value email 2 → no-response timeout → AI call
-only if independently policy-eligible → completed/unreachable/terminal`.
+The unified locked-cohort journey is:
+`LOCKED → EMAIL_READY → EMAIL_WAIT → SMS_READY → SMS_WAIT → VOICE_READY →
+VOICE_IN_PROGRESS → terminal`. Email, SMS or voice stages are skipped when the
+channel is not independently permitted. Terminal states are `COMPLETED`,
+`GLOBAL_DNC`, `EXHAUSTED`, `NO_LAWFUL_CHANNEL`, `HUMAN_REVIEW` and `CANCELLED`.
+At every dispatch, precedence is global suppression/hold, current-survey
+completion, human-review pause, channel legal basis or consent, channel
+suppression and validity, timing/frequency policy, then send or dial.
 
-The Path 2 journey is:
-`citizen intake and consent → newsletter → selected into rotating chase sample
-→ SMS only if separately consented and eligible → AI call only if separately
-consented and eligible → completed/unreachable/terminal`.
+The database enforces one cohort membership per canonical person, one logical
+dispatch intent per member/stage/template version and one application of each
+provider event. State transition and outbox insertion occur in one transaction;
+workers use leases and compare-and-swap. Immediately before an external API
+call the worker repeats the live gate. Ambiguous provider timeouts reconcile by
+idempotency key before retry, and duplicate or out-of-order webhooks can never
+regress completion or suppression. A completion or opt-out atomically cancels
+pending work; an unavoidable provider-accepted race is cancelled where possible,
+recorded as `SUPPRESSION_RACE` and alerted.
 
 "Non-response" is a reconciled state, not an assumption. A hard bounce,
 invalid endpoint or complaint suppresses that endpoint and does not authorise
@@ -1647,6 +1732,32 @@ quiet-hour/frequency/DNCR policy tests, survey parity across completion modes,
 tests, AI disclosure and human-handoff tests, report reproducibility,
 de-identification and small-cell suppression.
 
+The sampling and chase suite must prove all of the following with synthetic
+data:
+
+- independent rounded 30% targets for Business Contacts and Citizen Contacts,
+  followed by one combined cohort with no duplicate canonical person;
+- a January member is ineligible in February and March and eligible in April,
+  with under-capacity recorded as a shortfall rather than a cooldown override;
+- identical snapshot, cutoff, seed and algorithm version produce identical
+  ordered selections, including pool sizes 0, 1, 2, 3 and 10;
+- newsletter delivery never changes sampling history and a non-member never
+  enters the chase;
+- a locked member is never removed or backfilled after completion,
+  unsubscribe, invalidation or suppression;
+- completion from web, email link, SMS link, human or AI phone converges on one
+  idempotent `COMPLETED` state and cancels every controllable later stage;
+- email unsubscribe blocks email only, `STOP` blocks SMS, a call stop blocks
+  voice, and `STOP ALL` or unqualified do-not-contact language blocks every
+  channel across merged duplicate identities;
+- a link-scanner `GET` changes no preference, while a confirmed no-login `POST`
+  is immediate and idempotent;
+- provider duplicates, out-of-order events, ambiguous timeouts and concurrent
+  completion cannot duplicate a dispatch or regress suppression; and
+- voice is blocked outside local permitted times, unknown timezone fails
+  closed, recorded/synthetic voice supplies the required information mechanism,
+  and a failed opt-out write terminates the call and opens fail-closed quarantine.
+
 The suppression suite must also prove that every approved verbal stop phrase
 and a generic "I don't want to continue" interrupt every AI-call state; a
 shared/wrong-person endpoint is not redialled; a failed database write causes
@@ -1805,6 +1916,9 @@ Australian legal, ethics or community-governance advice.
 **Privacy, governance, safety and communications**
 
 - OAIC guidance on [small businesses](https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/organisations/small-business),
+  [APP 3 collection and sensitive information](https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines/chapter-3-app-3-collection-of-solicited-personal-information),
+  [APP 5 collection notices](https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines/chapter-5-app-5-notification-of-the-collection-of-personal-information),
+  [APP 7 direct-marketing opt-outs](https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines/chapter-7-app-7-direct-marketing),
   [APP 8 cross-border disclosure](https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines/chapter-8-app-8-cross-border-disclosure-of-personal-information),
   [APP 11 security/deletion](https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines/chapter-11-app-11-security-of-personal-information),
   [privacy impact assessments](https://www.oaic.gov.au/__data/assets/pdf_file/0013/2074/guide-to-undertaking-privacy-impact-assessments.pdf),
@@ -1813,6 +1927,11 @@ Australian legal, ethics or community-governance advice.
 - [AIATSIS Code of Ethics](https://aiatsis.gov.au/sites/default/files/2020-10/aiatsis-code-ethics.pdf)
   and [NHMRC ethical guidance](https://www.nhmrc.gov.au/sites/default/files/documents/Indigenous%20guidelines/Indigenous-ethical-guidelines.pdf)
 - ACMA guidance on [spam](https://www.acma.gov.au/avoid-sending-spam),
-  [calling rules](https://www.acma.gov.au/say-no-to-telemarketers) and the
-  [SMS Sender ID Register](https://www.acma.gov.au/sms-sender-id-register)
+  [email/SMS unsubscribe rules](https://www.acma.gov.au/sites/default/files/2024-05/Fact%20sheet%20-%20email%20and%20SMS%20unsubscribe%20rules.pdf),
+  [calling rules](https://www.acma.gov.au/say-no-to-telemarketers), the
+  [Telemarketing and Research Calls Industry Standard](https://www.legislation.gov.au/F2017L00323/asmade/2017-03-28/text/original/pdf),
+  [DNCR industry standards](https://www.donotcall.gov.au/industry/industry-overview/industry-standards/)
+  and the [SMS Sender ID Register](https://www.acma.gov.au/sms-sender-id-register)
+- NSW IPC [PPIP Act guidance](https://www.ipc.nsw.gov.au/privacy/nsw-privacy-laws/ppip)
+  and the NSW [Surveillance Devices Act 2007](https://legislation.nsw.gov.au/view/whole/html/inforce/2024-07-01/act-2007-064)
 - Australian Cyber Security Centre [Essential Eight](https://www.cyber.gov.au/sites/default/files/2023-11/PROTECT%20-%20Essential%20Eight%20Explained%20%28November%202023%29.pdf)
