@@ -1,24 +1,39 @@
 # IRAAC Website
 
-A working draft of a public website for IRAAC, covering the organisation, its programs (MCC, YouthScape, The Crew, DARC), governance and reporting, MCC support for other Aboriginal Community Organisations, news and contact details.
+A working draft of the public website for IRAAC. This repository is the public
+front door and the planning source for the future private listening platform.
+It must never contain production contact lists, survey responses or secrets.
 
-This is a plain static site (HTML/CSS/JS, no build step) so it's easy to edit and deploys directly on Vercel with zero configuration.
+The current website is a plain static HTML/CSS/JS site that deploys directly
+to Vercel. The consent, survey, campaign, calling, reporting and staff-control
+system described in the roadmap will be built in a separate private repository.
 
-Each page (`index.html`, `about.html`, etc.) is fully self-contained — styles and scripts are inlined in a `<style>`/`<script>` block at the top of each file, so there's nothing to upload but the seven `.html` files. This was done deliberately to make the site a single flat folder that's simple to drag-and-drop into GitHub or Vercel.
+Each of the eleven pages is self-contained. Styles and scripts are inlined so
+the public site remains simple to deploy.
+
+## Start here
+
+- [`PRODUCTION_LAUNCH_PLAN.md`](PRODUCTION_LAUNCH_PLAN.md) is the concise,
+  ready-to-run critical path, user sign-up list and agent work register.
+- [`ROADMAP.md`](ROADMAP.md) is the canonical product, governance, consent,
+  architecture and compliance specification.
 
 ## Editing
 
-`build.py` is the source of truth used to generate all seven pages from shared templates (nav, footer, styling). To make sitewide changes, edit `build.py` and re-run:
+`build.py` is intended to generate the eleven pages from shared templates.
+Reconcile its output against the current production HTML before accepting a
+sitewide regeneration.
 
 ```
 python3 build.py
 ```
 
-Editing an individual `.html` file directly also works fine for small tweaks — just note that shared elements (nav, footer, styling) are duplicated across all seven files, so a sitewide change made by hand needs to be repeated in each file.
+Editing one `.html` file works for a small change. Shared elements are repeated,
+so check whether the same change belongs in `build.py` and all pages.
 
-## Still to do
+## Current boundary
 
-Sections marked with a highlighted note box (e.g. on the About, Programs and Governance pages) are placeholders — replace them with real content: Board Member names and photos, program outcomes, links to public reports, and real contact details.
-Last updated: 2026-07-31 11:24 UTC — project analysis complete, both sites live on custom domains.
-
-GitHub push test completed: 2026-08-01.
+Have Your Say remains a non-collecting IRAAC-owned holding page until P1 in the
+production launch plan passes its human, governance, security, accessibility
+and operational gates. Do not represent prototype forms, campaigns or calling
+flows as live.
