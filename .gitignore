@@ -2,3 +2,5 @@
 *.png
 node_modules/
 server.log
+.vercel
+.env*
