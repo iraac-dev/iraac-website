@@ -24,14 +24,16 @@ a { color: inherit; }
 img { max-width: 100%; display: block; }
 .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
 header.site-header { background: var(--charcoal); color: var(--cream); position: sticky; top: 0; z-index: 50; }
-.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 11px 24px; max-width: var(--max-width); margin: 0 auto; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; max-width: var(--max-width); margin: 0 auto; }
 .wordmark { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.06em; text-decoration: none; color: var(--cream); }
 .wordmark span { color: var(--ochre); }
 nav.main-nav ul { list-style: none; display: flex; gap: 22px; margin: 0; padding: 0; flex-wrap: wrap; }
 nav.main-nav a { text-decoration: none; color: var(--sand); font-size: 0.92rem; font-weight: 500; border-bottom: 2px solid transparent; padding-bottom: 4px; }
 nav.main-nav a:hover, nav.main-nav a.active { color: var(--ochre); border-bottom-color: var(--ochre); }
+.nav-login { display: inline-block; background: var(--ochre); color: var(--cream) !important; font-size: 0.85rem; font-weight: 700; padding: 8px 18px; border-radius: 4px; border-bottom: none !important; letter-spacing: 0.02em; transition: background .15s; }
+.nav-login:hover { background: var(--ochre-dark); color: var(--cream) !important; border-bottom: none !important; }
 .nav-toggle { display: none; background: none; border: none; color: var(--cream); font-size: 1.6rem; cursor: pointer; }
-@media (max-width: 960px) {
+@media (max-width: 860px) {
   nav.main-nav { display: none; width: 100%; padding: 0 0 14px; }
   nav.main-nav.open { display: block; }
   nav.main-nav ul { flex-direction: column; gap: 12px; }
@@ -44,8 +46,8 @@ nav.main-nav a:hover, nav.main-nav a.active { color: var(--ochre); border-bottom
 .eyebrow { color: var(--ochre); text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.8rem; font-weight: 700; margin-bottom: 14px; }
 .hero h1 { font-size: 2.7rem; line-height: 1.15; margin: 0 0 20px; }
 .hero p { font-size: 1.15rem; color: var(--sand); max-width: 620px; }
-.page-hero { position: relative; color: var(--cream); padding: 80px 0 70px; background: radial-gradient(ellipse at top right, rgba(193,99,31,0.28) 0%, transparent 55%), linear-gradient(135deg, #201c1a 0%, #322b26 55%, #4a2812 100%); isolation: isolate; overflow: hidden; }
-.page-hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 20% 30%, rgba(193,99,31,0.10) 0%, transparent 50%); z-index: -1; }
+.page-hero { position: relative; color: var(--cream); padding: 70px 0 60px; background-size: cover; background-position: center; isolation: isolate; }
+.page-hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(20,16,14,0.90) 20%, rgba(32,28,26,0.6) 100%); z-index: -1; }
 .page-hero h1 { font-size: 2.2rem; margin: 0 0 12px; }
 .page-hero p { color: var(--sand); max-width: 640px; font-size: 1.05rem; }
 .btn { display: inline-block; padding: 13px 26px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 0.95rem; margin-right: 14px; margin-top: 10px; }
@@ -74,7 +76,7 @@ p.section-lead { color: var(--muted); max-width: 680px; font-size: 1.05rem; marg
 @media (max-width: 860px) { .program-hero { grid-template-columns: 1fr; } .program-hero img { height: 200px; } }
 .program-block .tag { display: inline-block; background: var(--sand); color: var(--charcoal); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 3px; margin-bottom: 12px; }
 .program-block h2 { font-size: 1.7rem; color: var(--ochre-dark); margin: 0 0 12px; }
-.note-box { display: none; }
+.note-box { background: var(--sand); border-left: 4px solid var(--ochre); padding: 18px 22px; border-radius: 4px; font-size: 0.95rem; color: var(--charcoal-soft); margin: 24px 0; }
 .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px; }
 .contact-card { background: #fff; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; padding: 26px; }
 .contact-card .icon { font-size: 1.8rem; margin-bottom: 10px; }
@@ -187,17 +189,6 @@ footer.site-footer { background: var(--charcoal); color: var(--sand); padding: 4
 /* Book a call */
 .call-card { background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 36px; max-width: 560px; }
 .call-card .duration { display:inline-block; background: var(--sand); color: var(--charcoal); font-weight:700; font-size:0.8rem; padding:5px 12px; border-radius:999px; margin-bottom:16px; }
-
-/* Voice strip — the four ways to be heard, pinned in the header on every page */
-.voice-strip { background: #2a2420; border-top: 1px solid rgba(250,246,239,0.08); }
-.voice-strip .vs-inner { max-width: var(--max-width); margin: 0 auto; padding: 6px 28px; display: flex; align-items: center; gap: 6px 18px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-.voice-strip .vs-inner::-webkit-scrollbar { display: none; }
-.voice-strip .vs-label { color: #c9beb2; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
-.voice-strip a { display: inline-flex; align-items: center; gap: 6px; color: #faf6ef; text-decoration: none; font-size: 0.8rem; font-weight: 600; padding: 4px 12px; border: 1px solid rgba(250,246,239,0.22); border-radius: 999px; white-space: nowrap; flex-shrink: 0; transition: border-color .15s ease, background .15s ease, color .15s ease; }
-.voice-strip a:hover, .voice-strip a:focus-visible { border-color: #d06a2a; color: #d06a2a; background: rgba(208,106,42,0.08); }
-.voice-strip a.vs-primary { background: #c1631f; border-color: #c1631f; }
-.voice-strip a.vs-primary:hover, .voice-strip a.vs-primary:focus-visible { background: #d06a2a; border-color: #d06a2a; color: #faf6ef; }
-@media (max-width: 560px) { .voice-strip .vs-label { display: none; } .voice-strip .vs-inner { padding: 8px 16px; } }
 </style>
 </head>
 <body>
@@ -209,24 +200,47 @@ footer.site-footer { background: var(--charcoal); color: var(--sand); padding: 4
 <li><a href="about.html">Our Story</a></li>
 <li><a href="programs.html">Our Programs</a></li>
 <li><a href="governance.html">Governance & Reporting</a></li>
+<li><a href="support.html">Supporting Other Organisations</a></li>
+<li><a href="news.html">News</a></li>
 <li><a href="insights.html" class="active">Insights</a></li>
 <li><a href="contact.html">Contact</a></li>
-</ul></nav>
+<li><a href="https://admin.iraac-aco.com/mob-link" class="nav-login">&#128274; Login</a></li></ul></nav>
   </div>
-<div class="voice-strip" aria-label="Ways to have your voice heard">
-  <div class="vs-inner">
-    <span class="vs-label">Have your voice heard:</span>
-    <a class="vs-primary" href="book-a-call.html"><span aria-hidden="true">&#128222;</span>Book a Call</a>
-    <a href="https://forms.gle/b8P66C6SqjARdD9H6"><span aria-hidden="true">&#128203;</span>Have Your Say</a>
-    <a href="offices.html"><span aria-hidden="true">&#127968;</span>Drop In</a>
-    <a href="contact.html#home-visit"><span aria-hidden="true">&#128100;</span>Home Visit</a>
-  </div>
-</div>
 </header>
 
+<section class="frontdoor">
+  <div class="container">
+    <div class="frontdoor-head">
+      <h2>Get in Touch &mdash; Choose What Works for You</h2>
+      <p>Whatever brings you here, IRAAC is here to help. Pick one of the four options below to get started right now.</p>
+    </div>
+    <div class="frontdoor-grid">
+      <a class="fd-card is-primary" href="book-a-call.html">
+        <span class="fd-icon">&#128197;</span>
+        <h3>Book a Free 15-Min Call</h3>
+        <p>Speak with an experienced IRAAC officer &mdash; free, no obligation, over the phone.</p>
+      </a>
+      <a class="fd-card" href="offices.html">
+        <span class="fd-icon">&#127968;</span>
+        <h3>Visit a Local Office</h3>
+        <p>Drop in and speak with someone from IRAAC face to face.</p>
+      </a>
+      <a class="fd-card" href="contact.html#home-visit">
+        <span class="fd-icon">&#128100;</span>
+        <h3>Request a Home Visit</h3>
+        <p>Ask an IRAAC officer to come to you, at a time that works.</p>
+      </a>
+      <a class="fd-card" href="https://forms.gle/b8P66C6SqjARdD9H6">
+        <span class="fd-icon">&#128203;</span>
+        <h3>Complete a Survey</h3>
+        <p>Tell us a bit about what you need &mdash; takes about two minutes.</p>
+      </a>
+    </div>
+  </div>
+</section>
 
 
-<section class="page-hero">
+<section class="page-hero" style="background-image:url('https://picsum.photos/seed/iraac-meeting/1200/800');">
   <div class="container">
     <div class="eyebrow">From IRAAC</div>
     <h1>Insights</h1>
@@ -237,284 +251,72 @@ footer.site-footer { background: var(--charcoal); color: var(--sand); padding: 4
 <section>
   <div class="container" style="max-width: 780px;">
 
-    <article class="insight-post is-featured" id="youthscape-illawarra-august-2026">
-      <div class="insight-meta"><span class="insight-tag">Emerging Community Report</span><span class="insight-date">August 2026</span></div>
-      <h2>YouthScape: A Community Solution to Youth Bail and Accommodation in the Illawarra</h2>
-      <p class="survey-report-intro">Young children, some as young as 10, are coming before the Illawarra courts. They come from homes where parents are on drugs, where there is partying and chaos and violence, where homework cannot be done and sleep cannot be found. They disengage from school. They roam the streets at night. They get into stealing. Eventually they are caught. And at the point they are caught, the question of bail arises.</p>
-      <p>If the court decides that sending them back to the home they came from is not safe &mdash; and for many of these young people, it is not &mdash; then they are refused bail. Not because of what they have done. Not because they are a flight risk. But because there is nowhere safe for them to go. The only option is remand to a youth detention centre 70 kilometres from their community, separated from family, from school, from everything familiar.</p>
-      <p><strong>YouthScape is IRAAC's proposed answer to this problem.</strong> A physical house in the Illawarra region where young people on bail can live in safety, and where every service they need comes to them. Legal support. Health care. Education re-engagement. Cultural connection. Transport. Family support. All coordinated through one place, so the young person does not have to navigate a fragmented system alone.</p>
-
-      <div class="survey-report-callout">
-        <p><strong>The central message:</strong> Young people in the Illawarra are being held in custody not because of what they are charged with, but because the system has no safe place to send them. YouthScape is a single, practical solution &mdash; a house where a young person on bail can live, and where ALS legal support, Medicare health services, education re-engagement, cultural connection, transport coordination, and family support all come together under one roof. The evidence from other regions shows this model works. The Illawarra needs it now.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>The young people this affects</h3>
-        <p>The children who end up in this situation are not hardened offenders. They are young people &mdash; sometimes as young as 10 &mdash; whose home lives have broken down. Parents struggling with drugs and alcohol. Mental health problems. Violence in the home. Chaotic environments where no adult is providing structure, safety or supervision. These young people stop attending school. They start roaming the streets at night. They get drawn into stealing, often as a survival mechanism or because there is simply nothing else to do. By the time they are caught, the damage has already been done &mdash; not by the offence, but by the circumstances that led to it.</p>
-        <p>When these young people come before Wollongong or Port Kembla Local Courts, the magistrate faces an impossible choice: send them back to the unsafe home, or remand them in custody. Neither option addresses the underlying problem. What is missing is a third option &mdash; a safe, stable place to live with wraparound support that addresses every dimension of the young person's circumstances.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>What the youth detention numbers show</h3>
-        <p>Aboriginal and Torres Strait Islander young people are detained at a rate of <strong>354 per 100,000</strong> young people &mdash; compared to <strong>9 per 100,000</strong> for non-Indigenous young people (AIHW Youth Justice in Australia, 2022-23). That is a ratio of <strong>39 to 1</strong>, making youth detention the most disproportionate area of the entire criminal justice system. By comparison, the adult imprisonment ratio is 14.8 to 1.</p>
-        <p>Nationally, <strong>55%</strong> of young people in detention are unsentenced &mdash; they have not been convicted of any offence. In NSW, that figure rises to <strong>64%</strong> (NSW Bureau of Crime Statistics and Research, 2023). Nearly two in three young people in custody in NSW are waiting for their matter to be finalised, not serving a sentence. The Australian Institute of Health and Welfare reports that <strong>38%</strong> of young people in detention had a history of homelessness or unstable housing (AIHW, 2022-23). The Australian Law Reform Commission identified this gap in its 2017 <em>Pathways to Justice</em> report, recommending that all jurisdictions expand culturally appropriate bail accommodation for Aboriginal young people (Recommendation 11-4). Eight years later, that recommendation remains substantially unimplemented.</p>
-        <p>In the Illawarra region specifically, approximately <strong>13,284 Aboriginal people</strong> call this area home &mdash; <strong>3.9%</strong> of the total population, above the NSW average of 3.4% (ABS 2021 Census). The nearest youth detention centre to Port Kembla is <strong>Reiby Youth Justice Centre in Airds, Campbelltown</strong> &mdash; <strong>70 kilometres north</strong>. The alternative is Frank Baxter at Kariong, roughly 100 kilometres away. When a young person is remanded there, family visits become difficult or impossible, cultural connection is broken, and the relationships that are proven to reduce reoffending are severed. In 2025, the <em>Illawarra Mercury</em> reported that local magistrates were raising the specific problem of bail refusals due to unsafe housing, with Aboriginal community organisations calling for dedicated bail accommodation in the region.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>The existing service landscape in the Illawarra: what each organisation does, and the gap none of them fill</h3>
-        <p>The Illawarra has a network of Aboriginal community-controlled organisations providing vital services. Each serves a specific need. None currently provides youth bail accommodation with coordinated wraparound support. Understanding this landscape makes clear why YouthScape fills a gap that no existing organisation covers.</p>
-        <p><strong>Illawarra Aboriginal Corporation (IAC)</strong> &mdash; 4 Wentworth Street, Port Kembla. IAC operates housing and homelessness programs, a permanency support program (child protection and out-of-home care through Myimbarr), a cultural centre, aged care, a preschool (Noogaleek &amp; Winnanggay), and employment services (Warrigal). IAC's housing program supports Aboriginal people with access to stable housing and those at risk of homelessness, but it does not provide youth-specific crisis accommodation for young people on bail, nor does it coordinate the wraparound legal, health and education services that a young person on bail requires.</p>
-        <p><strong>Gawura Aboriginal Corporation</strong> &mdash; 211 Lake Entrance Road, Shellharbour. Gawura runs the Brothers Against Domestic Violence (BADV) program, the ChangeV Men's Behaviour Change Program, and is a registered sponsor for Work and Development Orders and Community Service Orders through Community Corrections. Gawura provides important services for adults in the justice system, but does not operate any youth programs, accommodation, or bail support.</p>
-        <p><strong>Waminda (South Coast Women's Health and Wellbeing Aboriginal Corporation)</strong> &mdash; based in Nowra, serving the Shoalhaven region. Waminda provides health services, maternity care, client support including family preservation, and cultural programs. They serve women and families but are primarily Shoalhaven-focused and do not provide youth bail accommodation in the Illawarra.</p>
-        <p><strong>Aboriginal Legal Service (NSW/ACT) Wollongong</strong> &mdash; Level 1, 116 Crown Street, Wollongong. ALS runs the Youth Bail Advocacy and Support Program (YBASP), providing bail advocacy and accommodation referrals. ALS is a critical piece of the puzzle, but YBASP provides legal advocacy and referrals &mdash; it does not provide the accommodation itself, nor does it coordinate health, education, cultural and transport services.</p>
-        <p><strong>Youth Justice NSW</strong> &mdash; 85 Market Street, Wollongong. Youth Justice NSW runs the Youth on Bail program: 24-hour supported accommodation for young people aged 10 to 17 who cannot safely return home, delivered by partner organisations including Wesley Mission and available in the Illawarra region. A <strong>2019 NSW Audit Office</strong> evaluation found that Youth on Bail reduced remand by approximately <strong>30%</strong> for participants. However, Youth on Bail is a program within the justice system, not a community-led model. It does not include the coordinated wraparound services &mdash; health, education, culture, family support, long-term outcome tracking &mdash; that a community-led model like YouthScape would provide.</p>
-        <p>Each of these organisations provides a vital service. None of them provides what YouthScape proposes: a single physical house where a young person on bail can live, and where every service they need &mdash; legal, health, education, cultural, transport, family support &mdash; comes to them, coordinated through a single community-led organisation.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>What works: evidence from other regions</h3>
-        <p>YouthScape is not a theoretical model. The same principles have been proven to work in other regions of Australia and internationally.</p>
-        <p>The <strong>Maranguka Justice Reinvestment Project</strong> in Bourke &mdash; operating under the same Local Decision Making framework as IRAAC &mdash; achieved a 14% to 41% reduction in adult bail breaches, a 42% drop in adult custody days, a 23% reduction in police-recorded domestic violence, and $3.1 million in regional and justice benefit in a single year (KPMG Independent Evaluation, 2018). Maranguka's model is built on a single coordinating backbone organisation that connects existing services rather than duplicating them &mdash; the same principle YouthScape applies.</p>
-        <p>The <strong>Youth Koori Court</strong> in Victoria shows that Aboriginal young people who go through culturally safe, community-connected justice processes have <strong>32% lower reoffending</strong> over 24 months compared to mainstream courts. The key ingredients are cultural safety, community involvement, and coordinated support &mdash; all of which YouthScape is designed to provide.</p>
-        <p>The <strong>Youth on Bail</strong> program in NSW has demonstrated that providing supported accommodation as an alternative to remand works, with a <strong>~30% reduction in remand</strong> for participants (NSW Audit Office, 2019). Youth on Bail provides the accommodation piece. YouthScape adds the wraparound services and community-led coordination that maximise the impact.</p>
-        <p>The <strong>ALS Youth Bail Advocacy and Support Program</strong> is cited by the ALRC as a protective factor for Aboriginal young people in bail proceedings. When a young person has ALS representation at the bail stage, they are significantly more likely to be granted bail. At YouthScape, ALS support would be coordinated as one of the services available under the same roof.</p>
-        <p>Canada's <strong>Gladue Courts</strong> require bail authorities to consider systemic factors through dedicated caseworker reports, resulting in higher bail grant rates and earlier resolution for Indigenous defendants. The Gladue model shows that when the system is required to see the whole person &mdash; their background, their circumstances, their community context &mdash; better outcomes follow. YouthScape is designed to give the Illawarra courts exactly that: a complete picture of every young person, their needs, and the support they will receive.</p>
-        <p>Internationally, New Zealand's <strong>Rangatahi Courts</strong> hold youth court proceedings on marae (communal gathering places), embedding cultural connection into the justice process and improving outcomes for M&#257;ori young people. The principle is the same: when you bring justice to the community rather than sending the young person away from it, reoffending drops.</p>
-        <p>The common thread across every proven model is clear: keeping young people connected to their community, their family and their culture, in a safe and stable environment, is the single most effective way to reduce reoffending. YouthScape is designed to do exactly this, in one house, in the Illawarra.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>What YouthScape provides</h3>
-        <p>YouthScape is a physical house in the Illawarra region. When a young person comes before Wollongong or Port Kembla Local Courts and cannot safely return home, the court can order them to YouthScape as a bail condition. At YouthScape, every service the young person needs comes to them, rather than the young person having to navigate a fragmented system alone.</p>
-        <p><strong>Safe accommodation:</strong> A stable, supervised home environment with trained staff on site, providing the safety and structure that is missing from the young person's home. This alone changes the court's calculation &mdash; where previously there was no safe option, now there is YouthScape.</p>
-        <p><strong>Legal support:</strong> ALS Wollongong caseworkers provide bail advocacy, court representation through virtual bail hearings, and ongoing legal support. Young people at YouthScape have access to laptops and technology for virtual bail court appearances, and transport to physical court hearings when needed.</p>
-        <p><strong>Health and wellbeing:</strong> Medicare-accessible health practitioners visit YouthScape to provide physical health check-ups and mental health support. Many of these young people have never had consistent access to health care. YouthScape brings the doctor to them.</p>
-        <p><strong>Education re-engagement:</strong> YouthScape supports young people to return to school or access alternative education pathways. For young people who have disengaged from school completely, this is often the first step back into a structured, positive routine.</p>
-        <p><strong>Cultural connection:</strong> Connection to culture is not an optional extra at YouthScape. It is a core part of the program &mdash; taking young people back to Country, connecting them with Elders, and rebuilding the cultural identity that is essential to long-term wellbeing.</p>
-        <p><strong>Family support:</strong> When a young person is placed in YouthScape, the support extends to their family. Parents and carers are offered drug and alcohol support, mental health services, and connection to the services they need. The goal is not just to support the young person in isolation, but to strengthen the family so that reunification is possible when it is safe.</p>
-        <p><strong>Transport coordination:</strong> The single biggest practical barrier to bail compliance is transport. YouthScape provides transport to and from court, to ALS appointments, to police reporting, to school, and to cultural activities. This alone eliminates the most common reason bail conditions are breached.</p>
-        <p><strong>The moment a child is placed on bail, the phone call goes out.</strong> IRAAC's coordinated referral system ensures that within hours of a young person being bailed to YouthScape, every service they need is contacted and scheduled. There is no gap between the bail hearing and the first support arriving.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>YouthScape as a research engine: proving what works</h3>
-        <p>One of the most important functions YouthScape serves is evidence gathering. Every young person who comes through YouthScape is interviewed and surveyed consistently and repeatedly over a number of years, using IRAAC's established survey and feedback processes &mdash; the same process that identified bail as an emerging community issue in the first place.</p>
-        <p>This gives IRAAC something that virtually no other youth bail program in Australia has: longitudinal data showing the outcomes of every young person who passes through the program. How many returned to school. How many avoided further contact with the justice system. How many re-engaged with family and culture. How their health improved. This data is not just for advocacy &mdash; it is for continuous improvement, for reporting back to government on what works, and for proving that the investment in YouthScape delivers measurable, long-term results.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>Why IRAAC is best placed to deliver YouthScape</h3>
-        <p>IRAAC is not a legal service, a health provider, or an education provider. What IRAAC is, and what makes it uniquely positioned to deliver YouthScape, is a community-led coordination organisation operating under the Local Decision Making framework &mdash; the same framework that delivered the Maranguka results in Bourke.</p>
-        <p><strong>Existing trust and reach:</strong> IRAAC already operates four contact channels &mdash; book a call, complete the survey, visit an office, request a home visit &mdash; that community members use to raise issues including bail-related barriers. The community already knows IRAAC. The referral infrastructure already exists.</p>
-        <p><strong>Established listening loop:</strong> IRAAC's core model &mdash; <em>You share, We listen, We recommend to government, We report back</em> &mdash; ensures that community feedback on what is and is not working is captured, reported to government, and used to improve the service. No other organisation in the Illawarra has this feedback infrastructure.</p>
-        <p><strong>Proven governance:</strong> IRAAC operates with a standard Board agenda and minutes framework, an annual independent Board evaluation, role-specific training, and regular reporting to Aboriginal Affairs NSW, ORIC and the ACNC. Government can fund YouthScape through IRAAC with confidence that the money will be transparently accounted for.</p>
-        <p><strong>Coordination, not duplication:</strong> IRAAC does not need to replicate what ALS, IAC, Gawura, Waminda or Youth Justice NSW already do. YouthScape connects them. ALS provides the legal advocacy. Medicare-accessible providers deliver the health care. Schools provide the education pathways. IAC provides cultural services. Youth Justice NSW provides the Youth on Bail framework. What is missing is the community-led coordination that makes sure every young person gets all of these services, at the same place, at the same time. IRAAC is the organisation that can provide that coordination.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>Recommendations</h3>
-        <p>Based on the evidence in this report, IRAAC makes the following recommendations:</p>
-        <ol style="margin:0;padding-left:22px;color:var(--charcoal-soft);">
-          <li style="margin-bottom:10px;"><strong>Fund YouthScape as a physical bail accommodation house in the Illawarra</strong> &mdash; a single property where young people on bail can live safely, with trained staff on site and a coordinated wraparound service model</li>
-          <li style="margin-bottom:10px;"><strong>Fund IRAAC to coordinate the YouthScape service model</strong> &mdash; managing referral pathways from Wollongong and Port Kembla Local Courts, coordinating ALS legal support, health services, education re-engagement, cultural connection, transport, and family support under one roof</li>
-          <li style="margin-bottom:10px;"><strong>Establish a formal partnership agreement</strong> between IRAAC, ALS Wollongong, Youth Justice NSW, and Youth on Bail providers to ensure every Aboriginal young person in the Illawarra has a guaranteed pathway from bail hearing to safe accommodation with wraparound support</li>
-          <li style="margin-bottom:10px;"><strong>Fund transport coordination within the Illawarra</strong> so that young people on bail can get to ALS appointments, court appearances, school, and police reporting without breaching conditions</li>
-          <li style="margin-bottom:10px;"><strong>Fund the longitudinal research and surveying program</strong> that tracks every young person through YouthScape over multiple years, building the evidence base for what works in reducing youth remand and reoffending</li>
-        </ol>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>How IRAAC will deliver</h3>
-        <p>IRAAC commits to the following specific actions:</p>
-        <ul>
-          <li><strong>Apply for funding</strong> to establish YouthScape as described in this report, working with ALS Wollongong, Youth Justice NSW, Illawarra Aboriginal Corporation, Gawura Aboriginal Corporation and other service partners to design a coordinated service model</li>
-          <li><strong>Build the referral infrastructure</strong> connecting Wollongong and Port Kembla Local Courts, ALS Wollongong, and Youth on Bail providers to YouthScape, ensuring warm handovers with named contacts</li>
-          <li><strong>Report to government</strong> on what is working and what needs to change, using community feedback and longitudinal data as the primary evidence base</li>
-          <li><strong>Report back to community</strong> on what changed as a result of their input &mdash; the listening-to-advocacy loop is not complete until community members know their voice led to action</li>
-          <li><strong>Continue surveying and interviewing</strong> every young person who passes through YouthScape, building a longitudinal dataset that does not exist anywhere else in Australia's youth bail system</li>
-          <li><strong>Advocate for the broader systemic reforms</strong> needed while delivering practical help in the communities IRAAC already serves</li>
-        </ul>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>A note on how this evidence was gathered</h3>
-        <p>This report is built on community feedback gathered through IRAAC's Have Your Say survey, direct conversations with community members, and analysis of national data from the Australian Institute of Health and Welfare, the Australian Bureau of Statistics, the NSW Bureau of Crime Statistics and Research, the Australian Law Reform Commission, the Australian Institute of Criminology, and published evaluations of justice programs. No identifying participant information is included. IRAAC will continue listening to community, protect personal information, and test its interpretation with Aboriginal community representatives before presenting broader conclusions.</p>
-      </div>
-
-      <div class="survey-report-actions">
-        <a class="btn btn-primary" href="https://forms.gle/b8P66C6SqjARdD9H6">Have Your Say</a>
-        <a class="btn btn-outline" href="book-a-call.html">Book a Call</a>
-        <a class="btn btn-outline" href="contact.html">Contact IRAAC</a>
-      </div>
-    </article>
-
     <article class="insight-post is-featured" id="bail-conditions-july-2026">
-      <div class="insight-meta"><span class="insight-tag">Emerging Community Report</span><span class="insight-date">July 2026 — Enhanced Edition</span></div>
+      <div class="insight-meta"><span class="insight-tag">Emerging Community Report</span><span class="insight-date">July 2026</span></div>
       <h2>Bail Conditions: An Emerging Community Issue</h2>
       <p class="survey-report-intro">Community feedback has raised bail conditions as an issue connected with Local Decision Making. The same feedback also identified transport support and uncertainty about the best next step. Taken together, these points suggest that bail can involve practical access and service-navigation challenges as well as legal requirements.</p>
-      <p>This enhanced report shares an early community signal for Aboriginal community members, government organisations, frontline workers and service partners, supported by national data, legal analysis, and evidence from proven programs. It does not identify anyone, provide legal advice or claim to describe every person's experience. Its purpose is to guide further listening and identify practical opportunities for culturally safe support.</p>
+      <p>This report shares an early community signal for Aboriginal community members, government organisations, frontline workers and service partners. It does not identify anyone, provide legal advice or claim to describe every person's experience. Its purpose is to guide further listening and identify practical opportunities for culturally safe support.</p>
 
       <div class="survey-report-callout">
-        <p><strong>The central message:</strong> Understanding bail conditions is not enough on its own. People also need clear information, reliable transport, stable housing, a trusted person to speak with, and a coordinated pathway to qualified legal and practical support. Australia's major inquiries have made the same recommendations for 34 years with negligible implementation. Community-led action is no longer optional &mdash; it is essential.</p>
+        <p><strong>The central message:</strong> understanding bail conditions may not be enough on its own. People may also need clear information, reliable transport, a trusted person to speak with and a coordinated pathway to qualified legal and practical support.</p>
       </div>
 
       <div class="survey-report-section">
-        <h3>The national picture: what the data shows</h3>
-        <p>According to the Australian Bureau of Statistics <em>Prisoners in Australia 2024</em>, Aboriginal and Torres Strait Islander adults are incarcerated at a rate of <strong>2,617 per 100,000</strong> &mdash; compared to 177 per 100,000 for non-Indigenous adults. That is a ratio of <strong>14.8 to 1</strong>. For remand specifically, the ratio is even higher: Indigenous people are <strong>16 times more likely</strong> to be held on remand.</p>
-        <p>Nationally, <strong>41% of all Indigenous prisoners are unsentenced</strong> &mdash; they have not been convicted of any offence. They are waiting for their matter to be finalised, often because they cannot meet bail conditions designed for circumstances that bear no resemblance to their own.</p>
-        <p>The Australian Institute of Criminology's <em>Bail and Remand in Australia</em> report (2024) found that <strong>66% of Indigenous remandees did not have stable housing</strong> at the time of their arrest, compared to 35% of non-Indigenous remandees. <strong>42% reported that lack of transport prevented them from complying with bail conditions</strong> &mdash; nearly double the rate for non-Indigenous people.</p>
-        <p>These are not questions about guilt or innocence. They are questions about whether the bail system accommodates the realities of Aboriginal life in Australia. On the current evidence, it does not.</p>
+        <h3>What the feedback is pointing to</h3>
+        <ul>
+          <li>Bail conditions can intersect with transport, communication and access to services.</li>
+          <li>Uncertainty about the next step may indicate a need for clearer navigation and warm referrals.</li>
+          <li>Local knowledge should help shape how bail-related support is designed and delivered.</li>
+          <li>Trusted Aboriginal organisations can play an important role in connecting people with appropriate legal and practical assistance.</li>
+          <li>More community engagement is needed to understand which barriers create the greatest difficulty and what support would make the most difference.</li>
+        </ul>
       </div>
 
       <div class="survey-report-section">
-        <h3>State by state: where the problem is worst</h3>
-        <p>The national figures mask profound variation between jurisdictions. The data below is drawn from ABS Prisoners in Australia 2024 and state justice department data.</p>
+        <h3>What this may mean in practice</h3>
+        <p><strong>Access is part of successful follow-through.</strong> If transport, location, timing or communication make it difficult to attend an appointment or reach a service, providing information alone may not resolve the problem. Practical barriers should be identified early and included in support planning.</p>
+        <p><strong>People need a clear next step.</strong> Bail can involve different organisations and responsibilities. A named contact, plain-language explanation and warm referral can be more useful than asking someone to navigate several services alone.</p>
+        <p><strong>Cultural safety and local relationships matter.</strong> Support should be shaped with Aboriginal community leadership and delivered through trusted relationships wherever possible. IRAAC's role is to listen, connect and advocate, while qualified legal services provide legal advice.</p>
+      </div>
+
+      <div class="survey-report-section">
+        <h3>What this means for each audience</h3>
         <div class="survey-report-audiences">
           <div class="survey-report-audience">
-            <h4>New South Wales</h4>
-            <p><strong>Rate:</strong> 2,221 per 100,000<br><strong>Remand share:</strong> 28%<br>Has s 3A Aboriginal bail consideration. Bail support exists but is underfunded.</p>
+            <h4>For Aboriginal community members</h4>
+            <p>You can start by explaining what is making the situation difficult, including transport, communication or uncertainty about where to go. You should be able to ask for information in plain language and request help connecting with a qualified legal or support service.</p>
           </div>
           <div class="survey-report-audience">
-            <h4>Victoria</h4>
-            <p><strong>Rate:</strong> 1,769 per 100,000<br><strong>Remand share:</strong> 17%<br>Has s 3AAA bail provision. Koori Courts show 32% lower reoffending. Lowest remand &mdash; proof the right approach works.</p>
+            <h4>For government organisations</h4>
+            <p>Funding should recognise the practical conditions that help people understand requirements, reach appointments and remain connected to support. Locally designed transport, navigation and culturally safe referral pathways are important areas for further investigation.</p>
           </div>
           <div class="survey-report-audience">
-            <h4>Queensland</h4>
-            <p><strong>Rate:</strong> 2,780 per 100,000<br><strong>Remand share:</strong> 36%<br>No Aboriginal-specific bail provision. ALRC recommended one in 2017 &mdash; still not done.</p>
+            <h4>For frontline workers</h4>
+            <p>Ask about immediate practical barriers, explain your role clearly and avoid giving legal advice unless qualified to do so. Where legal help is needed, make a warm referral and confirm who owns the next action.</p>
           </div>
           <div class="survey-report-audience">
-            <h4>Western Australia</h4>
-            <p><strong>Rate:</strong> 3,847 per 100,000<br><strong>Remand share:</strong> 44%<br>No Aboriginal-specific provision. Remote distances make standard bail conditions impossible.</p>
-          </div>
-          <div class="survey-report-audience">
-            <h4>South Australia</h4>
-            <p><strong>Rate:</strong> 2,976 per 100,000<br><strong>Remand share:</strong> 31%<br>No Aboriginal-specific provision. One of the highest Indigenous imprisonment ratios.</p>
-          </div>
-          <div class="survey-report-audience">
-            <h4>Northern Territory</h4>
-            <p><strong>Rate:</strong> 4,446 per 100,000<br><strong>Remand share:</strong> 79%<br>No Aboriginal-specific provision. Nearly 4 in 5 Indigenous prisoners are unsentenced.</p>
-          </div>
-          <div class="survey-report-audience">
-            <h4>Tasmania</h4>
-            <p><strong>Rate:</strong> 1,904 per 100,000<br><strong>Remand share:</strong> 24%<br>No Aboriginal-specific provision. Bail support proposed but limited.</p>
-          </div>
-          <div class="survey-report-audience">
-            <h4>ACT</h4>
-            <p><strong>Rate:</strong> 1,858 per 100,000<br><strong>Remand share:</strong> 22%<br>General background consideration (s 22(2)). Circle Sentencing provides restorative options.</p>
+            <h4>For community and service partners</h4>
+            <p>Map existing legal, transport and support pathways together. Clear referral responsibilities can reduce gaps, avoid repeated storytelling and make it easier for people to reach the right help.</p>
           </div>
         </div>
-        <p><strong>Key observation:</strong> The two jurisdictions with Aboriginal-specific bail provisions (NSW and Victoria) have the lowest Indigenous remand proportions. The jurisdictions with the highest remand (NT at 79%, WA at 44%) have none. This is not a coincidence.</p>
       </div>
 
       <div class="survey-report-section">
-        <h3>What the community is telling us</h3>
-        <p>IRAAC's July 2026 Monthly Survey captured questions directly from Aboriginal community members about the practical barriers they face. These questions are directly relevant to bail because the same barriers &mdash; transport, housing, needing a trusted contact &mdash; are what prevent people from complying with bail conditions.</p>
-        <p>Community members asked: <em>Can an IRAAC worker visit my home or community if getting to an office is difficult? What support is available for families and for people dealing with several needs at once? Can practical barriers, including transport and access, be considered when support is arranged?</em></p>
-        <p>These questions tell us that the same problems driving the national remand crisis are the problems people face every day just trying to access support. A person who cannot get to an IRAAC office for a conversation also cannot get to a police station to report for bail, or to a court for a hearing.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>What the law requires</h3>
-        <p>The High Court of Australia has established clear principles. In <strong>Bugmy v The Queen [2013] HCA 37</strong>, the Court unanimously held that the effects of childhood deprivation do not diminish with time or repeat offending, and that "full weight" must be given to this consideration in every decision affecting an Aboriginal person in the criminal justice system &mdash; including bail. In <strong>Fernando (1992) 76 A Crim R 58</strong>, the NSW Supreme Court set out eight principles requiring courts to consider community circumstances and systemic disadvantage.</p>
-        <p>Section 3A of the <em>Bail Act 2013</em> (NSW) requires bail authorities to consider a person's Aboriginal cultural background, cultural obligations, and any issues arising from them in every bail decision. However, the ALRC found this provision is inconsistently applied &mdash; often treated as a box-ticking exercise. Only NSW and Victoria have this provision. The ALRC recommended in 2017 that all jurisdictions adopt it. Six of eight have not.</p>
-        <p>The UN Special Rapporteur on the Rights of Indigenous Peoples specifically identified NSW's "show cause" bail provisions as <strong>discriminatory</strong> during his 2023 visit to Australia. Australia's obligations under UNDRIP (Articles 2, 7, 10) and the Tokyo Rules (requiring pre-trial detention as a "means of last resort") reinforce the case for reform.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>What has already been said &mdash; and not done</h3>
-        <p>The same recommendations about bail and Aboriginal over-incarceration have been made by every major inquiry for 34 years:</p>
+        <h3>Practical recommendations</h3>
         <ul>
-          <li><strong>Royal Commission into Aboriginal Deaths in Custody (1991):</strong> 339 recommendations including bail-specific ones. The Indigenous imprisonment rate has <em>doubled</em> since. 474 additional deaths in custody.</li>
-          <li><strong>ALRC Pathways to Justice (2017):</strong> 35 recommendations, five bail-specific. No jurisdiction has fully implemented them.</li>
-          <li><strong>NSW Select Committee on High Aboriginal Incarceration (2022):</strong> Recommended abolition of "show cause" for Aboriginal young people. The NSW Government <strong>rejected</strong> key recommendations.</li>
-          <li><strong>UN Special Rapporteur (2023):</strong> Identified "show cause" as discriminatory. No legislative response.</li>
-          <li><strong>Closing the Gap (2020):</strong> Targets 10 and 11 (reducing incarceration and detention) are <strong>both not on track</strong>. The incarceration rate has increased since the targets were set.</li>
-        </ul>
-        <p>The problems are well understood, the solutions are well documented, and the implementation has been negligible. This is why community-led action is the only path that has not been tried.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>What works: the ALS Nowra bail advocacy model</h3>
-        <p>Among all proven bail support models, the <strong>Aboriginal Legal Service (NSW/ACT) Bail Advocacy Program</strong> is the most immediately scalable solution. Unlike justice reinvestment projects (which require years of multi-agency coordination) or specialised court models (which need legislative reform), ALS operates entirely within the existing legal framework. It requires no new legislation, no new courtrooms, and no structural changes to the judiciary. It simply needs funding.</p>
-        <p>The ALS operates an office at <strong>89 Plunkett Street, Nowra</strong>, with a dedicated Family Violence Prevention Unit at Unit 2, 64 North Street. ALS Nowra already provides criminal law representation, bail advocacy, and culturally safe legal support to Aboriginal people across the South Coast region. The office is staffed by Aboriginal and Torres Strait Islander caseworkers who understand the community, the kinship structures, and the practical barriers people face when navigating the bail system.</p>
-        <p>But ALS Nowra is operating under severe, ongoing funding constraints. Peak bodies report that funding has fallen in real terms while regional case demands have doubled. High staff burnout and localised &ldquo;service freezes&rdquo; occur when caseloads become unsustainable. Expanding ALS Nowra is the single most effective and most achievable step the NSW Government can take to reduce Aboriginal remand rates in the region.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>The virtual bail crisis</h3>
-        <p>The NSW Government has centralised urgent bail hearings through <strong>virtual bail courts</strong> &mdash; where a person refused bail by regional police appears via video link rather than in a physical courtroom. In principle, this should improve access. In practice, it has created a new set of problems.</p>
-        <p>Virtual bail hearings were rolled out without dedicated funding for ALS to staff them. ALS Nowra lawyers are expected to appear in virtual hearings on top of their existing caseloads, with no additional resources for the video-link technology, preparation time, or the extended hours these hearings require. The result is that Aboriginal people in the Nowra region go into bail hearings without proper representation, without a caseworker who has had time to prepare a complete picture of their circumstances, and without the advocacy that could make the difference between remand and release on culturally appropriate conditions.</p>
-        <p>The long-term solution is not to scrap virtual bail courts &mdash; they reduce the need for people to travel long distances to court, which is itself a barrier. The solution is to <strong>fund ALS Nowra properly to staff them</strong>: dedicated virtual bail lawyers, video-link infrastructure at the ALS office, and compensation for after-hours work. This is a straightforward resourcing problem, not a legislative one, and it can be solved immediately with targeted funding.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>How IRAAC can oversee and manage ALS Nowra funding</h3>
-        <p>IRAAC is not a legal service and does not provide legal advice. What IRAAC can do &mdash; and what the evidence in this report demonstrates IRAAC is uniquely positioned to do &mdash; is <strong>manage the funding, coordination, and accountability framework</strong> that allows ALS Nowra to operate at full capacity.</p>
-        <p><strong>Funding oversight:</strong> IRAAC's governance structure &mdash; standard Board agenda and minutes framework, annual independent Board evaluation, role-specific training, and regular reporting to Aboriginal Affairs NSW, ORIC, and the ACNC &mdash; means any funding directed through IRAAC can be properly acquitted and reported against. Government can fund IRAAC with confidence that the money will be spent for its intended purpose and transparently accounted for.</p>
-        <p><strong>Coordinated referral pathways:</strong> IRAAC already operates the four direct contact channels &mdash; book a call, complete the survey, visit an office, request a home visit &mdash; that community members use to raise issues including bail-related barriers. IRAAC can build structured referral pathways from these channels directly to ALS Nowra, ensuring that every person who needs bail advocacy reaches a qualified caseworker without falling through gaps.</p>
-        <p><strong>Transport and practical support:</strong> The single biggest barrier to bail compliance in the Nowra region is transport. IRAAC, with appropriate funding, can provide transport coordination &mdash; getting people from their communities to the ALS office, to court, and to police reporting stations &mdash; alongside ALS's legal advocacy. This directly addresses the 42% of Indigenous remandees who report lack of transport as a barrier to bail compliance.</p>
-        <p><strong>Closing the listening loop:</strong> IRAAC's core model &mdash; <em>You share, We listen, We recommend to government, We report back</em> &mdash; ensures that community feedback on what is and is not working with ALS Nowra services is captured, reported to government, and used to improve the service. This is the accountability mechanism that government-run programs consistently lack.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>What this means for ALS Nowra, concretely</h3>
-        <p>With adequate funding overseen and coordinated by IRAAC, ALS Nowra could:</p>
-        <ul>
-          <li><strong>Hire additional solicitors and caseworkers</strong> to eliminate service freezes and ensure every Aboriginal person in the Nowra region has access to bail advocacy when they need it</li>
-          <li><strong>Fund dedicated virtual bail court staff</strong> so that virtual hearings are properly resourced and defendants are not appearing without representation</li>
-          <li><strong>Expand the Family Violence Prevention Unit</strong> to include non-legal caseworkers who can bridge the gap between court representation and immediate safety planning, reducing family out-of-home care interventions</li>
-          <li><strong>Purchase and install video-link technology</strong> at the Plunkett Street office for virtual bail hearings, so defendants can speak with their ALS lawyer privately before appearing before a magistrate on screen</li>
-          <li><strong>Partner with IRAAC for transport coordination</strong> so that getting to the ALS office, to court, and to police reporting is no longer a barrier to bail compliance</li>
-          <li><strong>Provide outreach services</strong> to Aboriginal communities across the South Coast, not just in Nowra itself &mdash; meeting people where they are rather than expecting them to travel</li>
-        </ul>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>Why this model works: evidence from what already exists</h3>
-        <p>The evidence base for this approach is strong. The ALS bail advocacy program is consistently cited by the ALRC Pathways to Justice report as a <strong>protective factor</strong> &mdash; meaning that Aboriginal people who have ALS representation at the bail stage are significantly more likely to be granted bail than those who do not. The <strong>Maranguka Justice Reinvestment Project</strong> in Bourke &mdash; a community-led program operating under the same LDM framework as IRAAC &mdash; achieved a 14% to 41% reduction in adult bail breaches, a 42% drop in adult custody days, a 23% reduction in police-recorded domestic violence, and a 31% rise in Year 12 student retention, delivering $3.1 million in regional and justice benefit in a single year (KPMG Independent Evaluation, 2018).</p>
-        <p>Victoria's <strong>Koori Courts</strong> show 32% lower reoffending over 24 months compared to mainstream courts. Canada's <strong>Gladue Courts</strong> &mdash; requiring bail authorities to consider systemic factors through dedicated caseworker reports &mdash; provide an international template that Australia should adopt, but which requires legislative change. The ALS + IRAAC model does not need legislative change. It can be funded and operational within a budget cycle.</p>
-        <p>These are not theoretical projections. These are measured outcomes from programs operating under the same framework IRAAC operates within.</p>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>Recommendations to government</h3>
-        <p>Based on community feedback, national data, legal principles, and proven models, IRAAC makes the following recommendations. The first five are the immediate priority for the Nowra region. Recommendations six to ten are broader systemic reforms that IRAAC will continue to advocate for.</p>
-        <p><strong>Immediate priorities for the Nowra region:</strong></p>
-        <ol style="margin:0;padding-left:22px;color:var(--charcoal-soft);">
-          <li style="margin-bottom:10px;"><strong>Fund ALS Nowra for additional solicitors and caseworkers</strong> to eliminate service freezes and ensure every Aboriginal person in the region has access to bail advocacy. Direct funding through IRAAC for oversight, acquittal, and coordination.</li>
-          <li style="margin-bottom:10px;"><strong>Fund dedicated virtual bail court resources for ALS Nowra</strong> &mdash; including video-link infrastructure at the Plunkett Street office, dedicated virtual bail lawyers, and compensation for after-hours hearings. This is the single most urgent gap in the current system.</li>
-          <li style="margin-bottom:10px;"><strong>Establish IRAAC as the transport coordination partner for ALS Nowra</strong> &mdash; providing funded transport to court, police reporting, and ALS appointments. Transport is the #1 practical barrier for 42% of Indigenous remandees.</li>
-          <li style="margin-bottom:10px;"><strong>Expand the ALS Nowra Family Violence Prevention Unit</strong> to include non-legal caseworkers for early intervention and safety planning, reducing the number of Aboriginal women and children entering the out-of-home care system through bail-related pathways.</li>
-          <li style="margin-bottom:10px;"><strong>Fund IRAAC to build structured referral pathways</strong> from its four contact channels (call, survey, drop-in, home visit) directly to ALS Nowra, ensuring every community member who needs bail advocacy is connected to a qualified caseworker.</li>
-        </ol>
-        <p><strong>Broader systemic reforms IRAAC will continue to advocate for:</strong></p>
-        <ol style="margin:0;padding-left:22px;color:var(--charcoal-soft);" start="6">
-          <li style="margin-bottom:10px;"><strong>Adopt ALRC Recommendation 5-1 in all jurisdictions</strong> &mdash; requiring bail authorities to consider Aboriginal cultural background. Six of eight jurisdictions lack this.</li>
-          <li style="margin-bottom:10px;"><strong>Reform "show cause" provisions</strong> that disproportionately affect Aboriginal defendants, as identified by the UN Special Rapporteur and the NSW 2022 parliamentary inquiry.</li>
-          <li style="margin-bottom:10px;"><strong>Invest in culturally safe bail accommodation</strong> &mdash; 66% of Indigenous remandees lack stable housing.</li>
-          <li style="margin-bottom:10px;"><strong>Mandate data collection</strong> on bail outcomes by Indigenous status, gender, age, and location (ALRC Recommendation 5-2).</li>
-          <li style="margin-bottom:10px;"><strong>Adopt justice reinvestment</strong> as the overarching framework for reducing remand, scaling the Maranguka model across NSW.</li>
-        </ol>
-      </div>
-
-      <div class="survey-report-section">
-        <h3>How IRAAC will deliver</h3>
-        <p>IRAAC commits to the following specific actions:</p>
-        <ul>
-          <li><strong>Apply for funding</strong> to establish the transport coordination and referral pathway model described in this report, working with ALS Nowra to design a service that meets community needs</li>
-          <li><strong>Build the referral infrastructure</strong> connecting IRAAC's four contact channels to ALS Nowra, ensuring warm handovers with named contacts</li>
-          <li><strong>Report to government</strong> on what is working and what needs to change, using community feedback as the primary evidence base</li>
-          <li><strong>Report back to community</strong> on what changed as a result of their input &mdash; the listening-to-advocacy loop is not complete until community members know their voice led to action</li>
-          <li><strong>Continue gathering evidence</strong> on bail-related barriers in the Nowra region, with particular attention to the impact of virtual bail courts and transport access</li>
-          <li><strong>Advocate for the broader systemic reforms</strong> listed above while delivering practical help in the communities IRAAC already serves</li>
+          <li>Develop a culturally safe bail-support and navigation pathway with Aboriginal organisations and qualified legal services.</li>
+          <li>Ask about transport barriers early and connect people with practical travel planning or assistance where available.</li>
+          <li>Provide plain-language information, with interpreters or other communication support where needed.</li>
+          <li>Create warm-referral arrangements so people are not left to navigate legal, transport and community services alone.</li>
+          <li>Strengthen coordination between Aboriginal community-controlled organisations, legal services, transport providers and relevant government agencies.</li>
+          <li>Gather further community feedback before making broad claims or final policy recommendations.</li>
+          <li>Report back to community on what IRAAC recommended and what government and service organisations did in response.</li>
         </ul>
       </div>
 
       <div class="survey-report-section">
         <h3>Building the evidence responsibly</h3>
-        <p>This is an emerging signal rather than a population estimate. Community feedback is indicative of themes rather than a statistically representative sample. The national data is drawn from the most authoritative sources available (ABS, AIHW, AIC). The legal analysis is not legal advice &mdash; anyone seeking legal assistance should contact the Aboriginal Legal Service (NSW/ACT) or a qualified legal practitioner.</p>
-        <p>No identifying participant information is included in this report. IRAAC will continue listening to community, protect personal information, and test its interpretation with Aboriginal community representatives before presenting broader conclusions.</p>
+        <p>This is an emerging signal rather than a population estimate. IRAAC will continue listening to community, protect personal information and test its interpretation with Aboriginal community representatives before presenting broader conclusions. No identifying participant information is included in this report.</p>
       </div>
 
       <div class="survey-report-actions">
@@ -604,8 +406,7 @@ footer.site-footer { background: var(--charcoal); color: var(--sand); padding: 4
       </div>
     </article>
 
-    
-      <div class="insight-post">
+    <div class="insight-post">
       <div class="insight-meta"><span class="insight-tag">Governance</span><span class="insight-date">July 2026</span></div>
       <h2>Why Governance Is the Foundation of Strong Community Programs</h2>
       <p>It's easy to think of governance as paperwork &mdash; the meetings, the minutes, the reports that sit behind the programs people actually see and feel the benefit of. But good governance is what makes those programs possible in the first place. A Board that meets regularly, keeps clear records of its decisions, and reports honestly on what's working and what isn't is a Board that funders, partners and community can trust with more responsibility over time.</p>

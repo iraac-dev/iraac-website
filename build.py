@@ -20,6 +20,7 @@ IMG = {
 }
 
 SURVEY_URL = "https://forms.gle/b8P66C6SqjARdD9H6"
+LOGIN_URL = "https://admin.iraac-aco.com/mob-link"
 
 CSS = """
 :root {
@@ -46,6 +47,8 @@ header.site-header { background: var(--charcoal); color: var(--cream); position:
 nav.main-nav ul { list-style: none; display: flex; gap: 22px; margin: 0; padding: 0; flex-wrap: wrap; }
 nav.main-nav a { text-decoration: none; color: var(--sand); font-size: 0.92rem; font-weight: 500; border-bottom: 2px solid transparent; padding-bottom: 4px; }
 nav.main-nav a:hover, nav.main-nav a.active { color: var(--ochre); border-bottom-color: var(--ochre); }
+.nav-login { display: inline-block; background: var(--ochre); color: var(--cream) !important; font-size: 0.85rem; font-weight: 700; padding: 8px 18px; border-radius: 4px; border-bottom: none !important; letter-spacing: 0.02em; transition: background .15s; }
+.nav-login:hover { background: var(--ochre-dark); color: var(--cream) !important; border-bottom: none !important; }
 .nav-toggle { display: none; background: none; border: none; color: var(--cream); font-size: 1.6rem; cursor: pointer; }
 @media (max-width: 860px) {
   nav.main-nav { display: none; width: 100%; padding: 0 0 14px; }
@@ -252,7 +255,7 @@ def header(active):
   <div class="header-inner">
     <a href="index.html" class="wordmark">IRAAC<span>.</span></a>
     <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
-    <nav class="main-nav"><ul>{links}</ul></nav>
+    <nav class="main-nav"><ul>{links}<li><a href="{LOGIN_URL}" class="nav-login">&#128274; Login</a></li></ul></nav>
   </div>
 </header>
 """
