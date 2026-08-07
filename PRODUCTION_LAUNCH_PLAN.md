@@ -212,6 +212,13 @@ are stable so another agent can take over without re-planning.
 | `REL-P4` | Small named AI-consented pilot | Community speech/accessibility testing, `VOICE-002` | Immediate IRAAC/AI/purpose disclosure, permission to continue, human alternative, quiet hours, caller ID, return number and stop handling are evidenced |
 | `RPT-001` | Reproducible de-identified snapshot and three draft report views | Stable governed response base | Metrics reproduce from locked snapshot; small cells/quotes are suppressed; every publication still requires named human approval |
 
+### Phase 7 / R9 — Service Connector + 1800 Mob Link pilot
+
+| ID | Work package | Depends on | Done when |
+|---|---|---|---|
+| `MOB-001` | Public roadmap pointer to the private Service Connector + 1800 Mob Link platform work | R5, platform roadmap | Website docs state the program is proposed, not live, and keep sensitive design in `iraac-platform` |
+| `MOB-PUBLIC-001` | Future public information page, only after approval | `REL-MOB-PILOT` in `iraac-platform` | Page explains the approved service, routes crisis needs safely and links to the governed platform without collecting sensitive data in the static site |
+
 ## 6. Agent operating contract
 
 Every agent starts by reading, in order:

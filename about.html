@@ -24,14 +24,16 @@ a { color: inherit; }
 img { max-width: 100%; display: block; }
 .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
 header.site-header { background: var(--charcoal); color: var(--cream); position: sticky; top: 0; z-index: 50; }
-.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 11px 24px; max-width: var(--max-width); margin: 0 auto; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; max-width: var(--max-width); margin: 0 auto; }
 .wordmark { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.06em; text-decoration: none; color: var(--cream); }
 .wordmark span { color: var(--ochre); }
 nav.main-nav ul { list-style: none; display: flex; gap: 22px; margin: 0; padding: 0; flex-wrap: wrap; }
 nav.main-nav a { text-decoration: none; color: var(--sand); font-size: 0.92rem; font-weight: 500; border-bottom: 2px solid transparent; padding-bottom: 4px; }
 nav.main-nav a:hover, nav.main-nav a.active { color: var(--ochre); border-bottom-color: var(--ochre); }
+.nav-login { display: inline-block; background: var(--ochre); color: var(--cream) !important; font-size: 0.85rem; font-weight: 700; padding: 8px 18px; border-radius: 4px; border-bottom: none !important; letter-spacing: 0.02em; transition: background .15s; }
+.nav-login:hover { background: var(--ochre-dark); color: var(--cream) !important; border-bottom: none !important; }
 .nav-toggle { display: none; background: none; border: none; color: var(--cream); font-size: 1.6rem; cursor: pointer; }
-@media (max-width: 960px) {
+@media (max-width: 860px) {
   nav.main-nav { display: none; width: 100%; padding: 0 0 14px; }
   nav.main-nav.open { display: block; }
   nav.main-nav ul { flex-direction: column; gap: 12px; }
@@ -44,8 +46,8 @@ nav.main-nav a:hover, nav.main-nav a.active { color: var(--ochre); border-bottom
 .eyebrow { color: var(--ochre); text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.8rem; font-weight: 700; margin-bottom: 14px; }
 .hero h1 { font-size: 2.7rem; line-height: 1.15; margin: 0 0 20px; }
 .hero p { font-size: 1.15rem; color: var(--sand); max-width: 620px; }
-.page-hero { position: relative; color: var(--cream); padding: 80px 0 70px; background: radial-gradient(ellipse at top right, rgba(193,99,31,0.28) 0%, transparent 55%), linear-gradient(135deg, #201c1a 0%, #322b26 55%, #4a2812 100%); isolation: isolate; overflow: hidden; }
-.page-hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 20% 30%, rgba(193,99,31,0.10) 0%, transparent 50%); z-index: -1; }
+.page-hero { position: relative; color: var(--cream); padding: 70px 0 60px; background-size: cover; background-position: center; isolation: isolate; }
+.page-hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(20,16,14,0.90) 20%, rgba(32,28,26,0.6) 100%); z-index: -1; }
 .page-hero h1 { font-size: 2.2rem; margin: 0 0 12px; }
 .page-hero p { color: var(--sand); max-width: 640px; font-size: 1.05rem; }
 .btn { display: inline-block; padding: 13px 26px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 0.95rem; margin-right: 14px; margin-top: 10px; }
@@ -74,7 +76,7 @@ p.section-lead { color: var(--muted); max-width: 680px; font-size: 1.05rem; marg
 @media (max-width: 860px) { .program-hero { grid-template-columns: 1fr; } .program-hero img { height: 200px; } }
 .program-block .tag { display: inline-block; background: var(--sand); color: var(--charcoal); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 3px; margin-bottom: 12px; }
 .program-block h2 { font-size: 1.7rem; color: var(--ochre-dark); margin: 0 0 12px; }
-.note-box { display: none; }
+.note-box { background: var(--sand); border-left: 4px solid var(--ochre); padding: 18px 22px; border-radius: 4px; font-size: 0.95rem; color: var(--charcoal-soft); margin: 24px 0; }
 .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px; }
 .contact-card { background: #fff; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; padding: 26px; }
 .contact-card .icon { font-size: 1.8rem; margin-bottom: 10px; }
@@ -152,6 +154,28 @@ footer.site-footer { background: var(--charcoal); color: var(--sand); padding: 4
 .insight-post h2 { font-size: 1.55rem; color: var(--ochre-dark); margin: 0 0 14px; }
 .insight-post p { color: var(--charcoal-soft); max-width: 720px; }
 .insight-post p + p { margin-top: 12px; }
+.insight-post.is-featured { background: #fff; border: 1px solid rgba(0,0,0,0.08); border-top: 5px solid var(--ochre); border-radius: 12px; padding: 34px; margin: 8px 0 48px; box-shadow: 0 12px 32px rgba(32,28,26,0.06); }
+.insight-post.is-featured h2 { font-size: 2rem; line-height: 1.2; }
+.survey-report-intro { font-size: 1.08rem; }
+.survey-report-callout { background: var(--sand); border-left: 4px solid var(--ochre); border-radius: 4px; padding: 18px 20px; margin: 24px 0 30px; }
+.survey-report-callout p { margin: 0; }
+.survey-report-section { margin-top: 32px; }
+.survey-report-section h3 { color: var(--ochre-dark); font-size: 1.25rem; margin: 0 0 10px; }
+.survey-report-section ul { margin: 12px 0 0; padding-left: 22px; color: var(--charcoal-soft); }
+.survey-report-section li + li { margin-top: 9px; }
+.survey-report-audiences { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
+.survey-report-audience { background: var(--cream); border: 1px solid rgba(0,0,0,0.07); border-radius: 8px; padding: 20px; }
+.survey-report-audience h4 { color: var(--ochre-dark); font-size: 1rem; margin: 0 0 8px; }
+.survey-report-audience p { font-size: 0.94rem; margin: 0; }
+.survey-report-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.survey-report-actions .btn { margin: 0; }
+.survey-report-actions .btn-outline { color: var(--ochre-dark); border-color: var(--ochre-dark); }
+@media (max-width: 640px) {
+  .insight-post.is-featured { padding: 26px 20px; }
+  .insight-post.is-featured h2 { font-size: 1.65rem; }
+  .survey-report-audiences { grid-template-columns: 1fr; }
+  .survey-report-actions .btn { width: 100%; text-align: center; }
+}
 
 /* Sector / system explainer */
 .system-block { padding: 40px 0; border-bottom: 1px solid rgba(0,0,0,0.08); }
@@ -165,17 +189,6 @@ footer.site-footer { background: var(--charcoal); color: var(--sand); padding: 4
 /* Book a call */
 .call-card { background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 36px; max-width: 560px; }
 .call-card .duration { display:inline-block; background: var(--sand); color: var(--charcoal); font-weight:700; font-size:0.8rem; padding:5px 12px; border-radius:999px; margin-bottom:16px; }
-
-/* Voice strip — the four ways to be heard, pinned in the header on every page */
-.voice-strip { background: #2a2420; border-top: 1px solid rgba(250,246,239,0.08); }
-.voice-strip .vs-inner { max-width: var(--max-width); margin: 0 auto; padding: 6px 28px; display: flex; align-items: center; gap: 6px 18px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-.voice-strip .vs-inner::-webkit-scrollbar { display: none; }
-.voice-strip .vs-label { color: #c9beb2; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
-.voice-strip a { display: inline-flex; align-items: center; gap: 6px; color: #faf6ef; text-decoration: none; font-size: 0.8rem; font-weight: 600; padding: 4px 12px; border: 1px solid rgba(250,246,239,0.22); border-radius: 999px; white-space: nowrap; flex-shrink: 0; transition: border-color .15s ease, background .15s ease, color .15s ease; }
-.voice-strip a:hover, .voice-strip a:focus-visible { border-color: #d06a2a; color: #d06a2a; background: rgba(208,106,42,0.08); }
-.voice-strip a.vs-primary { background: #c1631f; border-color: #c1631f; }
-.voice-strip a.vs-primary:hover, .voice-strip a.vs-primary:focus-visible { background: #d06a2a; border-color: #d06a2a; color: #faf6ef; }
-@media (max-width: 560px) { .voice-strip .vs-label { display: none; } .voice-strip .vs-inner { padding: 8px 16px; } }
 </style>
 </head>
 <body>
@@ -187,24 +200,47 @@ footer.site-footer { background: var(--charcoal); color: var(--sand); padding: 4
 <li><a href="about.html" class="active">Our Story</a></li>
 <li><a href="programs.html">Our Programs</a></li>
 <li><a href="governance.html">Governance & Reporting</a></li>
+<li><a href="support.html">Supporting Other Organisations</a></li>
+<li><a href="news.html">News</a></li>
 <li><a href="insights.html">Insights</a></li>
 <li><a href="contact.html">Contact</a></li>
-</ul></nav>
+<li><a href="https://admin.iraac-aco.com/mob-link" class="nav-login">&#128274; Login</a></li></ul></nav>
   </div>
-<div class="voice-strip" aria-label="Ways to have your voice heard">
-  <div class="vs-inner">
-    <span class="vs-label">Have your voice heard:</span>
-    <a class="vs-primary" href="book-a-call.html"><span aria-hidden="true">&#128222;</span>Book a Call</a>
-    <a href="https://forms.gle/b8P66C6SqjARdD9H6"><span aria-hidden="true">&#128203;</span>Have Your Say</a>
-    <a href="offices.html"><span aria-hidden="true">&#127968;</span>Drop In</a>
-    <a href="contact.html#home-visit"><span aria-hidden="true">&#128100;</span>Home Visit</a>
-  </div>
-</div>
 </header>
 
+<section class="frontdoor">
+  <div class="container">
+    <div class="frontdoor-head">
+      <h2>Get in Touch &mdash; Choose What Works for You</h2>
+      <p>Whatever brings you here, IRAAC is here to help. Pick one of the four options below to get started right now.</p>
+    </div>
+    <div class="frontdoor-grid">
+      <a class="fd-card is-primary" href="book-a-call.html">
+        <span class="fd-icon">&#128197;</span>
+        <h3>Book a Free 15-Min Call</h3>
+        <p>Speak with an experienced IRAAC officer &mdash; free, no obligation, over the phone.</p>
+      </a>
+      <a class="fd-card" href="offices.html">
+        <span class="fd-icon">&#127968;</span>
+        <h3>Visit a Local Office</h3>
+        <p>Drop in and speak with someone from IRAAC face to face.</p>
+      </a>
+      <a class="fd-card" href="contact.html#home-visit">
+        <span class="fd-icon">&#128100;</span>
+        <h3>Request a Home Visit</h3>
+        <p>Ask an IRAAC officer to come to you, at a time that works.</p>
+      </a>
+      <a class="fd-card" href="https://forms.gle/b8P66C6SqjARdD9H6">
+        <span class="fd-icon">&#128203;</span>
+        <h3>Complete a Survey</h3>
+        <p>Tell us a bit about what you need &mdash; takes about two minutes.</p>
+      </a>
+    </div>
+  </div>
+</section>
 
 
-<section class="page-hero">
+<section class="page-hero" style="background-image:url('https://picsum.photos/seed/iraac-community/1200/900');">
   <div class="container">
     <div class="eyebrow">About Us</div>
     <h1>Our Story</h1>
@@ -213,13 +249,13 @@ footer.site-footer { background: var(--charcoal); color: var(--sand); padding: 4
 </section>
 
 <section>
-  <div class="container" style="max-width: 780px;">
+  <div class="container two-col">
     <div>
       <h2 class="section-title">Who We Are</h2>
       <p>IRAAC represents and serves its community through a set of programs and a growing focus on governance and organisational capability. We are a charity, run by and for community &mdash; independent of government, though we work alongside Aboriginal Affairs NSW, Alliances and Assemblies to progress the priorities community identifies for itself.</p>
       <p>This page is a starting point &mdash; the Secretary and Board should expand it with IRAAC's founding story, the community and Country it represents, and the people who lead it.</p>
     </div>
-    
+    <img src="https://picsum.photos/seed/iraac-office/700/500" alt="" />
   </div>
 </section>
 
