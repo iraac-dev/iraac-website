@@ -24,15 +24,20 @@ production launch plan are the current agent instructions.
 
 ---
 
-## 1. Mission and framing: the listening-and-advocacy model
+## 1. Mission and framing: advocacy plus direct service delivery
 
-IRAAC is an Aboriginal Community Organisation. It does not deliver services in
-the traditional sense — it *listens* to community members, *advocates* to
-government on their behalf, and *reports back* on what changed. That listen →
-advocate → report loop is the entire product. Everything the website, the
-contact groups, the phone surveys, the admin dashboard, and the reports
-system exist to do is make that loop faster, more evidenced, and more visible
-to the people involved in it.
+IRAAC is an Aboriginal Community Organisation that both advocates and delivers
+direct support programs. It listens to community members, advocates to
+government and reports back on what changed; it also builds and operates
+programs such as YouthScape, The Crew, DARC and MCC.
+
+YouthScape must be described as a real IRAAC program seeking funding and
+implementation support, not just an advocacy issue. Its intended service model
+is an Aboriginal youth crisis centre and bail accommodation pathway for the
+Illawarra, with beds, transport, cultural connection, education re-engagement,
+Aboriginal Legal Service connection, health access and wraparound care. Until
+funding, operating approvals, referral rules and site readiness are confirmed,
+public copy must not imply that every part of the service is already live.
 
 The cycle band already shown under the homepage hero states it plainly:
 **You share → We listen → We recommend to government → We report back.** Every
@@ -40,11 +45,11 @@ new feature we build should either strengthen one of those four steps or make
 the loop between them shorter. If a feature doesn't do that, it doesn't belong
 here yet.
 
-This framing shapes copy, information architecture, tone of voice, and the
-relative prominence of features. It is deliberately not a service-provider
-framing — IRAAC is not asking "how can we help you?" so much as "what should
-we take to government on your behalf, and did what we took last time actually
-work?"
+This framing shapes copy, information architecture, tone of voice and the
+relative prominence of features. IRAAC can ask both "what should we take to
+government on your behalf?" and "what practical support do you need right
+now?" Public pages must keep survey, service, referral and reporting pathways
+clear and distinct.
 
 ---
 
@@ -89,7 +94,8 @@ as the front door of the listening loop.
 | Central contact/consent store | Not built | Spreadsheets are staging only |
 | Email/SMS/voice campaigns | Not built | No provider integration, eligibility engine or suppression ledger |
 | Phone operator console | Not built | No canonical phone-assisted survey workflow |
-| 1800 Mob Link service-navigation line | Proposed strategic program | Not live; detailed governed build belongs in `iraac-platform` |
+| Location-based Aboriginal Service Connector | Proposed strategic product | Different from Have Your Say; app front door for service navigation and referral tracking |
+| 1800 Mob Link service-navigation line | Proposed strategic program | Call-centre follow-up engine; not live; detailed governed build belongs in `iraac-platform` |
 | Admin/auth/audit | Not built | No backend, roles, migrations or audit log |
 | Reporting automation | Not built | AI may draft only after governed aggregate pipeline exists |
 
@@ -164,14 +170,15 @@ whether circumstances changed. The visible product promise remains:
 
 ---
 
-## 3A. Public-site direction: 1800 Mob Link
+## 3A. Public-site direction: Service Connector + 1800 Mob Link
 
-The next strategic program concept is **1800 Mob Link**, proposed as **1800 MOB
-LINK (1800 662 5465)**: an Illawarra-first service-navigation and
-accountability line that can later expand nationally. The public promise is
-one memorable number where Aboriginal and Torres Strait Islander community
-members can ask for help finding appropriate local services, then consent to
-follow-up that checks whether the referral actually helped.
+The next strategic product concept is the **Location-based Aboriginal Service
+Connector**, backed by **1800 Mob Link**, proposed as **1800 MOB LINK (1800 662
+5465)**. This is not the Have Your Say survey. It is a future service finder
+and referral-accountability tool where Aboriginal and Torres Strait Islander
+community members can log in, search by location, see local and national
+services, request help, and consent to follow-up that checks whether the
+referral actually helped.
 
 This website must treat 1800 Mob Link as proposed, not live. It must not imply
 that IRAAC currently operates a national call centre, emergency line,
@@ -180,9 +187,10 @@ page must route urgent risk to approved emergency and specialist services such
 as 000, 13YARN or local crisis pathways.
 
 The governed build belongs in the private `iraac-platform` repository. That
-platform will need an approved service directory, consented intake, referral
-handoff, safe callback path, longitudinal outcome follow-up, de-identified
-reporting and human-reviewed publication controls before public launch.
+platform will need Clerk community login, an approved service directory,
+consented intake, referral handoff, safe callback path, longitudinal outcome
+follow-up, de-identified reporting and human-reviewed publication controls
+before public launch.
 
 Supabase Postgres remains the preferred system of record for this backbone.
 Convex may be considered only through a future architecture decision, because
