@@ -267,12 +267,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 NAV_ITEMS = [
     ("index.html", "Home"),
-    ("about.html", "Our Story"),
-    ("programs.html", "Our Programs"),
+    ("programs.html", "Programs"),
     ("insights.html", "Insights"),
 ]
 
 DROPDOWN_ITEMS = [
+    ("about.html", "Our Story"),
     ("governance.html", "Governance & Reporting"),
     ("support.html", "Support"),
     ("news.html", "News"),
