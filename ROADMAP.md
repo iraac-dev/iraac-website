@@ -89,6 +89,7 @@ as the front door of the listening loop.
 | Central contact/consent store | Not built | Spreadsheets are staging only |
 | Email/SMS/voice campaigns | Not built | No provider integration, eligibility engine or suppression ledger |
 | Phone operator console | Not built | No canonical phone-assisted survey workflow |
+| 1800 Mob Link service-navigation line | Proposed strategic program | Not live; detailed governed build belongs in `iraac-platform` |
 | Admin/auth/audit | Not built | No backend, roles, migrations or audit log |
 | Reporting automation | Not built | AI may draft only after governed aggregate pipeline exists |
 
@@ -160,6 +161,33 @@ The loop closes through re-surveying. Issues become recommendations to
 government, recommendations become tracked actions, and later surveys ask
 whether circumstances changed. The visible product promise remains:
 **You share → We listen → We recommend to government → We report back.**
+
+---
+
+## 3A. Public-site direction: 1800 Mob Link
+
+The next strategic program concept is **1800 Mob Link**, proposed as **1800 MOB
+LINK (1800 662 5465)**: an Illawarra-first service-navigation and
+accountability line that can later expand nationally. The public promise is
+one memorable number where Aboriginal and Torres Strait Islander community
+members can ask for help finding appropriate local services, then consent to
+follow-up that checks whether the referral actually helped.
+
+This website must treat 1800 Mob Link as proposed, not live. It must not imply
+that IRAAC currently operates a national call centre, emergency line,
+counselling service, legal service or crisis replacement. Any future public
+page must route urgent risk to approved emergency and specialist services such
+as 000, 13YARN or local crisis pathways.
+
+The governed build belongs in the private `iraac-platform` repository. That
+platform will need an approved service directory, consented intake, referral
+handoff, safe callback path, longitudinal outcome follow-up, de-identified
+reporting and human-reviewed publication controls before public launch.
+
+Supabase Postgres remains the preferred system of record for this backbone.
+Convex may be considered only through a future architecture decision, because
+the project needs Australian-region control, relational reporting, audit,
+restore drills and strong data-governance evidence.
 
 ---
 
