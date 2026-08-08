@@ -2456,3 +2456,104 @@ input {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== Compact Home Page ===== */
+
+.phone-shell-compact {
+  padding-top: 14px;
+}
+
+.phone-shell-compact .phone-status {
+  padding-bottom: 24px;
+}
+
+.phone-shell-compact .app-top {
+  margin-bottom: 10px;
+}
+
+.phone-shell-compact .app-top h1 {
+  font-size: clamp(2.2rem, 10vw, 3.2rem);
+}
+
+.phone-shell-compact .app-section {
+  margin-bottom: 16px;
+}
+
+.phone-shell-compact .app-section-title {
+  font-size: 1.1rem;
+}
+
+.phone-shell-compact .section-row {
+  margin-bottom: 8px;
+}
+
+.phone-shell-compact .crisis-strip {
+  margin-bottom: 14px;
+  padding: 10px 12px;
+}
+
+.phone-shell-compact .crisis-strip-title {
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+
+.phone-shell-compact .crisis-link {
+  padding: 5px 8px;
+}
+
+.phone-shell-compact .crisis-link-number {
+  font-size: 0.78rem;
+}
+
+.phone-shell-compact .crisis-link-label {
+  font-size: 0.72rem;
+}
+
+.compact-grid {
+  display: grid;
+  gap: 6px;
+}
+
+.compact-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #eeeeee;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #ffffff;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s;
+}
+
+.compact-card:hover {
+  border-color: #c0c0c0;
+}
+
+.compact-card-emoji {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+}
+
+.compact-card-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.compact-card-name {
+  font-size: 0.85rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compact-card-meta {
+  font-size: 0.72rem;
+  color: #8a8a8a;
+}
