@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { services } from "../../../data";
-import CrisisStrip from "../../../../components/app/CrisisStrip";
 import ServiceCard from "../../../../components/app/ServiceCard";
 import BottomNav from "../../../../components/app/BottomNav";
 
@@ -56,7 +55,6 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
 
-        <CrisisStrip />
 
         {nearby.length > 0 && (
           <section className="app-section">

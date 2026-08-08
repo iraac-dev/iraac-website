@@ -4,7 +4,6 @@ import { useState, useEffect, type FormEvent } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { services } from "../../../data";
 import { createReferral, saveReferral, needCategories } from "../../../../lib/referrals";
-import CrisisStrip from "../../../../components/app/CrisisStrip";
 import BottomNav from "../../../../components/app/BottomNav";
 
 export default function RequestHelpPage() {
@@ -84,7 +83,6 @@ export default function RequestHelpPage() {
               </button>
             </div>
           </div>
-          <CrisisStrip />
           <BottomNav current="/app/search" />
         </div>
       </main>
@@ -119,7 +117,6 @@ export default function RequestHelpPage() {
           </div>
         )}
 
-        <CrisisStrip />
 
         <form onSubmit={handleSubmit} className="request-form">
           <div className="request-form-group">

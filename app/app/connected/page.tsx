@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getReferrals, type Referral } from "../../../lib/referrals";
-import CrisisStrip from "../../../components/app/CrisisStrip";
 import BottomNav from "../../../components/app/BottomNav";
 
 export default function ConnectedPage() {
@@ -31,7 +30,6 @@ export default function ConnectedPage() {
           </div>
         </header>
 
-        <CrisisStrip />
 
         {referrals.length === 0 ? (
           <section className="app-section">

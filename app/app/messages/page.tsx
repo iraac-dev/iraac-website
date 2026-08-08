@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import HelpBot from "../../../components/app/HelpBot";
-import CrisisStrip from "../../../components/app/CrisisStrip";
 import BottomNav from "../../../components/app/BottomNav";
 
 export default function MessagesPage() {
@@ -44,7 +43,6 @@ export default function MessagesPage() {
           </div>
         </header>
 
-        <CrisisStrip />
 
         <div className="app-section">
           <button type="button" className="contact-us-card" onClick={() => setShowBot(true)}>

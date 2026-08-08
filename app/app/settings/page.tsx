@@ -1,5 +1,4 @@
 import Link from "next/link";
-import CrisisStrip from "../../../components/app/CrisisStrip";
 import BottomNav from "../../../components/app/BottomNav";
 
 export const metadata = {
@@ -27,7 +26,6 @@ export default function SettingsPage() {
           </div>
         </header>
 
-        <CrisisStrip />
 
         <section className="app-section">
           <div className="section-row">

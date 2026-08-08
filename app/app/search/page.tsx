@@ -1,6 +1,5 @@
 import { services } from "../../data";
 import ServiceList from "../../../components/app/ServiceList";
-import CrisisStrip from "../../../components/app/CrisisStrip";
 import BottomNav from "../../../components/app/BottomNav";
 
 export const metadata = {
@@ -30,7 +29,6 @@ export default async function SearchPage({
           </div>
         </header>
 
-        <CrisisStrip />
 
         <div className="app-section">
           <ServiceList services={services} title={q ? `Results for "${q}"` : undefined} />

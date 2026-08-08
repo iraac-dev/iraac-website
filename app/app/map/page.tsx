@@ -1,6 +1,5 @@
 "use client";
 
-import CrisisStrip from "../../../components/app/CrisisStrip";
 import ServiceMap from "../../../components/app/ServiceMap";
 import BottomNav from "../../../components/app/BottomNav";
 
@@ -20,7 +19,6 @@ export default function MapPage() {
           </div>
         </header>
 
-        <CrisisStrip />
 
         <div className="app-section app-section-full">
           <ServiceMap />

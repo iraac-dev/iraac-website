@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import CrisisStrip from "../../../components/app/CrisisStrip";
 import BottomNav from "../../../components/app/BottomNav";
 
 const surveyQuestions = [
@@ -113,7 +112,6 @@ export default function SurveyPage() {
               </a>
             </div>
           </div>
-          <CrisisStrip />
           <BottomNav current="/app/search" />
         </div>
       </main>
@@ -203,7 +201,6 @@ export default function SurveyPage() {
           </div>
         </div>
 
-        <CrisisStrip />
         <BottomNav current="/app/search" />
       </div>
     </main>
