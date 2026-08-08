@@ -60,6 +60,44 @@ npm run build
 The output is written to `dist/` and Vercel deploys that static output. Legacy
 `.html` URLs redirect to their clean Astro routes.
 
+## Publish to the live website
+
+The live public website is `https://www.iraac-aco.com/`. It is served by the
+Vercel project named `iraac-website`, linked locally in `.vercel/project.json`
+and aliased to the custom domain.
+
+Use this flow every time a change should appear on the public website:
+
+```
+npm run build
+git status --short
+git add README.md PRODUCTION_LAUNCH_PLAN.md ROADMAP.md docs src public package.json package-lock.json astro.config.mjs vercel.json
+git commit -m "Describe the website change"
+git push origin main
+```
+
+Do not add `.env.local`, `.vercel/.env.development.local`, production contact
+lists, survey responses or other private records to the public website repo.
+
+After pushing, check Vercel has deployed the newest `main` commit:
+
+```
+vercel inspect https://www.iraac-aco.com/
+curl -L https://www.iraac-aco.com/ | head
+```
+
+If Vercel is still showing an older build, force a production deploy from this
+folder:
+
+```
+vercel deploy --prod --yes
+```
+
+The deploy output should say `target production`, `status Ready`, and list
+`https://www.iraac-aco.com` under aliases. Only call a change live after opening
+or checking `https://www.iraac-aco.com/` and confirming the visible page has the
+new content.
+
 ## Current boundary
 
 Have Your Say remains a non-collecting IRAAC-owned holding page until P1 in the
