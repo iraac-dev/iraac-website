@@ -3,6 +3,7 @@ import Link from "next/link";
 import { services } from "../../../data";
 import CrisisStrip from "../../../../components/app/CrisisStrip";
 import ServiceCard from "../../../../components/app/ServiceCard";
+import BottomNav from "../../../../components/app/BottomNav";
 
 export async function generateStaticParams() {
   return services.map((s) => ({ id: s.id }));
@@ -79,12 +80,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           </section>
         )}
 
-        <nav className="bottom-nav" aria-label="Mob Link sections">
-          <a href="/app/">Home</a>
-          <a href="/app/search">Search</a>
-          <a href="/app/map">Map</a>
-          <a href="/survey/">Survey</a>
-        </nav>
+        <BottomNav current="/app/search" />
       </div>
     </main>
   );

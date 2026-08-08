@@ -2,6 +2,7 @@
 
 import CrisisStrip from "../../../components/app/CrisisStrip";
 import ServiceMap from "../../../components/app/ServiceMap";
+import BottomNav from "../../../components/app/BottomNav";
 
 export default function MapPage() {
   return (
@@ -25,12 +26,7 @@ export default function MapPage() {
           <ServiceMap />
         </div>
 
-        <nav className="bottom-nav" aria-label="Mob Link sections">
-          <a href="/app/">Home</a>
-          <a href="/app/search">Search</a>
-          <a href="/app/map" aria-current="page">Map</a>
-          <a href="/survey/">Survey</a>
-        </nav>
+        <BottomNav current="/app/map" />
       </div>
     </main>
   );

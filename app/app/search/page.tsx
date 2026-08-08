@@ -1,6 +1,7 @@
 import { services } from "../../data";
 import ServiceList from "../../../components/app/ServiceList";
 import CrisisStrip from "../../../components/app/CrisisStrip";
+import BottomNav from "../../../components/app/BottomNav";
 
 export const metadata = {
   title: "Search Services | 1800 Mob Link",
@@ -35,12 +36,7 @@ export default async function SearchPage({
           <ServiceList services={services} title={q ? `Results for "${q}"` : undefined} />
         </div>
 
-        <nav className="bottom-nav" aria-label="Mob Link sections">
-          <a href="/app/">Home</a>
-          <a href="/app/search" aria-current="page">Search</a>
-          <a href="/app/map">Map</a>
-          <a href="/survey/">Survey</a>
-        </nav>
+        <BottomNav current="/app/search" />
       </div>
     </main>
   );

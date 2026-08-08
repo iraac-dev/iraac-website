@@ -2,6 +2,7 @@ import Link from "next/link";
 import { services } from "../data";
 import CrisisStrip from "../../components/app/CrisisStrip";
 import SearchBar from "../../components/app/SearchBar";
+import BottomNav from "../../components/app/BottomNav";
 
 export const metadata = {
   title: "1800 Mob Link | IRAAC",
@@ -160,12 +161,7 @@ export default function MobLinkHome() {
           </section>
         )}
 
-        <nav className="bottom-nav" aria-label="Mob Link sections">
-          <Link href="/app/" aria-current="page">Home</Link>
-          <Link href="/app/search">Search</Link>
-          <Link href="/app/map">Map</Link>
-          <Link href="/survey/">Survey</Link>
-        </nav>
+        <BottomNav current="/app/" />
       </div>
     </main>
   );

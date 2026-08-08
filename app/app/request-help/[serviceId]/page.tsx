@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { services } from "../../../data";
 import { createReferral, saveReferral, needCategories } from "../../../../lib/referrals";
 import CrisisStrip from "../../../../components/app/CrisisStrip";
+import BottomNav from "../../../../components/app/BottomNav";
 
 export default function RequestHelpPage() {
   const router = useRouter();
@@ -84,12 +85,7 @@ export default function RequestHelpPage() {
             </div>
           </div>
           <CrisisStrip />
-          <nav className="bottom-nav" aria-label="Mob Link sections">
-            <a href="/app/">Home</a>
-            <a href="/app/search">Search</a>
-            <a href="/app/map">Map</a>
-            <a href="/survey/">Survey</a>
-          </nav>
+          <BottomNav current="/app/search" />
         </div>
       </main>
     );
@@ -203,12 +199,7 @@ export default function RequestHelpPage() {
           </button>
         </form>
 
-        <nav className="bottom-nav" aria-label="Mob Link sections">
-          <a href="/app/">Home</a>
-          <a href="/app/search">Search</a>
-          <a href="/app/map">Map</a>
-          <a href="/survey/">Survey</a>
-        </nav>
+        <BottomNav current="/app/search" />
       </div>
     </main>
   );
