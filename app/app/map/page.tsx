@@ -64,6 +64,11 @@ export default function MapPage() {
 
   return (
     <main className="app-page">
+      <div className="phone-shell phone-shell-compact">
+        <div className="phone-status" aria-hidden="true">
+          <span className="phone-time">Map</span>
+          <span className="phone-signal">1800 MOB LINK</span>
+        </div>
       <div className="map-mobile-page">
         {/* Full-screen map */}
         <div className="map-mobile-canvas">
@@ -163,6 +168,7 @@ export default function MapPage() {
         <button type="button" className="map-mobile-fab" onClick={handleToggleSheet} aria-label="Toggle list">
           {showSheet ? "🗺️" : "📋"}
         </button>
+      </div>
       </div>
       <BottomNav current="/app/map" />
     </main>

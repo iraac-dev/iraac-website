@@ -3467,12 +3467,15 @@ input {
 /* ===== Full Map Page — Mobile Optimized ===== */
 
 .map-mobile-page {
-  position: fixed;
-  inset: 0;
+  position: relative;
+  height: calc(100vh - 200px);
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   background: #000;
-  z-index: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0 -22px;
 }
 
 /* The map canvas fills the whole screen */
