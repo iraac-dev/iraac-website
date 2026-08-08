@@ -38,7 +38,7 @@ function FrontDoor() {
     ["Book a Free 15-Min Call", "Speak with an IRAAC officer over the phone.", "/book-a-call/"],
     ["Visit a Local Office", "Drop in and speak with someone face to face.", "/offices/"],
     ["Request a Home Visit", "Ask an IRAAC officer to come to you.", "/contact/"],
-    ["Complete a Survey", "Tell IRAAC what matters through Have Your Say.", "/survey/"],
+    ["Complete a Survey", "Tell IRAAC what matters through Have Your Say.", "/app/survey/"],
   ];
 
   return (
