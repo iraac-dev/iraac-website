@@ -4,39 +4,41 @@ A working draft of the public website for IRAAC. This repository is the public
 front door and the planning source for the future private listening platform.
 It must never contain production contact lists, survey responses or secrets.
 
-The public site now uses Astro, Markdown content files and normal CSS. It still
-builds to a static website and deploys to Vercel. The consent, survey, campaign,
-calling, reporting and staff-control system described in the roadmap remains a
-separate private platform.
+The public site now uses Next.js App Router and deploys to Vercel as one app.
+It serves the public website at `/`, the visual 1800 Mob Link prototype at
+`/app/`, and the visual staff dashboard prototype at `/admin/`. The consent,
+survey, campaign, calling, reporting and staff-control system described in the
+roadmap still needs production Supabase Auth, RLS, audit and governance gates
+before it can handle real users or real data.
 
 ## Start here
 
-- `src/content/pages/` contains the editable page content. This is the first
-  place DeepSeek or another AI editor should look for text changes.
-- `src/styles/global.css` contains the shared visual styling.
-- `src/components/` contains shared header, front-door and footer pieces.
+- `app/data.ts` contains public navigation, page content, program cards and
+  prototype service data.
+- `app/SiteShell.tsx` contains the public header, front-door strip and footer.
+- `app/globals.css` contains the shared visual styling.
+- `app/app/page.tsx` contains the visual MobLink prototype route.
+- `app/admin/page.tsx` contains the visual staff admin prototype route.
 - `public/data/images.json` records the placeholder image sources.
 - `PRODUCTION_LAUNCH_PLAN.md` is the concise critical path, user sign-up list
   and agent work register.
 - `ROADMAP.md` is the canonical product, governance, consent, architecture and
   compliance specification.
+- `docs/release/CLAUDE_CLI_PRODUCTION_HANDOFF.md` is the detailed build guide
+  for Claude CLI / DeepSeek to take the prototype toward production.
 
 ## Editing
 
-For a normal page text change, edit the matching Markdown file in
-`src/content/pages/`. Each page has frontmatter for its title, description and
-active navigation item, followed by the page body. The body may include HTML
-where the layout needs cards, grids or buttons.
-
-For shared navigation, edit `src/data.ts`. For shared layout, edit the relevant
-component in `src/components/`. For colours, spacing and responsive behaviour,
-edit `src/styles/global.css`.
+For a normal public page text change, edit the matching entry in `app/data.ts`.
+For shared navigation or footer changes, edit `app/SiteShell.tsx` and
+`app/data.ts`. For colours, spacing and responsive behaviour, edit
+`app/globals.css`.
 
 ## Login and Mob Link
 
-The public Login button points to the 1800 Mob Link prototype at
-`https://admin.iraac-aco.com/mob-link`. Keep that route prominent: it is the
-future community account entry point, not just a staff/admin shortcut.
+The public Login button points directly to `/app/`, the 1800 Mob Link
+prototype. The footer Admin link points directly to `/admin/`, the staff
+dashboard prototype. Keep these as same-domain Next.js routes.
 
 The public site does not own authentication or personal-data matching. That
 belongs in the private platform. The intended identity direction is Supabase
@@ -46,19 +48,19 @@ under one governed user record after clear consent and verification.
 
 ## Local preview
 
-```
+```bash
 npm install
 npm run dev
 ```
 
 ## Production build
 
-```
+```bash
 npm run build
 ```
 
-The output is written to `dist/` and Vercel deploys that static output. Legacy
-`.html` URLs redirect to their clean Astro routes.
+Vercel builds and serves the Next.js output. Legacy `.html` URLs redirect to
+their clean Next.js routes through `vercel.json`.
 
 ## Publish to the live website
 
@@ -68,10 +70,10 @@ and aliased to the custom domain.
 
 Use this flow every time a change should appear on the public website:
 
-```
+```bash
 npm run build
 git status --short
-git add README.md PRODUCTION_LAUNCH_PLAN.md ROADMAP.md docs src public package.json package-lock.json astro.config.mjs vercel.json
+git add README.md PRODUCTION_LAUNCH_PLAN.md ROADMAP.md docs app public package.json package-lock.json next.config.ts next-env.d.ts tsconfig.json vercel.json
 git commit -m "Describe the website change"
 git push origin main
 ```
@@ -81,7 +83,7 @@ lists, survey responses or other private records to the public website repo.
 
 After pushing, check Vercel has deployed the newest `main` commit:
 
-```
+```bash
 vercel inspect https://www.iraac-aco.com/
 curl -L https://www.iraac-aco.com/ | head
 ```
@@ -89,7 +91,7 @@ curl -L https://www.iraac-aco.com/ | head
 If Vercel is still showing an older build, force a production deploy from this
 folder:
 
-```
+```bash
 vercel deploy --prod --yes
 ```
 
