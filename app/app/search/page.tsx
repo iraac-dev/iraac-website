@@ -1,5 +1,7 @@
-import { services } from "../../data";
+import Link from "next/link";
+import { services, serviceCategories } from "../../data";
 import ServiceList from "../../../components/app/ServiceList";
+import MiniMap from "../../../components/app/MiniMap";
 import BottomNav from "../../../components/app/BottomNav";
 
 export const metadata = {
@@ -14,9 +16,22 @@ export default async function SearchPage({
 }) {
   const { q } = await searchParams;
 
+  // Top categories - sorted by count
+  const categoryCounts = serviceCategories
+    .map((cat) => ({
+      category: cat,
+      count: services.filter((s) => s.category === cat).length,
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  const localCount = services.filter((s) => !s.isNational).length;
+  const nationalCount = services.filter((s) => s.isNational).length;
+  const aboriginalCount = services.filter((s) => s.isAboriginalLed).length;
+  const freeCount = services.filter((s) => s.isFree).length;
+
   return (
     <main className="app-page">
-      <div className="phone-shell">
+      <div className="phone-shell phone-shell-compact">
         <div className="phone-status" aria-hidden="true">
           <span className="phone-time">Search</span>
           <span className="phone-signal">1800 MOB LINK</span>
@@ -25,14 +40,76 @@ export default async function SearchPage({
         <header className="app-top app-top-compact">
           <div>
             <p className="app-kicker">1800 Mob Link</p>
-            <h1>Find a service</h1>
+            <h1>Search</h1>
           </div>
         </header>
 
-
-        <div className="app-section">
-          <ServiceList services={services} title={q ? `Results for "${q}"` : undefined} />
+        {/* Search bar */}
+        <div className="search-hero-bar">
+          <span className="search-hero-icon" aria-hidden="true">🔍</span>
+          <input
+            type="search"
+            className="search-hero-input"
+            placeholder="Housing support, legal help, health services..."
+            aria-label="Search services"
+          />
         </div>
+
+        {/* Browse nearby — mini map */}
+        <section className="app-section">
+          <div className="section-row">
+            <h2 className="app-section-title">Browse nearby</h2>
+          </div>
+          <MiniMap />
+        </section>
+
+        {/* Browse all — quick filters */}
+        <section className="app-section">
+          <div className="section-row">
+            <h2 className="app-section-title">Browse all</h2>
+          </div>
+          <div className="browse-grid">
+            <Link href="/app/search?q=local" className="browse-card">
+              <span className="browse-card-icon" aria-hidden="true">📍</span>
+              <span className="browse-card-label">Local</span>
+              <span className="browse-card-count">{localCount}</span>
+            </Link>
+            <Link href="/app/search?q=national" className="browse-card">
+              <span className="browse-card-icon" aria-hidden="true">📞</span>
+              <span className="browse-card-label">National</span>
+              <span className="browse-card-count">{nationalCount}</span>
+            </Link>
+            <Link href="/app/search?q=aboriginal" className="browse-card">
+              <span className="browse-card-icon" aria-hidden="true">🪶</span>
+              <span className="browse-card-label">Aboriginal</span>
+              <span className="browse-card-count">{aboriginalCount}</span>
+            </Link>
+            <Link href="/app/search?q=free" className="browse-card">
+              <span className="browse-card-icon" aria-hidden="true">🎯</span>
+              <span className="browse-card-label">Free</span>
+              <span className="browse-card-count">{freeCount}</span>
+            </Link>
+          </div>
+        </section>
+
+        {/* Top categories */}
+        <section className="app-section">
+          <div className="section-row">
+            <h2 className="app-section-title">Top categories</h2>
+          </div>
+          <div className="browse-categories">
+            {categoryCounts.map(({ category, count }) => (
+              <Link
+                href={`/app/search?q=${encodeURIComponent(category.toLowerCase())}`}
+                className="browse-cat-chip"
+                key={category}
+              >
+                <span className="browse-cat-name">{category}</span>
+                <span className="browse-cat-count">{count}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         <BottomNav current="/app/search" />
       </div>
