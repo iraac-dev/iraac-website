@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+
+  return pages
+    .map((entry) => ({ entry, slug: entry.id.replace(/\.md$/, '') }))
+    .filter(({ slug }) => slug !== 'index')
+    .map(({ entry, slug }) => ({ params: { slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const frontmatter = entry.data;
+---
+
+<BaseLayout title={frontmatter.title} description={frontmatter.description} active={frontmatter.active}>
+  <Content />
+</BaseLayout>

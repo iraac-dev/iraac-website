@@ -1,3 +1,65 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/about.html",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/programs.html",
+      "destination": "/programs",
+      "permanent": true
+    },
+    {
+      "source": "/governance.html",
+      "destination": "/governance",
+      "permanent": true
+    },
+    {
+      "source": "/support.html",
+      "destination": "/support",
+      "permanent": true
+    },
+    {
+      "source": "/news.html",
+      "destination": "/news",
+      "permanent": true
+    },
+    {
+      "source": "/insights.html",
+      "destination": "/insights",
+      "permanent": true
+    },
+    {
+      "source": "/contact.html",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/survey.html",
+      "destination": "/survey",
+      "permanent": true
+    },
+    {
+      "source": "/offices.html",
+      "destination": "/offices",
+      "permanent": true
+    },
+    {
+      "source": "/book-a-call.html",
+      "destination": "/book-a-call",
+      "permanent": true
+    },
+    {
+      "source": "/enhanced-bail-article.html",
+      "destination": "/enhanced-bail-article",
+      "permanent": true
+    }
+  ]
 }

@@ -1,0 +1,33 @@
+---
+import { LOGIN_URL, dropdownItems, navItems } from '../data';
+
+interface Props {
+  active: string;
+}
+
+const { active } = Astro.props;
+const dropdownActive = dropdownItems.some((item) => item.key === active);
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="wordmark">IRAAC<span>.</span></a>
+    <nav class="main-nav">
+      <ul>
+        {navItems.map((item) => (
+          <li><a href={item.href} class:list={[{ active: item.key === active }]}>{item.label}</a></li>
+        ))}
+        <li class:list={["nav-dropdown", { active: dropdownActive }]}>
+          <button class="nav-dd-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="primary-more-menu">More ▾</button>
+          <ul class="nav-dd-menu" id="primary-more-menu">
+            {dropdownItems.map((item) => (
+              <li><a href={item.href} class:list={[{ active: item.key === active }]}>{item.label}</a></li>
+            ))}
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <a href={LOGIN_URL} class="nav-login" aria-label="Login to the 1800 Mob Link prototype">Login</a>
+    <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+  </div>
+</header>

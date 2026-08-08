@@ -1,6 +1,8 @@
 .DS_Store
 *.png
 node_modules/
+dist/
+.astro/
 server.log
 .vercel
 .env*

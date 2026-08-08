@@ -1,0 +1,32 @@
+---
+import Header from '../components/Header.astro';
+import FrontDoor from '../components/FrontDoor.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  active: string;
+}
+
+const { title, description, active } = Astro.props;
+const pageTitle = `${title} | IRAAC`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <Header active={active} />
+    <FrontDoor />
+    <slot />
+    <Footer />
+    <script src="/scripts/site.js" defer is:inline></script>
+  </body>
+</html>
