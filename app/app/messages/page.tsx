@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import HelpBot from "../../../components/app/HelpBot";
 import CrisisStrip from "../../../components/app/CrisisStrip";
 import BottomNav from "../../../components/app/BottomNav";
@@ -56,6 +57,19 @@ export default function MessagesPage() {
             </div>
             <span className="contact-us-card-arrow">→</span>
           </button>
+        </div>
+
+        <div className="app-section">
+          <Link href="/app/survey" className="contact-us-card">
+            <div className="contact-us-card-icon">📝</div>
+            <div className="contact-us-card-body">
+              <strong className="contact-us-card-title">Have Your Say</strong>
+              <span className="contact-us-card-desc">
+                Complete the IRAAC survey. Your voice helps us advocate for what matters to community.
+              </span>
+            </div>
+            <span className="contact-us-card-arrow">→</span>
+          </Link>
         </div>
 
         <section className="app-section">
