@@ -1,0 +1,27 @@
+# IRAAC website Supabase configuration
+# Run `supabase link --project-ref xfrhwibtmpjnasbcxdlw` to connect to the production project
+# Run `supabase db push` to apply migrations
+
+project_id = "iraac-website"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "extensions", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+# PostGIS extension is enabled in the first migration
+
+[auth]
+enabled = true
+# Phone auth for community user login (Mob Link)
+# Email/password + MFA for staff admin login
+smtp_admin_email = "info@iraac-aco.com"
+
+[auth.external]
+enabled = false
+
+[analytics]
+enabled = false
