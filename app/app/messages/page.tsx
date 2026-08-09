@@ -72,6 +72,17 @@ export default function ChatPage() {
               <span className="inbox-item-preview">Track your referrals and requests for help</span>
             </div>
           </Link>
+
+          <Link href="/app/survey/" className="inbox-item">
+            <span className="inbox-item-avatar">📝</span>
+            <div className="inbox-item-body">
+              <div className="inbox-item-top">
+                <strong className="inbox-item-name">Have Your Say</strong>
+                <span className="inbox-item-time" />
+              </div>
+              <span className="inbox-item-preview">Complete the IRAAC survey — your voice matters</span>
+            </div>
+          </Link>
         </div>
 
         <BottomNav current="/app/messages" />
