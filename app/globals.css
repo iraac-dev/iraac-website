@@ -3894,3 +3894,272 @@ input {
   font-size: 0.72rem;
   font-weight: 800;
 }
+
+/* ===== Contact Centre ===== */
+
+.contact-grid {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 16px;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.15s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.contact-card:hover {
+  border-color: var(--ochre);
+  box-shadow: 0 4px 16px rgba(193, 99, 31, 0.1);
+  transform: translateY(-1px);
+}
+
+.contact-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  background: #f8f4ed;
+}
+
+.contact-card-icon-chat {
+  background: #f0fdf4;
+}
+
+.contact-card-icon-office {
+  background: #f0f4ff;
+}
+
+.contact-card-icon-home {
+  background: #fef3c7;
+}
+
+.contact-card-icon-survey {
+  background: #fdf2f8;
+}
+
+.contact-card-icon-phone {
+  background: #fce7f3;
+}
+
+.contact-card-icon-dropin {
+  background: #e0f2fe;
+}
+
+.contact-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.contact-card-title {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 900;
+  margin-bottom: 2px;
+}
+
+.contact-card-desc {
+  display: block;
+  font-size: 0.78rem;
+  color: #6b6b6b;
+  line-height: 1.4;
+}
+
+.contact-card-arrow {
+  font-size: 1.1rem;
+  color: var(--ochre);
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.contact-card:hover .contact-card-arrow {
+  opacity: 1;
+}
+
+.contact-card-number {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--ochre);
+  letter-spacing: 0.02em;
+}
+
+.contact-card-number-label {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: #8a8a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.contact-card-chat-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #16a34a;
+}
+
+.contact-card-chat-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #16a34a;
+  animation: contact-pulse 1.5s infinite;
+}
+
+@keyframes contact-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.contact-card-phone-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.contact-card-phone-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  border: 1px solid var(--ochre);
+  border-radius: 999px;
+  padding: 0 14px;
+  background: var(--ochre);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.contact-card-phone-action:hover {
+  opacity: 0.9;
+}
+
+/* ===== Chat with IRAAC — Human Mode ===== */
+
+.chat-human-mode {
+  text-align: center;
+  padding: 32px 16px;
+}
+
+.chat-human-mode-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.chat-human-mode h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.chat-human-mode p {
+  margin: 0 auto 16px;
+  max-width: 280px;
+  font-size: 0.85rem;
+  color: #6b6b6b;
+  line-height: 1.5;
+}
+
+.chat-human-actions {
+  display: grid;
+  gap: 8px;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.chat-human-btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #151515;
+  border-radius: 10px;
+  padding: 0 16px;
+  font-size: 0.85rem;
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.15s;
+}
+
+.chat-human-btn-primary {
+  background: #151515;
+  color: #ffffff;
+  border-color: #151515;
+}
+
+.chat-human-btn-primary:hover {
+  opacity: 0.9;
+}
+
+.chat-human-btn-outline {
+  background: #ffffff;
+  border-color: #d4d4d4;
+}
+
+.chat-human-btn-outline:hover {
+  border-color: #9a9a9a;
+}
+
+.chat-human-btn-back {
+  background: none;
+  border: none;
+  font-size: 0.82rem;
+  color: #8a8a8a;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.chat-human-btn-back:hover {
+  color: #565656;
+}
+
+/* ===== Contact Centre — Human Toggle Button ===== */
+
+.help-bot-human-toggle {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #d4d4d4;
+  border-radius: 999px;
+  padding: 0 12px;
+  background: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  color: #565656;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.help-bot-human-toggle:hover {
+  border-color: var(--ochre);
+  color: var(--ochre);
+  background: #fef9f0;
+}

@@ -35,7 +35,6 @@ function findServices(text: string) {
     }
   }
 
-  // Map keyword categories to service categories
   const categoryMap: Record<string, string[]> = {
     health: ["Health"],
     legal: ["Legal"],
@@ -73,15 +72,26 @@ function findServices(text: string) {
 const initialMessages: Message[] = [
   {
     role: "bot",
-    text: "Hi, I'm the IRAAC Help Bot. 👋\n\nI can help you find services and support near you. Just tell me what you need help with, and I'll recommend services that might help.\n\nFor example, you can say things like:\n• \"I need somewhere to live\"\n• \"I'm having legal trouble\"\n• \"I need to see a doctor\"\n• \"I'm feeling really down\"\n\nOr type **talk to a person** to speak with an IRAAC team member.",
+    text:
+      "Hi, I'm Chat with IRAAC. 👋\n\n" +
+      "Tell me what's going on — I'll listen, find services that can help, " +
+      "or connect you with an IRAAC team member.\n\n" +
+      "For example, you can say things like:\n" +
+      '• "I need somewhere to live"\n' +
+      '• "I\'m having legal trouble"\n' +
+      '• "I need to see a doctor"\n' +
+      '• "I\'m feeling really down"\n\n' +
+      "You can also:\n" +
+      "• Tap **Talk to a person** to speak with an IRAAC team member\n" +
+      "• Call **1800 662 5465** to speak with our AI phone line or a real person",
   },
 ];
 
-export default function HelpBot() {
+export default function HelpBot({ onBackToContact }: { onBackToContact?: () => void }) {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
   const [waiting, setWaiting] = useState(false);
-  const [escalated, setEscalated] = useState(false);
+  const [humanMode, setHumanMode] = useState(false);
   const chatEnd = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -108,7 +118,10 @@ export default function HelpBot() {
       // Check for crisis keywords
       if (keywords.crisis.some((w) => lower.includes(w))) {
         addBotMessage(
-          "🚨 If you're in immediate danger, please call **000** right now.\n\nIf you need to talk to someone, **13YARN** (13 92 76) has Aboriginal and Torres Strait Islander crisis supporters available 24/7.\n\n**Lifeline** (13 11 14) is also available 24/7 for crisis support.\n\nWould you like me to show you other services that might help?"
+          "🚨 If you're in immediate danger, please call **000** right now.\n\n" +
+            "If you need to talk to someone, **13YARN** (13 92 76) has Aboriginal and Torres Strait Islander crisis supporters available 24/7.\n\n" +
+            "**Lifeline** (13 11 14) is also available 24/7 for crisis support.\n\n" +
+            "Would you like me to show you other services that might help?"
         );
         const crisisServices = findServices("crisis health");
         if (crisisServices.length > 0) {
@@ -117,28 +130,55 @@ export default function HelpBot() {
         return;
       }
 
-      // Check for escalation
-      if (lower.includes("talk to a person") || lower.includes("real person") || lower.includes("human") || lower.includes("speak to someone")) {
-        setEscalated(true);
+      // Check for escalation to human
+      if (
+        lower.includes("talk to a person") ||
+        lower.includes("real person") ||
+        lower.includes("human") ||
+        lower.includes("speak to someone") ||
+        lower.includes("talk to someone")
+      ) {
+        showHumanMode();
+        return;
+      }
+
+      // Check for phone call request
+      if (
+        lower.includes("call") ||
+        lower.includes("phone") ||
+        lower.includes("ring") ||
+        lower.includes("number")
+      ) {
         addBotMessage(
-          "I've noted that you'd like to speak with a real person. An IRAAC team member will be in touch with you.\n\nIn the meantime, here are some services that might help:"
+          "You can reach us by phone at **1800 662 5465**.\n\n" +
+            "Our AI phone line is available to listen and help connect you with services. " +
+            "You can also speak with a real IRAAC team member during office hours.\n\n" +
+            "Would you like me to help with anything else in the meantime?"
         );
-        const all = services.filter((s) => !s.isCrisis).slice(0, 4);
-        if (all.length > 0) {
-          addBotMessage("Recommended services in your area:", all.map((s) => ({ id: s.id, name: s.name, category: s.category, distance: s.distance })));
-        }
         return;
       }
 
       // Check for thanks
       if (lower.includes("thank") || lower.includes("thanks") || lower.includes("cheers")) {
-        addBotMessage("You're welcome! 😊\n\nIs there anything else I can help you with?\n\nYou can also browse all services on the **Search** tab or submit a **Request for help** from any service page.");
+        addBotMessage(
+          "You're welcome! 😊\n\n" +
+            "Is there anything else I can help you with?\n\n" +
+            "You can also:\n" +
+            "• Browse all services on the **Search** tab\n" +
+            "• **Request help** from any service page\n" +
+            "• Tap **Talk to a person** to speak with an IRAAC team member"
+        );
         return;
       }
 
       // Check for greetings
       if (lower.includes("hi") || lower.includes("hello") || lower.includes("hey") || lower.includes("gday") || lower.includes("yo")) {
-        addBotMessage("Hello! 👋\n\nWhat kind of support are you looking for today? Tell me a bit about what's going on and I'll help find the right services for you.");
+        addBotMessage(
+          "Hello! 👋\n\n" +
+            "What kind of support are you looking for today? Tell me a bit about what's going on " +
+            "and I'll help find the right services for you.\n\n" +
+            "Or if you'd prefer, you can tap **Talk to a person** above to speak with an IRAAC team member."
+        );
         return;
       }
 
@@ -152,14 +192,35 @@ export default function HelpBot() {
           matched
         );
         addBotMessage(
-          "You can tap any service to see more details, or **Request help** to have an IRAAC team member follow up with you.\n\nIf none of these are quite right, tell me more and I'll look again. Or type **talk to a person** to speak with an IRAAC team member."
+          "You can tap any service to see more details, or **Request help** to have an IRAAC team member follow up with you.\n\n" +
+            "If none of these are quite right, tell me more and I'll look again. " +
+            "Or tap **Talk to a person** to speak with an IRAAC team member."
         );
       } else {
         addBotMessage(
-          "Thanks for sharing. I'm not quite sure which service would be best based on what you've said.\n\nCould you tell me a bit more? For example:\n• What kind of support do you need?\n• What area are you in?\n\nOr you can **browse all services** to find what you're looking for."
+          "Thanks for sharing. I'm not quite sure which service would be best based on what you've said.\n\n" +
+            "Could you tell me a bit more? For example:\n" +
+            "• What kind of support do you need?\n" +
+            "• What area are you in?\n\n" +
+            "Or you can **browse all services** or tap **Talk to a person** to speak with an IRAAC team member."
         );
       }
     }, 800);
+  };
+
+  const showHumanMode = () => {
+    setHumanMode(true);
+    addBotMessage(
+      "I've noted that you'd like to speak with a real person. An IRAAC team member will be in touch with you soon.\n\n" +
+        "In the meantime, here are some ways to reach us:"
+    );
+    const all = services.filter((s) => !s.isCrisis).slice(0, 3);
+    if (all.length > 0) {
+      addBotMessage(
+        "Recommended services in your area:",
+        all.map((s) => ({ id: s.id, name: s.name, category: s.category, distance: s.distance }))
+      );
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -175,11 +236,25 @@ export default function HelpBot() {
         <div className="help-bot-header-info">
           <span className="help-bot-avatar">🤖</span>
           <div>
-            <strong>IRAAC Help Bot</strong>
+            <strong>Chat with IRAAC</strong>
             <span className="help-bot-status">Online</span>
           </div>
         </div>
-        {escalated && <span className="help-bot-escalated-badge">Agent requested</span>}
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          {humanMode && <span className="help-bot-escalated-badge">Agent requested</span>}
+          {!humanMode && (
+            <button
+              type="button"
+              className="help-bot-human-toggle"
+              onClick={() => {
+                setHumanMode(true);
+                showHumanMode();
+              }}
+            >
+              🙋 Talk to a person
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="help-bot-chat">
@@ -220,27 +295,59 @@ export default function HelpBot() {
         <div ref={chatEnd} />
       </div>
 
-      <div className="help-bot-input-row">
-        <input
-          type="text"
-          className="help-bot-input"
-          placeholder="Type your message..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          disabled={waiting}
-          aria-label="Type your message"
-        />
-        <button
-          type="button"
-          className="help-bot-send"
-          onClick={handleSend}
-          disabled={!input.trim() || waiting}
-          aria-label="Send message"
-        >
-          Send
-        </button>
-      </div>
+      {humanMode && (
+        <div className="chat-human-mode">
+          <div className="chat-human-mode-icon">🙋</div>
+          <h3>We&apos;re here to help</h3>
+          <p>
+            An IRAAC team member will be in touch with you as soon as possible. In the meantime, here are some other ways to reach us:
+          </p>
+          <div className="chat-human-actions">
+            <a href="tel:18006625465" className="chat-human-btn chat-human-btn-primary">
+              📞 Call 1800 662 5465
+            </a>
+            <Link href="/contact/" className="chat-human-btn chat-human-btn-outline" onClick={onBackToContact}>
+              🏠 Request a home visit
+            </Link>
+            <button
+              type="button"
+              className="chat-human-btn chat-human-btn-outline"
+              onClick={() => {
+                setHumanMode(false);
+                addBotMessage(
+                  "OK, I'm back! Let me know if you need help finding services or support. 😊"
+                );
+              }}
+            >
+              💬 Continue chatting with the bot
+            </button>
+          </div>
+        </div>
+      )}
+
+      {!humanMode && (
+        <div className="help-bot-input-row">
+          <input
+            type="text"
+            className="help-bot-input"
+            placeholder="Type your message..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={waiting}
+            aria-label="Type your message"
+          />
+          <button
+            type="button"
+            className="help-bot-send"
+            onClick={handleSend}
+            disabled={!input.trim() || waiting}
+            aria-label="Send message"
+          >
+            Send
+          </button>
+        </div>
+      )}
     </div>
   );
 }
