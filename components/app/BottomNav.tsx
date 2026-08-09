@@ -2,10 +2,10 @@ import Link from "next/link";
 
 const navItems = [
   { href: "/app/messages", label: "Chat", icon: "💬" },
+  { href: "/app/", label: "Browse", icon: "🏠" },
   { href: "/app/search", label: "Search", icon: "🔍" },
   { href: "/app/connected", label: "Connected", icon: "🔗" },
   { href: "/app/profile", label: "Profile", icon: "👤" },
-  { href: "/app/", label: "Browse", icon: "🏠" },
 ] as const;
 
 export type NavPage = (typeof navItems)[number]["href"];
