@@ -25,7 +25,7 @@ function Header() {
             </div>
           </details>
         </nav>
-        <Link href="/app/" className="nav-login" aria-label="Login to the 1800 Mob Link prototype">
+        <Link href="/app/messages/" className="nav-login" aria-label="Login to the 1800 Mob Link prototype">
           Login
         </Link>
       </div>

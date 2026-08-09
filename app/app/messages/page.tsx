@@ -6,7 +6,7 @@ import HelpBot from "../../../components/app/HelpBot";
 import BottomNav from "../../../components/app/BottomNav";
 
 export default function ChatPage() {
-  const [inChat, setInChat] = useState(false);
+  const [inChat, setInChat] = useState(true);
 
   if (inChat) {
     return (
