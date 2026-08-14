@@ -774,7 +774,7 @@ section.alt {
 
 .admin-shell {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
+  grid-template-columns: 190px minmax(0, 1fr);
   min-height: 100vh;
 }
 
@@ -784,13 +784,13 @@ section.alt {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 22px 18px;
+  padding: 18px 14px;
   background: var(--charcoal);
   color: var(--cream);
 }
 
 .admin-sidebar .brand {
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   color: var(--cream);
   font-size: 1.8rem;
   font-weight: 900;
@@ -803,13 +803,14 @@ section.alt {
 }
 
 .admin-nav-link {
-  min-height: 38px;
+  min-height: 34px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   border-radius: 8px;
-  padding: 0 12px;
+  padding: 0 10px;
+  font-size: 0.86rem;
   color: var(--sand);
   font-weight: 800;
   text-decoration: none;
@@ -844,7 +845,7 @@ section.alt {
 }
 
 .admin-main {
-  padding: 22px;
+  padding: 16px;
 }
 
 .session-card,
@@ -870,8 +871,8 @@ section.alt {
 .admin-banner {
   align-items: center;
   border-radius: 8px;
-  padding: 14px 16px;
-  margin: 16px 0;
+  padding: 11px 13px;
+  margin: 12px 0;
   background: var(--green);
   color: #ffffff;
 }
@@ -882,12 +883,13 @@ section.alt {
 }
 
 .admin-button {
-  min-height: 44px;
+  min-height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  padding: 0 16px;
+  padding: 0 12px;
+  font-size: 0.84rem;
   background: var(--ochre);
   color: #ffffff;
   text-decoration: none;
@@ -897,36 +899,36 @@ section.alt {
 .admin-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 9px;
+  margin-bottom: 12px;
 }
 
 .admin-tile {
-  min-height: 148px;
+  min-height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 14px;
+  padding: 11px;
 }
 
 .admin-tile h2,
 .admin-panel h2 {
-  margin: 0 0 7px;
-  font-size: 1.05rem;
+  margin: 0 0 5px;
+  font-size: 0.96rem;
   line-height: 1.25;
 }
 
 .admin-tile p,
 .admin-panel p {
   margin: 0;
-  font-size: 0.82rem;
-  line-height: 1.45;
+  font-size: 0.76rem;
+  line-height: 1.4;
 }
 
 .admin-stat {
-  margin-top: 14px;
+  margin-top: 10px;
   color: var(--charcoal);
-  font-size: 1.7rem;
+  font-size: 1.45rem;
   font-weight: 900;
 }
 
@@ -940,11 +942,11 @@ section.alt {
 .admin-panels {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
-  gap: 12px;
+  gap: 9px;
 }
 
 .admin-panel {
-  padding: 16px;
+  padding: 12px;
 }
 
 table {
@@ -1006,8 +1008,14 @@ input {
   .frontdoor-grid,
   .hero-flex .container,
   .two-col,
-  .program-hero,
-  .admin-grid,
+  .program-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .admin-panels {
     grid-template-columns: 1fr;
   }
@@ -1032,7 +1040,8 @@ input {
   }
 
   .frontdoor-grid,
-  .crisis-grid {
+  .crisis-grid,
+  .admin-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1998,7 +2007,12 @@ input {
 }
 
 .admin-page-content > .admin-top h1 {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.75rem, 3vw, 2.2rem);
+}
+
+.admin-page-content > .admin-top .admin-kicker {
+  margin-bottom: 4px;
+  font-size: 0.68rem;
 }
 
 .admin-stat-badge {
@@ -2525,7 +2539,7 @@ input {
   height: 100dvh;
   min-height: 0;
   display: grid;
-  grid-template-columns: 238px minmax(420px, 1fr) 258px;
+  grid-template-columns: 190px minmax(420px, 1fr) 214px;
   overflow: hidden;
   background: #f7f3ec;
 }
@@ -2534,8 +2548,8 @@ input {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 16px 14px;
+  gap: 9px;
+  padding: 11px 10px;
   overflow: hidden;
   background: var(--charcoal);
   color: var(--cream);
@@ -2567,7 +2581,7 @@ input {
 
 .admin-funding-brand {
   color: var(--cream);
-  font-size: 1.35rem;
+  font-size: 1.16rem;
   font-weight: 900;
   text-decoration: none;
 }
@@ -2577,10 +2591,10 @@ input {
 }
 
 .admin-funding-app .admin-funding-back {
-  min-height: 32px;
-  padding: 0 10px;
+  min-height: 28px;
+  padding: 0 8px;
   border-radius: 8px;
-  font-size: 0.74rem;
+  font-size: 0.68rem;
   text-decoration: none;
   background: rgba(250, 246, 239, 0.08);
   color: var(--cream);
@@ -2593,11 +2607,12 @@ input {
 
 .admin-funding-app .admin-funding-new-thread {
   width: 100%;
-  min-height: 40px;
+  min-height: 34px;
   justify-content: flex-start;
   gap: 8px;
   border-radius: 9px;
-  padding: 0 12px;
+  padding: 0 10px;
+  font-size: 0.78rem;
   background: var(--cream);
   color: var(--charcoal);
 }
@@ -2607,7 +2622,7 @@ input {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
 .admin-funding-app .admin-funding-rail-label {
@@ -2622,7 +2637,7 @@ input {
 .admin-funding-app .admin-funding-thread-list {
   min-height: 0;
   display: grid;
-  gap: 6px;
+  gap: 4px;
   overflow-y: auto;
 }
 
@@ -2631,7 +2646,7 @@ input {
   gap: 2px;
   border: 1px solid rgba(250, 246, 239, 0.12);
   border-radius: 9px;
-  padding: 9px 10px;
+  padding: 7px 8px;
   background: rgba(250, 246, 239, 0.04);
   color: var(--cream);
   text-align: left;
@@ -2646,13 +2661,13 @@ input {
 
 .admin-funding-app .admin-funding-thread-title {
   color: #ffffff;
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   font-weight: 900;
 }
 
 .admin-funding-app .admin-funding-thread-status {
   color: #e4c692;
-  font-size: 0.61rem;
+  font-size: 0.56rem;
   font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -2661,7 +2676,7 @@ input {
 .admin-funding-app .admin-funding-thread-preview {
   overflow: hidden;
   color: rgba(250, 246, 239, 0.62);
-  font-size: 0.7rem;
+  font-size: 0.63rem;
   line-height: 1.3;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2680,8 +2695,8 @@ input {
   min-height: 0;
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr) auto;
-  gap: 10px;
-  padding: 14px 18px;
+  gap: 7px;
+  padding: 10px 12px;
   border-right: 1px solid #e2d8c8;
   background: #faf8f4;
 }
@@ -2693,7 +2708,7 @@ input {
 .admin-funding-header h1 {
   overflow: hidden;
   margin: 1px 0 0;
-  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-size: clamp(1.05rem, 1.7vw, 1.28rem);
   line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2723,18 +2738,18 @@ input {
 }
 
 .admin-funding-app .admin-funding-secondary {
-  min-height: 34px;
+  min-height: 30px;
   border-radius: 8px;
-  padding: 0 11px;
-  font-size: 0.72rem;
+  padding: 0 9px;
+  font-size: 0.66rem;
 }
 
 .admin-funding-app .admin-funding-banner {
   border-radius: 8px;
-  padding: 8px 11px;
+  padding: 6px 9px;
   background: #fff2db;
   color: #9a5b22;
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   font-weight: 700;
   line-height: 1.35;
   text-align: left;
@@ -2744,7 +2759,7 @@ input {
   min-height: 0;
   display: grid;
   align-content: start;
-  gap: 9px;
+  gap: 6px;
   padding: 1px 4px 2px 0;
   overflow: auto;
 }
@@ -2772,14 +2787,14 @@ input {
 
 .admin-funding-app .admin-funding-message-list {
   display: grid;
-  gap: 7px;
+  gap: 5px;
 }
 
 .admin-funding-app .admin-funding-message {
   max-width: 88%;
   border: 1px solid #e8dece;
   border-radius: 10px;
-  padding: 9px 11px;
+  padding: 7px 9px;
   background: #ffffff;
   box-shadow: none;
 }
@@ -2814,20 +2829,20 @@ input {
 
 .admin-funding-app .admin-funding-message p {
   margin: 0;
-  font-size: 0.79rem;
-  line-height: 1.45;
+  font-size: 0.72rem;
+  line-height: 1.38;
 }
 
 .admin-funding-app .admin-funding-opportunity-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 7px;
+  gap: 5px;
 }
 
 .admin-funding-app .admin-funding-opportunity {
   border: 1px solid #e8dece;
   border-radius: 9px;
-  padding: 9px;
+  padding: 7px;
   background: #ffffff;
   box-shadow: none;
 }
@@ -2870,26 +2885,26 @@ input {
 
 .admin-funding-app .admin-funding-composer {
   display: grid;
-  gap: 6px;
+  gap: 3px;
   border: 1px solid #e8dece;
   border-radius: 11px;
-  padding: 8px 9px;
+  padding: 6px 7px;
   background: #ffffff;
   box-shadow: 0 6px 18px rgba(32, 28, 26, 0.07);
 }
 
 .admin-funding-composer textarea {
   width: 100%;
-  min-height: 30px;
+  min-height: 24px;
   max-height: 90px;
   resize: vertical;
   border: 0;
   outline: 0;
-  padding: 5px 4px;
+  padding: 3px;
   background: transparent;
   color: var(--text);
   font: inherit;
-  font-size: 0.84rem;
+  font-size: 0.76rem;
 }
 
 .admin-funding-app .admin-funding-composer-actions {
@@ -2898,8 +2913,8 @@ input {
 }
 
 .admin-funding-app .admin-funding-send {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border: 0;
   border-radius: 50%;
   background: #151515;
@@ -2914,30 +2929,30 @@ input {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 7px;
   overflow-y: auto;
-  padding: 14px;
+  padding: 10px;
   background: #f3eee6;
 }
 
 .admin-funding-context section {
   border: 1px solid #e0d5c5;
   border-radius: 10px;
-  padding: 11px;
+  padding: 8px;
   background: rgba(255, 255, 255, 0.7);
 }
 
 .admin-funding-context h2 {
-  margin: 5px 0 4px;
-  font-size: 0.9rem;
+  margin: 4px 0 3px;
+  font-size: 0.8rem;
   line-height: 1.25;
 }
 
 .admin-funding-context p {
   margin: 0;
   color: var(--muted);
-  font-size: 0.72rem;
-  line-height: 1.45;
+  font-size: 0.65rem;
+  line-height: 1.38;
 }
 
 .admin-funding-context-heading > span {
@@ -2947,11 +2962,11 @@ input {
 
 .admin-funding-artefact-list {
   display: grid;
-  gap: 7px;
-  margin: 9px 0 0;
+  gap: 5px;
+  margin: 6px 0 0;
   padding: 0;
   list-style: none;
-  font-size: 0.74rem;
+  font-size: 0.67rem;
 }
 
 .admin-funding-artefact-list li {
@@ -2987,9 +3002,9 @@ input {
   font-size: 0.72rem;
 }
 
-@media (max-width: 1040px) {
+@media (max-width: 880px) {
   .admin-funding-app {
-    grid-template-columns: 220px minmax(420px, 1fr);
+    grid-template-columns: 180px minmax(420px, 1fr);
   }
 
   .admin-funding-context {
@@ -3002,7 +3017,7 @@ input {
     height: 100dvh;
     min-height: 0;
     grid-template-columns: 1fr;
-    grid-template-rows: 210px minmax(0, 1fr);
+    grid-template-rows: 180px minmax(0, 1fr);
     overflow: hidden;
   }
 
@@ -3017,7 +3032,7 @@ input {
 
   .admin-funding-app .admin-funding-thread-list {
     grid-auto-flow: column;
-    grid-auto-columns: minmax(190px, 68vw);
+    grid-auto-columns: minmax(170px, 62vw);
     overflow-x: auto;
     overflow-y: hidden;
     padding-bottom: 3px;
@@ -3030,7 +3045,7 @@ input {
   .admin-funding-app .admin-funding-main {
     min-height: 0;
     border-right: 0;
-    padding: 12px;
+    padding: 9px;
   }
 
   .admin-funding-header {
