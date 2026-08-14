@@ -790,10 +790,12 @@ section.alt {
   gap: 10px;
 }
 
-.admin-sidebar nav a {
+.admin-nav-link {
   min-height: 44px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   border-radius: 8px;
   padding: 0 12px;
   color: var(--sand);
@@ -801,10 +803,24 @@ section.alt {
   text-decoration: none;
 }
 
-.admin-sidebar nav a:first-child,
-.admin-sidebar nav a:hover {
+.admin-nav-link:hover,
+.admin-nav-link[aria-current="page"],
+.admin-nav-link.active {
   background: rgba(250, 246, 239, 0.1);
   color: #ffffff;
+}
+
+.admin-nav-badge {
+  min-width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #3b82f6;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 900;
 }
 
 .admin-note {
@@ -2397,6 +2413,280 @@ input {
   text-align: right;
 }
 
+/* ===== Admin — Funding ===== */
+
+.admin-funding-page {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-funding-intro {
+  margin: 0;
+  max-width: 860px;
+  color: var(--muted);
+}
+
+.admin-funding-workspace {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr) 280px;
+  gap: 16px;
+  align-items: start;
+}
+
+.admin-funding-rail,
+.admin-funding-thread-card,
+.admin-funding-panel {
+  border: 1px solid #e8dece;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(32, 28, 26, 0.06);
+}
+
+.admin-funding-rail,
+.admin-funding-thread-card,
+.admin-funding-panel {
+  padding: 18px;
+}
+
+.admin-funding-rail {
+  display: grid;
+  gap: 18px;
+  position: sticky;
+  top: 28px;
+}
+
+.admin-funding-new-thread,
+.admin-funding-secondary {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d4d4d4;
+  border-radius: 999px;
+  padding: 0 16px;
+  background: #ffffff;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-funding-new-thread {
+  background: var(--charcoal);
+  color: #ffffff;
+  border-color: var(--charcoal);
+}
+
+.admin-funding-rail-section {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-funding-rail-label,
+.admin-funding-thread-eyebrow {
+  margin: 0;
+  color: #9a5b22;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.admin-funding-rail-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.admin-funding-thread-list {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-funding-thread {
+  display: grid;
+  gap: 4px;
+  border: 1px solid #ece2d1;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fbf8f2;
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-funding-thread.active {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+}
+
+.admin-funding-thread-title {
+  font-weight: 900;
+  color: var(--charcoal);
+}
+
+.admin-funding-thread-status {
+  color: #9a5b22;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.admin-funding-thread-preview {
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.admin-funding-conversation {
+  min-width: 0;
+}
+
+.admin-funding-thread-card {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-funding-thread-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-funding-thread-head h2 {
+  margin: 8px 0 0;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1;
+}
+
+.admin-funding-thread-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.admin-funding-pill {
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: #123d3b;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.admin-funding-pill-muted {
+  background: #f0e8da;
+  color: var(--text);
+}
+
+.admin-funding-message {
+  max-width: 860px;
+  border-radius: 14px;
+  padding: 16px 18px;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.admin-funding-message-user {
+  background: #f3f7ff;
+  border-left: 4px solid #3b82f6;
+}
+
+.admin-funding-message-agent {
+  background: #f8f4ed;
+  border-left: 4px solid var(--ochre);
+}
+
+.admin-funding-opportunity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.admin-funding-opportunity {
+  border: 1px solid #e8dece;
+  border-radius: 12px;
+  padding: 14px;
+  background: #ffffff;
+}
+
+.admin-funding-opportunity-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.admin-funding-opportunity-type,
+.admin-funding-opportunity-status {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-funding-opportunity-type {
+  color: #9a5b22;
+}
+
+.admin-funding-opportunity-status {
+  color: #16a34a;
+}
+
+.admin-funding-opportunity h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.admin-funding-opportunity p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.admin-funding-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-funding-secondary {
+  color: var(--text);
+}
+
+.admin-funding-aside {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-funding-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-funding-panel h3 {
+  margin: 0;
+  font-size: 0.96rem;
+}
+
+.admin-funding-source-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.admin-funding-guardrail {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
 /* ===== Admin — Tile links ===== */
 
 .admin-tile-link {
@@ -2469,6 +2759,26 @@ input {
 
   .admin-filter-row-stretch {
     grid-template-columns: 1fr;
+  }
+
+  .admin-funding-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-funding-rail {
+    position: static;
+  }
+
+  .admin-funding-opportunity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-funding-thread-head {
+    flex-direction: column;
+  }
+
+  .admin-funding-thread-meta {
+    justify-content: flex-start;
   }
 }
 
