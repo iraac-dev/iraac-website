@@ -2417,44 +2417,29 @@ input {
 
 .admin-funding-page {
   display: grid;
-  gap: 18px;
-}
-
-.admin-funding-intro {
-  margin: 0;
-  max-width: 860px;
-  color: var(--muted);
-}
-
-.admin-funding-workspace {
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr) 280px;
   gap: 16px;
-  align-items: start;
 }
 
-.admin-funding-rail,
-.admin-funding-thread-card,
-.admin-funding-panel {
-  border: 1px solid #e8dece;
-  border-radius: 14px;
-  background: #ffffff;
-  box-shadow: 0 12px 30px rgba(32, 28, 26, 0.06);
-}
-
-.admin-funding-rail,
-.admin-funding-thread-card,
-.admin-funding-panel {
-  padding: 18px;
-}
-
-.admin-funding-rail {
+.admin-funding-window {
   display: grid;
-  gap: 18px;
-  position: sticky;
-  top: 28px;
+  grid-template-columns: 296px minmax(0, 1fr);
+  min-height: calc(100vh - 152px);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #d8cdb9;
+  background: #f8f4ed;
+  box-shadow: 0 24px 64px rgba(32, 28, 26, 0.12);
 }
 
+.admin-funding-sidebar {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  background: var(--charcoal);
+  color: var(--cream);
+}
+
+.admin-funding-back,
 .admin-funding-new-thread,
 .admin-funding-secondary {
   min-height: 44px;
@@ -2470,10 +2455,22 @@ input {
   cursor: pointer;
 }
 
+.admin-funding-back {
+  width: fit-content;
+  background: rgba(250, 246, 239, 0.08);
+  color: var(--cream);
+  border-color: rgba(250, 246, 239, 0.14);
+}
+
+.admin-funding-back:hover {
+  background: rgba(250, 246, 239, 0.14);
+}
+
 .admin-funding-new-thread {
-  background: var(--charcoal);
+  width: 100%;
+  background: var(--charcoal-soft);
   color: #ffffff;
-  border-color: var(--charcoal);
+  border-color: rgba(250, 246, 239, 0.14);
 }
 
 .admin-funding-rail-section {
@@ -2481,20 +2478,19 @@ input {
   gap: 10px;
 }
 
+.admin-funding-rail-section-spread {
+  align-content: start;
+}
+
 .admin-funding-rail-label,
-.admin-funding-thread-eyebrow {
+.admin-funding-message-title,
+.admin-funding-problem-label {
   margin: 0;
   color: #9a5b22;
   font-size: 0.74rem;
   font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-.admin-funding-rail-note {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.88rem;
 }
 
 .admin-funding-thread-list {
@@ -2505,26 +2501,28 @@ input {
 .admin-funding-thread {
   display: grid;
   gap: 4px;
-  border: 1px solid #ece2d1;
+  border: 1px solid rgba(250, 246, 239, 0.12);
   border-radius: 12px;
   padding: 12px;
-  background: #fbf8f2;
+  background: rgba(250, 246, 239, 0.04);
   text-align: left;
   cursor: pointer;
+  color: var(--cream);
 }
 
 .admin-funding-thread.active {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.8);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.16);
+  background: rgba(250, 246, 239, 0.09);
 }
 
 .admin-funding-thread-title {
   font-weight: 900;
-  color: var(--charcoal);
+  color: #ffffff;
 }
 
 .admin-funding-thread-status {
-  color: #9a5b22;
+  color: #e4c692;
   font-size: 0.76rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -2532,38 +2530,73 @@ input {
 }
 
 .admin-funding-thread-preview {
-  color: var(--muted);
+  color: rgba(250, 246, 239, 0.72);
   font-size: 0.84rem;
   line-height: 1.45;
 }
 
-.admin-funding-conversation {
-  min-width: 0;
-}
-
-.admin-funding-thread-card {
+.admin-funding-source-list {
+  margin: 0;
+  padding-left: 18px;
   display: grid;
-  gap: 18px;
+  gap: 8px;
+  color: rgba(250, 246, 239, 0.78);
+  font-size: 0.86rem;
 }
 
-.admin-funding-thread-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+.admin-funding-main {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  min-width: 0;
+  padding: 14px;
+  background: #faf7f2;
+}
+
+.admin-funding-banner {
+  border-radius: 12px;
+  padding: 12px 16px;
+  background: #fff2db;
+  color: #9a5b22;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.admin-funding-scroll {
+  overflow: auto;
+  display: grid;
   gap: 16px;
+  padding: 6px 4px 2px;
 }
 
-.admin-funding-thread-head h2 {
-  margin: 8px 0 0;
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  line-height: 1;
+.admin-funding-problem-card,
+.admin-funding-message,
+.admin-funding-opportunity,
+.admin-funding-callout,
+.admin-funding-composer {
+  border: 1px solid #e8dece;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(32, 28, 26, 0.05);
 }
 
-.admin-funding-thread-meta {
+.admin-funding-problem-card,
+.admin-funding-callout {
+  padding: 16px 18px;
+}
+
+.admin-funding-problem-text {
+  margin: 10px 0 0;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.admin-funding-pill-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  justify-content: flex-end;
 }
 
 .admin-funding-pill {
@@ -2576,27 +2609,39 @@ input {
   white-space: nowrap;
 }
 
-.admin-funding-pill-muted {
-  background: #f0e8da;
-  color: var(--text);
+.admin-funding-pill-soft {
+  background: #e8efe8;
+  color: #30524f;
+}
+
+.admin-funding-message-list {
+  display: grid;
+  gap: 12px;
 }
 
 .admin-funding-message {
-  max-width: 860px;
-  border-radius: 14px;
-  padding: 16px 18px;
-  font-size: 0.95rem;
-  line-height: 1.65;
+  padding: 14px 16px;
 }
 
-.admin-funding-message-user {
-  background: #f3f7ff;
-  border-left: 4px solid #3b82f6;
+.admin-funding-message-problem {
+  background: #f6f7f8;
 }
 
 .admin-funding-message-agent {
-  background: #f8f4ed;
-  border-left: 4px solid var(--ochre);
+  background: #f4f0ff;
+}
+
+.admin-funding-message-author {
+  margin: 0 0 6px;
+  color: #5a47a4;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.admin-funding-message p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
 }
 
 .admin-funding-opportunity-grid {
@@ -2606,10 +2651,7 @@ input {
 }
 
 .admin-funding-opportunity {
-  border: 1px solid #e8dece;
-  border-radius: 12px;
   padding: 14px;
-  background: #ffffff;
 }
 
 .admin-funding-opportunity-head {
@@ -2644,40 +2686,17 @@ input {
   margin: 0;
   color: var(--muted);
   font-size: 0.86rem;
+  line-height: 1.55;
 }
 
-.admin-funding-actions {
-  display: flex;
-  flex-wrap: wrap;
+.admin-funding-callout {
+  display: grid;
   gap: 10px;
 }
 
-.admin-funding-secondary {
-  color: var(--text);
-}
-
-.admin-funding-aside {
-  display: grid;
-  gap: 16px;
-}
-
-.admin-funding-panel {
-  display: grid;
-  gap: 12px;
-}
-
-.admin-funding-panel h3 {
+.admin-funding-callout h3 {
   margin: 0;
-  font-size: 0.96rem;
-}
-
-.admin-funding-source-list {
-  margin: 0;
-  padding-left: 18px;
-  display: grid;
-  gap: 8px;
-  color: var(--muted);
-  font-size: 0.88rem;
+  font-size: 0.92rem;
 }
 
 .admin-funding-guardrail {
@@ -2685,6 +2704,46 @@ input {
   color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.55;
+}
+
+.admin-funding-composer {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.admin-funding-composer input {
+  min-height: 54px;
+  border: 1px solid #d6d0c7;
+  border-radius: 12px;
+  padding: 0 16px;
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.admin-funding-composer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-button-dark {
+  background: #151515;
+  border-color: #151515;
+}
+
+.admin-funding-send {
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 50%;
+  background: #151515;
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 900;
+  cursor: pointer;
+  margin-left: auto;
 }
 
 /* ===== Admin — Tile links ===== */
@@ -2761,11 +2820,11 @@ input {
     grid-template-columns: 1fr;
   }
 
-  .admin-funding-workspace {
+  .admin-funding-window {
     grid-template-columns: 1fr;
   }
 
-  .admin-funding-rail {
+  .admin-funding-sidebar {
     position: static;
   }
 
@@ -2773,12 +2832,27 @@ input {
     grid-template-columns: 1fr;
   }
 
-  .admin-funding-thread-head {
-    flex-direction: column;
+  .admin-funding-main {
+    padding: 12px;
   }
 
-  .admin-funding-thread-meta {
-    justify-content: flex-start;
+  .admin-funding-banner {
+    text-align: left;
+  }
+
+  .admin-funding-send {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-funding-composer-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-funding-opportunity-grid {
+    grid-template-columns: 1fr;
   }
 }
 
