@@ -79,14 +79,28 @@ const artefacts = ["Shortlist", "Readiness checklist", "Evidence list", "Draft o
 export default function AdminFundingPage() {
   return (
     <div className="admin-funding-app">
-      <aside className="admin-funding-sidebar" aria-label="Funding conversations">
+      <input
+        className="admin-funding-sidebar-toggle-input"
+        id="funding-sidebar-toggle"
+        type="checkbox"
+        aria-label="Toggle previous chats sidebar"
+        aria-controls="funding-sidebar"
+      />
+      <aside id="funding-sidebar" className="admin-funding-sidebar" aria-label="Funding conversations">
         <div className="admin-funding-sidebar-head">
           <Link className="admin-funding-brand" href="/admin/" aria-label="Back to IRAAC dashboard">
             IRAAC<span>.</span>
           </Link>
-          <Link className="admin-funding-back" href="/admin/">
-            Dashboard
-          </Link>
+          <div className="admin-funding-sidebar-actions">
+            <Link className="admin-funding-back" href="/admin/">
+              Dashboard
+            </Link>
+            <label className="admin-funding-sidebar-toggle" htmlFor="funding-sidebar-toggle">
+              <span className="sr-only admin-funding-toggle-collapse">Collapse previous chats</span>
+              <span className="sr-only admin-funding-toggle-expand">Expand previous chats</span>
+              <span className="admin-funding-toggle-icon" aria-hidden="true">‹</span>
+            </label>
+          </div>
         </div>
 
         <button type="button" className="admin-funding-new-thread">
