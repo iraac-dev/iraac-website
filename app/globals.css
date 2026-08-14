@@ -36,6 +36,18 @@ img {
   display: block;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .container {
   width: min(100%, var(--max-width));
   margin: 0 auto;
@@ -762,7 +774,7 @@ section.alt {
 
 .admin-shell {
   display: grid;
-  grid-template-columns: 270px minmax(0, 1fr);
+  grid-template-columns: 190px minmax(0, 1fr);
   min-height: 100vh;
 }
 
@@ -772,13 +784,13 @@ section.alt {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 28px;
+  padding: 18px 14px;
   background: var(--charcoal);
   color: var(--cream);
 }
 
 .admin-sidebar .brand {
-  margin-bottom: 34px;
+  margin-bottom: 18px;
   color: var(--cream);
   font-size: 1.8rem;
   font-weight: 900;
@@ -787,17 +799,18 @@ section.alt {
 
 .admin-sidebar nav {
   display: grid;
-  gap: 10px;
+  gap: 5px;
 }
 
 .admin-nav-link {
-  min-height: 44px;
+  min-height: 34px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   border-radius: 8px;
-  padding: 0 12px;
+  padding: 0 10px;
+  font-size: 0.86rem;
   color: var(--sand);
   font-weight: 800;
   text-decoration: none;
@@ -826,13 +839,13 @@ section.alt {
 .admin-note {
   margin-top: auto;
   border-top: 1px solid rgba(250, 246, 239, 0.14);
-  padding-top: 18px;
+  padding-top: 14px;
   color: rgba(250, 246, 239, 0.72);
-  font-size: 0.86rem;
+  font-size: 0.78rem;
 }
 
 .admin-main {
-  padding: 34px;
+  padding: 16px;
 }
 
 .session-card,
@@ -858,8 +871,8 @@ section.alt {
 .admin-banner {
   align-items: center;
   border-radius: 8px;
-  padding: 18px;
-  margin: 24px 0;
+  padding: 11px 13px;
+  margin: 12px 0;
   background: var(--green);
   color: #ffffff;
 }
@@ -870,12 +883,13 @@ section.alt {
 }
 
 .admin-button {
-  min-height: 44px;
+  min-height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  padding: 0 16px;
+  padding: 0 12px;
+  font-size: 0.84rem;
   background: var(--ochre);
   color: #ffffff;
   text-decoration: none;
@@ -885,22 +899,36 @@ section.alt {
 .admin-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 9px;
+  margin-bottom: 12px;
 }
 
 .admin-tile {
-  min-height: 200px;
+  min-height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 18px;
+  padding: 11px;
+}
+
+.admin-tile h2,
+.admin-panel h2 {
+  margin: 0 0 5px;
+  font-size: 0.96rem;
+  line-height: 1.25;
+}
+
+.admin-tile p,
+.admin-panel p {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.4;
 }
 
 .admin-stat {
-  margin-top: 22px;
+  margin-top: 10px;
   color: var(--charcoal);
-  font-size: 2.1rem;
+  font-size: 1.45rem;
   font-weight: 900;
 }
 
@@ -914,11 +942,11 @@ section.alt {
 .admin-panels {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
-  gap: 18px;
+  gap: 9px;
 }
 
 .admin-panel {
-  padding: 22px;
+  padding: 12px;
 }
 
 table {
@@ -980,8 +1008,14 @@ input {
   .frontdoor-grid,
   .hero-flex .container,
   .two-col,
-  .program-hero,
-  .admin-grid,
+  .program-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .admin-panels {
     grid-template-columns: 1fr;
   }
@@ -1006,7 +1040,8 @@ input {
   }
 
   .frontdoor-grid,
-  .crisis-grid {
+  .crisis-grid,
+  .admin-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1971,6 +2006,15 @@ input {
   max-width: 100%;
 }
 
+.admin-page-content > .admin-top h1 {
+  font-size: clamp(1.75rem, 3vw, 2.2rem);
+}
+
+.admin-page-content > .admin-top .admin-kicker {
+  margin-bottom: 4px;
+  font-size: 0.68rem;
+}
+
 .admin-stat-badge {
   min-height: 36px;
   display: inline-flex;
@@ -2413,339 +2457,6 @@ input {
   text-align: right;
 }
 
-/* ===== Admin — Funding ===== */
-
-.admin-funding-page {
-  display: grid;
-  gap: 16px;
-}
-
-.admin-funding-window {
-  display: grid;
-  grid-template-columns: 296px minmax(0, 1fr);
-  min-height: calc(100vh - 152px);
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid #d8cdb9;
-  background: #f8f4ed;
-  box-shadow: 0 24px 64px rgba(32, 28, 26, 0.12);
-}
-
-.admin-funding-sidebar {
-  display: grid;
-  gap: 16px;
-  padding: 20px;
-  background: var(--charcoal);
-  color: var(--cream);
-}
-
-.admin-funding-back,
-.admin-funding-new-thread,
-.admin-funding-secondary {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #d4d4d4;
-  border-radius: 999px;
-  padding: 0 16px;
-  background: #ffffff;
-  font: inherit;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.admin-funding-back {
-  width: fit-content;
-  background: rgba(250, 246, 239, 0.08);
-  color: var(--cream);
-  border-color: rgba(250, 246, 239, 0.14);
-}
-
-.admin-funding-back:hover {
-  background: rgba(250, 246, 239, 0.14);
-}
-
-.admin-funding-new-thread {
-  width: 100%;
-  background: var(--charcoal-soft);
-  color: #ffffff;
-  border-color: rgba(250, 246, 239, 0.14);
-}
-
-.admin-funding-rail-section {
-  display: grid;
-  gap: 10px;
-}
-
-.admin-funding-rail-section-spread {
-  align-content: start;
-}
-
-.admin-funding-rail-label,
-.admin-funding-message-title,
-.admin-funding-problem-label {
-  margin: 0;
-  color: #9a5b22;
-  font-size: 0.74rem;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.admin-funding-thread-list {
-  display: grid;
-  gap: 10px;
-}
-
-.admin-funding-thread {
-  display: grid;
-  gap: 4px;
-  border: 1px solid rgba(250, 246, 239, 0.12);
-  border-radius: 12px;
-  padding: 12px;
-  background: rgba(250, 246, 239, 0.04);
-  text-align: left;
-  cursor: pointer;
-  color: var(--cream);
-}
-
-.admin-funding-thread.active {
-  border-color: rgba(59, 130, 246, 0.8);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.16);
-  background: rgba(250, 246, 239, 0.09);
-}
-
-.admin-funding-thread-title {
-  font-weight: 900;
-  color: #ffffff;
-}
-
-.admin-funding-thread-status {
-  color: #e4c692;
-  font-size: 0.76rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.admin-funding-thread-preview {
-  color: rgba(250, 246, 239, 0.72);
-  font-size: 0.84rem;
-  line-height: 1.45;
-}
-
-.admin-funding-source-list {
-  margin: 0;
-  padding-left: 18px;
-  display: grid;
-  gap: 8px;
-  color: rgba(250, 246, 239, 0.78);
-  font-size: 0.86rem;
-}
-
-.admin-funding-main {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: 14px;
-  min-width: 0;
-  padding: 14px;
-  background: #faf7f2;
-}
-
-.admin-funding-banner {
-  border-radius: 12px;
-  padding: 12px 16px;
-  background: #fff2db;
-  color: #9a5b22;
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-align: center;
-}
-
-.admin-funding-scroll {
-  overflow: auto;
-  display: grid;
-  gap: 16px;
-  padding: 6px 4px 2px;
-}
-
-.admin-funding-problem-card,
-.admin-funding-message,
-.admin-funding-opportunity,
-.admin-funding-callout,
-.admin-funding-composer {
-  border: 1px solid #e8dece;
-  border-radius: 14px;
-  background: #ffffff;
-  box-shadow: 0 10px 24px rgba(32, 28, 26, 0.05);
-}
-
-.admin-funding-problem-card,
-.admin-funding-callout {
-  padding: 16px 18px;
-}
-
-.admin-funding-problem-text {
-  margin: 10px 0 0;
-  font-size: 0.98rem;
-  line-height: 1.6;
-  color: var(--text);
-}
-
-.admin-funding-pill-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.admin-funding-pill {
-  border-radius: 999px;
-  padding: 6px 12px;
-  background: #123d3b;
-  color: #ffffff;
-  font-size: 0.72rem;
-  font-weight: 900;
-  white-space: nowrap;
-}
-
-.admin-funding-pill-soft {
-  background: #e8efe8;
-  color: #30524f;
-}
-
-.admin-funding-message-list {
-  display: grid;
-  gap: 12px;
-}
-
-.admin-funding-message {
-  padding: 14px 16px;
-}
-
-.admin-funding-message-problem {
-  background: #f6f7f8;
-}
-
-.admin-funding-message-agent {
-  background: #f4f0ff;
-}
-
-.admin-funding-message-author {
-  margin: 0 0 6px;
-  color: #5a47a4;
-  font-size: 0.8rem;
-  font-weight: 900;
-}
-
-.admin-funding-message p {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.65;
-}
-
-.admin-funding-opportunity-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.admin-funding-opportunity {
-  padding: 14px;
-}
-
-.admin-funding-opportunity-head {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.admin-funding-opportunity-type,
-.admin-funding-opportunity-status {
-  font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.admin-funding-opportunity-type {
-  color: #9a5b22;
-}
-
-.admin-funding-opportunity-status {
-  color: #16a34a;
-}
-
-.admin-funding-opportunity h3 {
-  margin: 0 0 6px;
-  font-size: 1rem;
-}
-
-.admin-funding-opportunity p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.86rem;
-  line-height: 1.55;
-}
-
-.admin-funding-callout {
-  display: grid;
-  gap: 10px;
-}
-
-.admin-funding-callout h3 {
-  margin: 0;
-  font-size: 0.92rem;
-}
-
-.admin-funding-guardrail {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-  line-height: 1.55;
-}
-
-.admin-funding-composer {
-  display: grid;
-  gap: 12px;
-  padding: 14px;
-}
-
-.admin-funding-composer input {
-  min-height: 54px;
-  border: 1px solid #d6d0c7;
-  border-radius: 12px;
-  padding: 0 16px;
-  font: inherit;
-  font-size: 0.95rem;
-}
-
-.admin-funding-composer-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-.admin-button-dark {
-  background: #151515;
-  border-color: #151515;
-}
-
-.admin-funding-send {
-  width: 46px;
-  height: 46px;
-  border: 0;
-  border-radius: 50%;
-  background: #151515;
-  color: #ffffff;
-  font-size: 1.15rem;
-  font-weight: 900;
-  cursor: pointer;
-  margin-left: auto;
-}
-
 /* ===== Admin — Tile links ===== */
 
 .admin-tile-link {
@@ -2820,39 +2531,641 @@ input {
     grid-template-columns: 1fr;
   }
 
-  .admin-funding-window {
-    grid-template-columns: 1fr;
+}
+
+/* ===== Admin — Dedicated Funding workspace ===== */
+
+.admin-funding-app {
+  position: relative;
+  height: 100dvh;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 190px minmax(420px, 1fr) 214px;
+  overflow: hidden;
+  background: #f7f3ec;
+}
+
+.admin-funding-app .admin-funding-sidebar {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 11px 10px;
+  overflow: hidden;
+  background: var(--charcoal);
+  color: var(--cream);
+}
+
+.admin-funding-sidebar-toggle-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.admin-funding-sidebar-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.admin-funding-sidebar-toggle {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(250, 246, 239, 0.14);
+  border-radius: 8px;
+  background: rgba(250, 246, 239, 0.08);
+  color: var(--cream);
+  cursor: pointer;
+}
+
+.admin-funding-sidebar-toggle:hover {
+  background: rgba(250, 246, 239, 0.14);
+}
+
+.admin-funding-sidebar-toggle-input:focus-visible + .admin-funding-sidebar .admin-funding-sidebar-toggle {
+  outline: 2px solid #d8a76f;
+  outline-offset: 2px;
+}
+
+.admin-funding-app .admin-funding-sidebar-head {
+  gap: 6px;
+}
+
+.admin-funding-toggle-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+
+.admin-funding-toggle-expand {
+  display: none;
+}
+
+.admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) {
+  grid-template-columns: 48px minmax(420px, 1fr) 214px;
+}
+
+.admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) .admin-funding-sidebar {
+  padding-inline: 10px;
+}
+
+.admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) .admin-funding-brand,
+.admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) .admin-funding-back,
+.admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) .admin-funding-new-thread,
+.admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) .admin-funding-rail-section,
+.admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) .admin-funding-privacy,
+.admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) .admin-funding-toggle-collapse {
+  display: none;
+}
+
+.admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) .admin-funding-toggle-expand {
+  display: block;
+}
+
+.admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) .admin-funding-sidebar-head {
+  justify-content: center;
+}
+
+.admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) .admin-funding-toggle-icon {
+  transform: rotate(180deg);
+}
+
+.admin-funding-back,
+.admin-funding-new-thread,
+.admin-funding-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d4d4d4;
+  background: #ffffff;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-funding-sidebar-head,
+.admin-funding-header,
+.admin-funding-header-actions,
+.admin-funding-context-heading,
+.admin-funding-composer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.admin-funding-brand {
+  color: var(--cream);
+  font-size: 1.16rem;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.admin-funding-brand span {
+  color: var(--ochre);
+}
+
+.admin-funding-app .admin-funding-back {
+  min-height: 28px;
+  padding: 0 6px;
+  border-radius: 8px;
+  font-size: 0.68rem;
+  text-decoration: none;
+  background: rgba(250, 246, 239, 0.08);
+  color: var(--cream);
+  border-color: rgba(250, 246, 239, 0.14);
+}
+
+.admin-funding-back:hover {
+  background: rgba(250, 246, 239, 0.14);
+}
+
+.admin-funding-app .admin-funding-new-thread {
+  width: 100%;
+  min-height: 34px;
+  justify-content: flex-start;
+  gap: 8px;
+  border-radius: 9px;
+  padding: 0 10px;
+  font-size: 0.78rem;
+  background: var(--cream);
+  color: var(--charcoal);
+}
+
+.admin-funding-app .admin-funding-rail-section {
+  min-height: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.admin-funding-app .admin-funding-rail-label {
+  margin: 0;
+  color: #d8a76f;
+  font-size: 0.67rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.admin-funding-app .admin-funding-thread-list {
+  min-height: 0;
+  display: grid;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+.admin-funding-app .admin-funding-thread {
+  display: grid;
+  gap: 2px;
+  border: 1px solid rgba(250, 246, 239, 0.12);
+  border-radius: 9px;
+  padding: 7px 8px;
+  background: rgba(250, 246, 239, 0.04);
+  color: var(--cream);
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-funding-app .admin-funding-thread.active {
+  border-color: rgba(216, 167, 111, 0.72);
+  background: rgba(250, 246, 239, 0.1);
+  box-shadow: inset 3px 0 #d8a76f;
+}
+
+.admin-funding-app .admin-funding-thread-title {
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.admin-funding-app .admin-funding-thread-status {
+  color: #e4c692;
+  font-size: 0.56rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-funding-app .admin-funding-thread-preview {
+  overflow: hidden;
+  color: rgba(250, 246, 239, 0.62);
+  font-size: 0.63rem;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-funding-privacy {
+  margin: auto 0 0;
+  border-top: 1px solid rgba(250, 246, 239, 0.12);
+  padding-top: 10px;
+  color: rgba(250, 246, 239, 0.54);
+  font-size: 0.67rem;
+  line-height: 1.35;
+}
+
+.admin-funding-app .admin-funding-main {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: 7px;
+  padding: 10px 12px;
+  border-right: 1px solid #e2d8c8;
+  background: #faf8f4;
+}
+
+.admin-funding-header {
+  min-width: 0;
+}
+
+.admin-funding-header h1 {
+  overflow: hidden;
+  margin: 1px 0 0;
+  font-size: clamp(1.05rem, 1.7vw, 1.28rem);
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-funding-header .admin-kicker {
+  margin-bottom: 2px;
+  font-size: 0.64rem;
+}
+
+.admin-funding-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #42615d;
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.admin-funding-status span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+}
+
+.admin-funding-app .admin-funding-secondary {
+  min-height: 30px;
+  border-radius: 8px;
+  padding: 0 9px;
+  font-size: 0.66rem;
+}
+
+.admin-funding-app .admin-funding-banner {
+  border-radius: 8px;
+  padding: 6px 9px;
+  background: #fff2db;
+  color: #9a5b22;
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.admin-funding-app .admin-funding-scroll {
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 1px 4px 2px 0;
+  overflow: auto;
+}
+
+.admin-funding-app .admin-funding-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.admin-funding-app .admin-funding-pill {
+  border-radius: 999px;
+  padding: 3px 8px;
+  background: #123d3b;
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.admin-funding-app .admin-funding-pill-soft {
+  background: #e8efe8;
+  color: #30524f;
+}
+
+.admin-funding-app .admin-funding-message-list {
+  display: grid;
+  gap: 5px;
+}
+
+.admin-funding-app .admin-funding-message {
+  max-width: 88%;
+  border: 1px solid #e8dece;
+  border-radius: 10px;
+  padding: 7px 9px;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.admin-funding-app .admin-funding-message-problem {
+  justify-self: end;
+  background: #e9eee9;
+}
+
+.admin-funding-app .admin-funding-message-agent {
+  border-color: #ded5f3;
+  background: #f4f0ff;
+}
+
+.admin-funding-app .admin-funding-message-title,
+.admin-funding-app .admin-funding-message-author {
+  margin-top: 0;
+  margin-bottom: 3px;
+  font-size: 0.66rem;
+  font-weight: 900;
+}
+
+.admin-funding-app .admin-funding-message-title {
+  color: #9a5b22;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.admin-funding-app .admin-funding-message-author {
+  color: #5a47a4;
+}
+
+.admin-funding-app .admin-funding-message p {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.38;
+}
+
+.admin-funding-app .admin-funding-opportunity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.admin-funding-app .admin-funding-opportunity {
+  border: 1px solid #e8dece;
+  border-radius: 9px;
+  padding: 7px;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.admin-funding-app .admin-funding-opportunity-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.admin-funding-app .admin-funding-opportunity-type,
+.admin-funding-app .admin-funding-opportunity-status {
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-funding-app .admin-funding-opportunity-type {
+  color: #9a5b22;
+}
+
+.admin-funding-app .admin-funding-opportunity-status {
+  color: #16a34a;
+}
+
+.admin-funding-app .admin-funding-opportunity h2 {
+  margin: 0 0 3px;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.admin-funding-app .admin-funding-opportunity p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.admin-funding-app .admin-funding-composer {
+  display: grid;
+  gap: 3px;
+  border: 1px solid #e8dece;
+  border-radius: 11px;
+  padding: 6px 7px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(32, 28, 26, 0.07);
+}
+
+.admin-funding-composer textarea {
+  width: 100%;
+  min-height: 24px;
+  max-height: 90px;
+  resize: vertical;
+  border: 0;
+  outline: 0;
+  padding: 3px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.76rem;
+}
+
+.admin-funding-app .admin-funding-composer-actions {
+  color: var(--muted);
+  font-size: 0.64rem;
+}
+
+.admin-funding-app .admin-funding-send {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: #151515;
+  color: #ffffff;
+  margin-left: auto;
+  font-size: 0.92rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-funding-context {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  overflow-y: auto;
+  padding: 10px;
+  background: #f3eee6;
+}
+
+.admin-funding-context section {
+  border: 1px solid #e0d5c5;
+  border-radius: 10px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.admin-funding-context h2 {
+  margin: 4px 0 3px;
+  font-size: 0.8rem;
+  line-height: 1.25;
+}
+
+.admin-funding-context p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.65rem;
+  line-height: 1.38;
+}
+
+.admin-funding-context-heading > span {
+  color: var(--muted);
+  font-size: 0.64rem;
+}
+
+.admin-funding-artefact-list {
+  display: grid;
+  gap: 5px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.67rem;
+}
+
+.admin-funding-artefact-list li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.admin-funding-artefact-list li span {
+  color: #9a5b22;
+  font-weight: 900;
+}
+
+.admin-funding-context .admin-funding-human-card {
+  background: #fff8ec;
+}
+
+.admin-funding-human-card .admin-funding-secondary {
+  width: 100%;
+  margin-top: 9px;
+}
+
+.admin-funding-context .admin-funding-guardrail-card {
+  margin-top: auto;
+  border-color: #ead4d0;
+  background: #fff6f4;
+}
+
+.admin-funding-guardrail-card strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #94463b;
+  font-size: 0.72rem;
+}
+
+@media (max-width: 880px) {
+  .admin-funding-app {
+    grid-template-columns: 180px minmax(420px, 1fr);
   }
 
-  .admin-funding-sidebar {
-    position: static;
+  .admin-funding-context {
+    display: none;
   }
 
-  .admin-funding-opportunity-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-funding-main {
-    padding: 12px;
-  }
-
-  .admin-funding-banner {
-    text-align: left;
-  }
-
-  .admin-funding-send {
-    margin-left: 0;
+  .admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) {
+    grid-template-columns: 48px minmax(420px, 1fr);
   }
 }
 
-@media (max-width: 560px) {
-  .admin-funding-composer-actions {
-    display: grid;
+@media (max-width: 720px) {
+  .admin-funding-app {
+    height: 100dvh;
+    min-height: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: 180px minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  .admin-funding-app .admin-funding-sidebar {
+    min-height: 0;
+    padding: 10px 12px;
+  }
+
+  .admin-funding-app .admin-funding-rail-section {
+    flex: initial;
+  }
+
+  .admin-funding-app .admin-funding-thread-list {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(170px, 62vw);
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 3px;
+  }
+
+  .admin-funding-privacy {
+    display: none;
+  }
+
+  .admin-funding-app .admin-funding-main {
+    min-height: 0;
+    border-right: 0;
+    padding: 9px;
+  }
+
+  .admin-funding-header {
+    align-items: flex-start;
+  }
+
+  .admin-funding-header-actions .admin-funding-status {
+    display: none;
+  }
+
+  .admin-funding-app .admin-funding-opportunity-grid {
     grid-template-columns: 1fr;
   }
 
-  .admin-funding-opportunity-grid {
+  .admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) {
     grid-template-columns: 1fr;
+    grid-template-rows: 48px minmax(0, 1fr);
+  }
+
+  .admin-funding-app:has(> .admin-funding-sidebar-toggle-input:checked) .admin-funding-sidebar {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 720px) and (max-height: 600px) {
+  .admin-funding-app {
+    grid-template-rows: 140px minmax(0, 1fr);
+  }
+
+  .admin-funding-app .admin-funding-sidebar {
+    gap: 7px;
+    padding-block: 8px;
+  }
+
+  .admin-funding-app .admin-funding-new-thread {
+    display: none;
   }
 }
 
