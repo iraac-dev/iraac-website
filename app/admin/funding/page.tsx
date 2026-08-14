@@ -1,6 +1,4 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type FundingMessage =
   | {
@@ -18,210 +16,198 @@ const recentThreads = [
   {
     title: "ACCO transport support",
     subtitle: "Ready for review",
-    preview: "Looking for a grant, vehicle support, or a small finance option for community transport.",
+    preview: "Transport and program delivery support.",
     active: true,
   },
   {
     title: "Youth program equipment",
     subtitle: "Shortlist ready",
-    preview: "A mixed funding path for laptops, workshop materials, and delivery costs.",
+    preview: "Laptops, workshop materials and delivery costs.",
   },
   {
     title: "Business readiness check",
     subtitle: "Waiting on evidence",
-    preview: "Needs ABN, trading history, and a clearer purpose before a shortlist can be drafted.",
+    preview: "ABN, trading history and funding purpose.",
   },
   {
     title: "Cultural camp support",
-    subtitle: "Human handoff requested",
-    preview: "Needs a Sebenza consultant to confirm suitable grant and acquittal options.",
+    subtitle: "Handoff requested",
+    preview: "Grant options and acquittal support.",
   },
 ];
 
 const activeMessages: FundingMessage[] = [
   {
     role: "problem",
-    title: "Problem",
-    body: "Funding for community transport and program delivery for an Aboriginal organisation.",
+    title: "You",
+    body: "We need help funding transport and program delivery for a community-facing Aboriginal organisation.",
   },
   {
     role: "agent",
     author: "IRAAC Funding Agent",
     body:
-      "I’m checking current official sources, basic readiness, and missing facts before I draft a shortlist. I can prepare work, but I cannot promise eligibility or submit anything on your behalf.",
+      "I’m checking current official sources, basic readiness, and missing facts before I draft a shortlist. I can prepare the work, but I cannot promise eligibility or submit anything on your behalf.",
   },
   {
     role: "agent",
     author: "IRAAC Funding Agent",
     body:
-      "The first pass is looking strongest for a transport-related grant, an Indigenous business support pathway, and a readiness checklist for evidence and timing.",
+      "The first pass is strongest for a transport-related grant, an Indigenous business support pathway, and a readiness checklist covering evidence and timing.",
   },
 ];
 
 const opportunityCards = [
   {
     type: "Grant",
-    title: "business.gov.au - Grants and Programs finder",
-    detail: "Use for Commonwealth grants, programs, and business support pathways.",
+    title: "business.gov.au",
+    detail: "Commonwealth grants, programs and business support pathways.",
   },
   {
     type: "Grant",
     title: "GrantConnect",
-    detail: "Primary source for Australian Government grant opportunities and guidelines.",
+    detail: "Australian Government opportunities and official guidelines.",
   },
   {
     type: "Support",
-    title: "NIAA grants and funding",
-    detail: "Indigenous Advancement Strategy and current Indigenous program guidance.",
+    title: "NIAA funding",
+    detail: "Indigenous Advancement Strategy and current program guidance.",
   },
-  {
-    type: "Finance",
-    title: "Indigenous Business Australia",
-    detail: "Business support and finance products for Aboriginal and Torres Strait Islander businesses.",
-  },
-];
-
-const sourceCatalogue = [
-  "business.gov.au",
-  "GrantConnect",
-  "National Indigenous Australians Agency",
-  "Indigenous Business Australia",
-  "NSW grants and business support",
-  "Approved local and philanthropic sources",
 ];
 
 const artefacts = ["Shortlist", "Readiness checklist", "Evidence list", "Draft outline", "Deadline plan"];
 
 export default function AdminFundingPage() {
-  const router = useRouter();
-
   return (
-    <div className="admin-page-content admin-funding-page">
-      <div className="admin-top">
-        <div>
-          <p className="admin-kicker">Staff console</p>
-          <h1>Funding</h1>
+    <div className="admin-funding-app">
+      <aside className="admin-funding-sidebar" aria-label="Funding conversations">
+        <div className="admin-funding-sidebar-head">
+          <Link className="admin-funding-brand" href="/admin/" aria-label="Back to IRAAC dashboard">
+            IRAAC<span>.</span>
+          </Link>
+          <Link className="admin-funding-back" href="/admin/">
+            Dashboard
+          </Link>
         </div>
-        <div className="admin-stat-badge">Windowed workspace</div>
-      </div>
 
-      <div className="admin-funding-window">
-        <aside className="admin-funding-sidebar">
-          <button type="button" className="admin-funding-back" onClick={() => router.back()}>
-            ← Back
-          </button>
+        <button type="button" className="admin-funding-new-thread">
+          <span aria-hidden="true">＋</span> New chat
+        </button>
 
-          <button type="button" className="admin-funding-new-thread">
-            + New thread
-          </button>
+        <div className="admin-funding-rail-section">
+          <p className="admin-funding-rail-label">Previous chats</p>
+          <div className="admin-funding-thread-list">
+            {recentThreads.map((thread) => (
+              <button
+                key={thread.title}
+                type="button"
+                aria-pressed={thread.active || undefined}
+                className={thread.active ? "admin-funding-thread active" : "admin-funding-thread"}
+              >
+                <span className="admin-funding-thread-title">{thread.title}</span>
+                <span className="admin-funding-thread-status">{thread.subtitle}</span>
+                <span className="admin-funding-thread-preview">{thread.preview}</span>
+              </button>
+            ))}
+          </div>
+        </div>
 
-          <div className="admin-funding-rail-section">
-            <p className="admin-funding-rail-label">Recent threads</p>
-            <div className="admin-funding-thread-list">
-              {recentThreads.map((thread) => (
-                <button
-                  key={thread.title}
-                  type="button"
-                  className={thread.active ? "admin-funding-thread active" : "admin-funding-thread"}
-                >
-                  <span className="admin-funding-thread-title">{thread.title}</span>
-                  <span className="admin-funding-thread-status">{thread.subtitle}</span>
-                  <span className="admin-funding-thread-preview">{thread.preview}</span>
-                </button>
-              ))}
-            </div>
+        <p className="admin-funding-privacy">Staff workspace · AI-labelled · Human reviewed</p>
+      </aside>
+
+      <main className="admin-funding-main">
+        <header className="admin-funding-header">
+          <div>
+            <p className="admin-kicker">Funding message centre</p>
+            <h1>ACCO transport support</h1>
+          </div>
+          <div className="admin-funding-header-actions">
+            <span className="admin-funding-status"><span aria-hidden="true" /> Agent active</span>
+            <button type="button" className="admin-funding-secondary">Share with Sebenza</button>
+          </div>
+        </header>
+
+        <div className="admin-funding-banner" role="note">
+          Source-backed guidance only. IRAAC can prepare a shortlist and drafts, but a human must confirm eligibility and submit.
+        </div>
+
+        <div className="admin-funding-scroll" aria-label="Active funding conversation">
+          <div className="admin-funding-pill-row" aria-label="Funding context">
+            <span className="admin-funding-pill admin-funding-pill-soft">Aboriginal organisation</span>
+            <span className="admin-funding-pill admin-funding-pill-soft">Transport</span>
+            <span className="admin-funding-pill admin-funding-pill-soft">Program delivery</span>
           </div>
 
-          <div className="admin-funding-rail-section admin-funding-rail-section-spread">
-            <p className="admin-funding-rail-label">Approved sources</p>
-            <ul className="admin-funding-source-list">
-              {sourceCatalogue.map((source) => (
-                <li key={source}>{source}</li>
-              ))}
-            </ul>
-          </div>
-        </aside>
-
-        <section className="admin-funding-main">
-          <div className="admin-funding-banner">
-            Funding is source-backed, staff-first, and human-reviewed. It can prepare a shortlist and draft notes, but it cannot promise funding or act like a consultant.
+          <div className="admin-funding-message-list">
+            {activeMessages.map((message) => (
+              <article
+                key={`${message.role}-${message.body.slice(0, 24)}`}
+                className={`admin-funding-message admin-funding-message-${message.role}`}
+              >
+                {"title" in message ? <p className="admin-funding-message-title">{message.title}</p> : null}
+                {"author" in message ? <p className="admin-funding-message-author">{message.author}</p> : null}
+                <p>{message.body}</p>
+              </article>
+            ))}
           </div>
 
-          <div className="admin-funding-scroll">
-            <div className="admin-funding-problem-card">
-              <p className="admin-funding-problem-label">Problem</p>
-              <p className="admin-funding-problem-text">
-                We need help funding transport and program delivery for a community-facing Aboriginal organisation.
-              </p>
-            </div>
-
-            <div className="admin-funding-pill-row">
-              <span className="admin-funding-pill admin-funding-pill-soft">Aboriginal organisation</span>
-              <span className="admin-funding-pill admin-funding-pill-soft">Transport</span>
-              <span className="admin-funding-pill admin-funding-pill-soft">Program delivery</span>
-            </div>
-
-            <div className="admin-funding-message-list">
-              {activeMessages.map((message) => (
-                <div key={`${message.role}-${message.body.slice(0, 24)}`} className={`admin-funding-message admin-funding-message-${message.role}`}>
-                  {"title" in message ? (
-                    <p className="admin-funding-message-title">{message.title}</p>
-                  ) : null}
-                  {"author" in message ? <p className="admin-funding-message-author">{message.author}</p> : null}
-                  <p>{message.body}</p>
+          <div className="admin-funding-opportunity-grid" aria-label="Suggested funding sources">
+            {opportunityCards.map((card) => (
+              <article key={card.title} className="admin-funding-opportunity">
+                <div className="admin-funding-opportunity-head">
+                  <span className="admin-funding-opportunity-type">{card.type}</span>
+                  <span className="admin-funding-opportunity-status">Current</span>
                 </div>
-              ))}
-            </div>
-
-            <div className="admin-funding-opportunity-grid">
-              {opportunityCards.map((card) => (
-                <article key={card.title} className="admin-funding-opportunity">
-                  <div className="admin-funding-opportunity-head">
-                    <span className="admin-funding-opportunity-type">{card.type}</span>
-                    <span className="admin-funding-opportunity-status">Open</span>
-                  </div>
-                  <h3>{card.title}</h3>
-                  <p>{card.detail}</p>
-                </article>
-              ))}
-            </div>
-
-            <div className="admin-funding-callout">
-              <h3>Shared artefacts</h3>
-              <ul className="admin-funding-source-list">
-                {artefacts.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="admin-funding-callout">
-              <h3>Guardrails</h3>
-              <p className="admin-funding-guardrail">
-                No guaranteed eligibility, fabricated evidence, autonomous submissions, funder contact, or impersonated humans.
-              </p>
-            </div>
+                <h2>{card.title}</h2>
+                <p>{card.detail}</p>
+              </article>
+            ))}
           </div>
+        </div>
 
-          <div className="admin-funding-composer">
-            <input type="text" aria-label="Ask your agent about funding" placeholder="Ask your agent about funding..." />
-            <div className="admin-funding-composer-actions">
-              <button type="button" className="admin-button admin-button-dark">
-                Agent
-              </button>
-              <button type="button" className="admin-funding-secondary">
-                Sebenza Consultant
-              </button>
-              <button type="button" className="admin-funding-secondary">
-                Add consultant
-              </button>
-              <button type="button" className="admin-funding-send" aria-label="Send">
-                →
-              </button>
-            </div>
+        <div className="admin-funding-composer">
+          <label className="sr-only" htmlFor="funding-message">Ask the IRAAC Funding Agent</label>
+          <textarea id="funding-message" rows={1} placeholder="Ask what funding or support may fit…" />
+          <div className="admin-funding-composer-actions">
+            <span><strong>AI agent</strong> · Sources shown with answers</span>
+            <button type="button" className="admin-funding-send" aria-label="Send message">↑</button>
           </div>
+        </div>
+      </main>
+
+      <aside className="admin-funding-context" aria-label="Funding workspace details">
+        <section>
+          <p className="admin-funding-rail-label">Current task</p>
+          <h2>Prepare a funding shortlist</h2>
+          <p>Compare transport, delivery and organisational support pathways.</p>
         </section>
-      </div>
+
+        <section>
+          <div className="admin-funding-context-heading">
+            <p className="admin-funding-rail-label">Shared work</p>
+            <span>5 items</span>
+          </div>
+          <ul className="admin-funding-artefact-list">
+            {artefacts.map((item, index) => (
+              <li key={item}>
+                <span aria-hidden="true">{index === 0 ? "✓" : "○"}</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="admin-funding-human-card">
+          <p className="admin-funding-rail-label">Need a person?</p>
+          <h2>Sebenza consultant</h2>
+          <p>Preview exactly what will be shared before requesting a named consultant.</p>
+          <button type="button" className="admin-funding-secondary">Review handoff</button>
+        </section>
+
+        <section className="admin-funding-guardrail-card">
+          <strong>Human decision required</strong>
+          <p>No automatic applications, funder contact or guaranteed eligibility.</p>
+        </section>
+      </aside>
     </div>
   );
 }
