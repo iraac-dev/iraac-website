@@ -39,7 +39,9 @@ not yet place or answer phone calls, send SMS messages, authenticate providers,
 isolate one provider's leads from another, or persist production referrals. The
 UI labels these limits wherever a person could otherwise mistake the prototype
 for a live service. Production builds fail closed on the admin routes until
-Supabase authentication is configured.
+Supabase authentication is configured. A deliberately public, fictional-data
+showcase can opt in with `MOBLINK_DEMO_MODE=true`; never enable that flag for a
+deployment that accepts or stores real personal information.
 
 Production work must connect Supabase Auth, tenant-scoped RLS, audited consent,
 provider onboarding, verified directory data, notification delivery, and a

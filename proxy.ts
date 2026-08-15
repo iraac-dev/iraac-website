@@ -7,14 +7,19 @@ export async function proxy(request: NextRequest) {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
+  const isSyntheticDemo = process.env.MOBLINK_DEMO_MODE === "true";
 
   // Local development remains available for synthetic-data demonstrations.
-  // A production deployment fails closed until authentication is configured.
+  // Production fails closed unless the deployment explicitly opts into the
+  // labelled synthetic demo or configures real authentication.
   if (!supabaseUrl || !supabaseAnonKey) {
-    if (isAdminRoute && process.env.NODE_ENV === "production") {
+    if (isAdminRoute && process.env.NODE_ENV === "production" && !isSyntheticDemo) {
       return new NextResponse("MobLink supplier authentication is not configured.", { status: 503 });
     }
-    supabaseResponse.headers.set("x-moblink-auth", "prototype-unconfigured");
+    supabaseResponse.headers.set(
+      "x-moblink-auth",
+      isSyntheticDemo ? "synthetic-demo" : "prototype-unconfigured",
+    );
     return supabaseResponse;
   }
 
