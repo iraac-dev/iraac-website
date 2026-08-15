@@ -22,27 +22,27 @@ export default function AdminDashboard() {
     <div className="admin-page-content">
       <div className="admin-top">
         <div>
-          <p className="admin-kicker">Staff console</p>
-          <h1>IRAAC overview</h1>
+          <p className="admin-kicker">Supplier workspace</p>
+          <h1>MobLink overview</h1>
         </div>
         <div className="admin-stat-badge">{pendingReferrals > 0 ? `${pendingReferrals} pending` : "All clear"}</div>
       </div>
 
       <div className="admin-banner">
         <div>
-          <strong>Service directory is live.</strong>
-          <p>20 services across 15 categories in the Nowra / Illawarra region. Referrals and reporting are active.</p>
+          <strong>The MobLink connection workflow is ready to explore.</strong>
+          <p>See how an app or hotline request becomes a matched lead, supplier alert, and shared conversation.</p>
         </div>
         <Link className="admin-button" href="/app/">
-          Open MobLink
+          Open community app
         </Link>
       </div>
 
       <div className="admin-grid">
         <Link href="/admin/referrals" className="admin-tile admin-tile-link">
           <div>
-            <h2>Referral queue</h2>
-            <p>Incoming service requests and scheduled callbacks.</p>
+            <h2>Lead inbox</h2>
+            <p>Incoming app and hotline requests matched to this provider.</p>
           </div>
           <div>
             <div className="admin-stat">{totalReferrals}</div>
@@ -74,22 +74,22 @@ export default function AdminDashboard() {
 
         <div className="admin-tile">
           <div>
-            <h2>Create MobLink account</h2>
-            <p>Staff-created account setup link flow.</p>
+            <h2>Call-centre intake</h2>
+            <p>Turn a caller&apos;s need and location into a reviewed service match.</p>
           </div>
           <div>
-            <div className="admin-stat">Ready</div>
-            <div className="admin-label">Prototype flow</div>
+            <div className="admin-stat">AI</div>
+            <div className="admin-label"><Link href="/admin/call-centre">Open intake →</Link></div>
           </div>
         </div>
       </div>
 
       <div className="admin-panels">
         <div className="admin-panel" id="queue">
-          <h2>Recent referrals</h2>
+          <h2>Recent leads</h2>
           {totalReferrals === 0 ? (
             <div className="admin-empty">
-              <p>No referrals yet. Referrals appear here when a community member requests help from a service.</p>
+              <p>No leads yet. Leads appear here when a community member requests help by app or hotline.</p>
             </div>
           ) : (
             <table>
@@ -121,7 +121,7 @@ export default function AdminDashboard() {
             </table>
           )}
           <Link href="/admin/referrals" className="admin-panel-link">
-            View all referrals →
+            View all leads →
           </Link>
         </div>
 

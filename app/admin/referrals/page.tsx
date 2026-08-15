@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { getReferrals, updateReferralStatus, referralStatusLabels, referralStatusColors, type Referral, type ReferralStatus } from "../../../lib/referrals";
+import { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
+import { getReferrals, updateReferralStatus, referralSourceLabels, referralStatusLabels, referralStatusColors, type Referral, type ReferralStatus } from "../../../lib/referrals";
 
 export default function AdminReferralsPage() {
   const [referrals, setReferrals] = useState<Referral[]>([]);
@@ -13,32 +14,44 @@ export default function AdminReferralsPage() {
     setReferrals(getReferrals());
   }, []);
 
-  const filtered = filter === "all" ? referrals : referrals.filter((r) => r.status === filter);
+  const { filtered, counts } = useMemo(() => {
+    const statusCounts = { requested: 0, triage: 0, follow_up_due: 0, pending: 0 };
+    const visible: Referral[] = [];
+    for (const referral of referrals) {
+      if (referral.status === "requested") statusCounts.requested += 1;
+      if (referral.status === "triage") statusCounts.triage += 1;
+      if (referral.status === "follow_up_due") statusCounts.follow_up_due += 1;
+      if (referral.status === "requested" || referral.status === "triage") statusCounts.pending += 1;
+      if (filter === "all" || referral.status === filter) visible.push(referral);
+    }
+    return { filtered: visible, counts: statusCounts };
+  }, [filter, referrals]);
+
+  const replaceReferral = (updated: Referral | undefined) => {
+    if (!updated) return;
+    setReferrals((current) => current.map((referral) => (referral.id === updated.id ? updated : referral)));
+  };
 
   const handleStatusChange = (id: string, status: ReferralStatus) => {
-    updateReferralStatus(id, status);
-    setReferrals(getReferrals());
+    replaceReferral(updateReferralStatus(id, status));
   };
 
   const handleSaveNotes = (id: string) => {
     const r = referrals.find((ref) => ref.id === id);
     if (!r) return;
-    updateReferralStatus(id, r.status, editNotes);
-    setReferrals(getReferrals());
+    replaceReferral(updateReferralStatus(id, r.status, editNotes));
     setExpanded(null);
   };
-
-  const pendingCount = referrals.filter((r) => r.status === "requested" || r.status === "triage").length;
 
   return (
     <div className="admin-page-content">
       <div className="admin-top">
         <div>
-          <p className="admin-kicker">Staff console</p>
-          <h1>Referral queue</h1>
+          <p className="admin-kicker">MobLink network demo</p>
+          <h1>Leads</h1>
         </div>
         <div className="admin-stat-badge">
-          {pendingCount} pending
+          {counts.pending} pending
         </div>
       </div>
 
@@ -55,21 +68,21 @@ export default function AdminReferralsPage() {
           className={`admin-filter-btn ${filter === "requested" ? "active" : ""}`}
           onClick={() => setFilter("requested")}
         >
-          New ({referrals.filter((r) => r.status === "requested").length})
+          New ({counts.requested})
         </button>
         <button
           type="button"
           className={`admin-filter-btn ${filter === "triage" ? "active" : ""}`}
           onClick={() => setFilter("triage")}
         >
-          Triage ({referrals.filter((r) => r.status === "triage").length})
+          Triage ({counts.triage})
         </button>
         <button
           type="button"
           className={`admin-filter-btn ${filter === "follow_up_due" ? "active" : ""}`}
           onClick={() => setFilter("follow_up_due")}
         >
-          Follow-up ({referrals.filter((r) => r.status === "follow_up_due").length})
+          Follow-up ({counts.follow_up_due})
         </button>
       </div>
 
@@ -97,12 +110,16 @@ export default function AdminReferralsPage() {
 
               <div className="admin-referral-body">
                 <div className="admin-referral-detail">
-                  <span className="admin-detail-label">Service</span>
+                  <span className="admin-detail-label">Matched service</span>
                   <span>{referral.serviceName}</span>
                 </div>
                 <div className="admin-referral-detail">
                   <span className="admin-detail-label">Need</span>
                   <span>{referral.needCategory}</span>
+                </div>
+                <div className="admin-referral-detail">
+                  <span className="admin-detail-label">Source</span>
+                  <span>{referralSourceLabels[referral.source]} · {referral.postcode || "No postcode"}</span>
                 </div>
                 <div className="admin-referral-detail">
                   <span className="admin-detail-label">Consent to follow-up</span>
@@ -121,6 +138,7 @@ export default function AdminReferralsPage() {
               </div>
 
               <div className="admin-referral-actions">
+                <Link className="admin-small-btn admin-small-btn-primary" href={`/admin/referrals/${referral.id}`}>Open lead & chat</Link>
                 <select
                   value={referral.status}
                   onChange={(e) => handleStatusChange(referral.id, e.target.value as ReferralStatus)}

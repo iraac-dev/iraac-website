@@ -46,13 +46,13 @@ const activeMessages: FundingMessage[] = [
   },
   {
     role: "agent",
-    author: "IRAAC Funding Agent",
+    author: "MobLink Funding Agent",
     body:
       "I’m checking current official sources, basic readiness, and missing facts before I draft a shortlist. I can prepare work, but I cannot promise eligibility or submit anything on your behalf.",
   },
   {
     role: "agent",
-    author: "IRAAC Funding Agent",
+    author: "MobLink Funding Agent",
     body:
       "The first pass is looking strongest for a transport-related grant, an Indigenous business support pathway, and a readiness checklist for evidence and timing.",
   },
@@ -99,7 +99,7 @@ export default function AdminFundingPage() {
     <div className="admin-page-content admin-funding-page">
       <div className="admin-top">
         <div>
-          <p className="admin-kicker">Staff console</p>
+          <p className="admin-kicker">Supplier workspace</p>
           <h1>Funding</h1>
         </div>
         <div className="admin-stat-badge">Windowed workspace</div>
@@ -144,7 +144,7 @@ export default function AdminFundingPage() {
 
         <section className="admin-funding-main">
           <div className="admin-funding-banner">
-            Funding is source-backed, staff-first, and human-reviewed. It can prepare a shortlist and draft notes, but it cannot promise funding or act like a consultant.
+            MobLink Funding is source-backed, supplier-controlled, and human-reviewed. It can prepare a shortlist and draft notes, but it cannot promise funding, contact funders, or submit applications.
           </div>
 
           <div className="admin-funding-scroll">

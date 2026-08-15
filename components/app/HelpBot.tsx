@@ -73,17 +73,17 @@ const initialMessages: Message[] = [
   {
     role: "bot",
     text:
-      "Hi, I'm Chat with IRAAC. 👋\n\n" +
+      "Hi, I'm the MobLink guide. 👋\n\n" +
       "Tell me what's going on — I'll listen, find services that can help, " +
-      "or connect you with an IRAAC team member.\n\n" +
+      "or prepare a request for a participating service.\n\n" +
       "For example, you can say things like:\n" +
       '• "I need somewhere to live"\n' +
       '• "I\'m having legal trouble"\n' +
       '• "I need to see a doctor"\n' +
       '• "I\'m feeling really down"\n\n' +
       "You can also:\n" +
-      "• Tap **Talk to a person** to speak with an IRAAC team member\n" +
-      "• Call **1800 662 5465** to speak with our AI phone line or a real person",
+      "• Tap **Talk to a person** to request a human follow-up\n" +
+      "• Browse services by need and location",
   },
 ];
 
@@ -150,9 +150,9 @@ export default function HelpBot({ onBackToContact }: { onBackToContact?: () => v
         lower.includes("number")
       ) {
         addBotMessage(
-          "You can reach us by phone at **1800 662 5465**.\n\n" +
-            "Our AI phone line is available to listen and help connect you with services. " +
-            "You can also speak with a real IRAAC team member during office hours.\n\n" +
+          "The MobLink hotline is being prepared for launch.\n\n" +
+            "For now, I can help you search services in the app or prepare a request for a participating provider. " +
+            "Call **000** if you are in immediate danger.\n\n" +
             "Would you like me to help with anything else in the meantime?"
         );
         return;
@@ -166,7 +166,7 @@ export default function HelpBot({ onBackToContact }: { onBackToContact?: () => v
             "You can also:\n" +
             "• Browse all services on the **Search** tab\n" +
             "• **Request help** from any service page\n" +
-            "• Tap **Talk to a person** to speak with an IRAAC team member"
+            "• Tap **Talk to a person** to request human follow-up"
         );
         return;
       }
@@ -177,7 +177,7 @@ export default function HelpBot({ onBackToContact }: { onBackToContact?: () => v
           "Hello! 👋\n\n" +
             "What kind of support are you looking for today? Tell me a bit about what's going on " +
             "and I'll help find the right services for you.\n\n" +
-            "Or if you'd prefer, you can tap **Talk to a person** above to speak with an IRAAC team member."
+            "Or if you'd prefer, you can tap **Talk to a person** above to request human follow-up."
         );
         return;
       }
@@ -192,9 +192,9 @@ export default function HelpBot({ onBackToContact }: { onBackToContact?: () => v
           matched
         );
         addBotMessage(
-          "You can tap any service to see more details, or **Request help** to have an IRAAC team member follow up with you.\n\n" +
+          "You can tap any service to see more details, or **Request help** to send that provider a consented lead.\n\n" +
             "If none of these are quite right, tell me more and I'll look again. " +
-            "Or tap **Talk to a person** to speak with an IRAAC team member."
+            "Or tap **Talk to a person** to request human follow-up."
         );
       } else {
         addBotMessage(
@@ -202,7 +202,7 @@ export default function HelpBot({ onBackToContact }: { onBackToContact?: () => v
             "Could you tell me a bit more? For example:\n" +
             "• What kind of support do you need?\n" +
             "• What area are you in?\n\n" +
-            "Or you can **browse all services** or tap **Talk to a person** to speak with an IRAAC team member."
+            "Or you can **browse all services** or tap **Talk to a person** to request human follow-up."
         );
       }
     }, 800);
@@ -211,7 +211,7 @@ export default function HelpBot({ onBackToContact }: { onBackToContact?: () => v
   const showHumanMode = () => {
     setHumanMode(true);
     addBotMessage(
-      "I've noted that you'd like to speak with a real person. An IRAAC team member will be in touch with you soon.\n\n" +
+      "I've noted that you'd like to speak with a real person. This prototype records the request but does not yet notify a live operator.\n\n" +
         "In the meantime, here are some ways to reach us:"
     );
     const all = services.filter((s) => !s.isCrisis).slice(0, 3);
@@ -236,7 +236,7 @@ export default function HelpBot({ onBackToContact }: { onBackToContact?: () => v
         <div className="help-bot-header-info">
           <span className="help-bot-avatar">🤖</span>
           <div>
-            <strong>Chat with IRAAC</strong>
+            <strong>MobLink guide</strong>
             <span className="help-bot-status">Online</span>
           </div>
         </div>
@@ -300,14 +300,11 @@ export default function HelpBot({ onBackToContact }: { onBackToContact?: () => v
           <div className="chat-human-mode-icon">🙋</div>
           <h3>We&apos;re here to help</h3>
           <p>
-            An IRAAC team member will be in touch with you as soon as possible. In the meantime, here are some other ways to reach us:
+            This prototype has recorded your preference for human support. Live operator follow-up is not connected yet; you can still browse and request help from listed services.
           </p>
           <div className="chat-human-actions">
-            <a href="tel:18006625465" className="chat-human-btn chat-human-btn-primary">
-              📞 Call 1800 662 5465
-            </a>
-            <Link href="/contact/" className="chat-human-btn chat-human-btn-outline" onClick={onBackToContact}>
-              🏠 Request a home visit
+            <Link href="/app/search/" className="chat-human-btn chat-human-btn-primary" onClick={onBackToContact}>
+              Find a participating service
             </Link>
             <button
               type="button"

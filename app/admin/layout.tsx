@@ -9,7 +9,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const links = [
     { href: "/admin/", label: "Overview" },
-    { href: "/admin/referrals", label: "Referral Queue" },
+    { href: "/admin/call-centre", label: "Call Centre" },
+    { href: "/admin/referrals", label: "Leads" },
     { href: "/admin/services", label: "Service Directory" },
     { href: "/admin/reports", label: "Reports" },
     { href: "/admin/funding", label: "Funding" },
@@ -20,7 +21,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="admin-shell">
         <aside className="admin-sidebar">
           <Link className="brand" href="/">
-            IRAAC<span>.</span>
+            MOBLINK<span>.</span>
           </Link>
           <nav aria-label="Staff dashboard sections">
             {links.map((link) => {
@@ -41,7 +42,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             })}
           </nav>
           <p className="admin-note">
-            Staff admin dashboard. Authentication, Supabase roles and audit controls will be wired in the next build pass.
+            MobLink-wide network demo. Authentication, provider-specific access, live notifications and audit controls still need production wiring.
           </p>
         </aside>
         <div className="admin-main">{children}</div>

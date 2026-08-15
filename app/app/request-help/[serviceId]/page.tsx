@@ -3,7 +3,7 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { services } from "../../../data";
-import { createReferral, saveReferral, needCategories } from "../../../../lib/referrals";
+import { createReferral, saveReferral, needCategories, type PreferredContact } from "../../../../lib/referrals";
 import BottomNav from "../../../../components/app/BottomNav";
 
 export default function RequestHelpPage() {
@@ -11,15 +11,18 @@ export default function RequestHelpPage() {
   const params = useParams();
   const serviceId = params?.serviceId as string;
   const [submitted, setSubmitted] = useState(false);
+  const [createdReferralId, setCreatedReferralId] = useState("");
   const [form, setForm] = useState({
     requesterName: "",
     requesterPhone: "",
     requesterEmail: "",
+    postcode: "2541",
     needCategory: "Other",
     message: "",
     serviceId: "general",
     serviceName: "General support",
     consentToFollowUp: false,
+    preferredContact: "sms" as PreferredContact,
   });
 
   const [service, setService] = useState<typeof services[0] | null>(null);
@@ -40,6 +43,7 @@ export default function RequestHelpPage() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (!form.consentToFollowUp) return;
     const referral = createReferral({
       serviceId: form.serviceId,
       serviceName: form.serviceName,
@@ -47,11 +51,15 @@ export default function RequestHelpPage() {
       requesterName: form.requesterName,
       requesterPhone: form.requesterPhone,
       requesterEmail: form.requesterEmail,
+      postcode: form.postcode,
       needCategory: form.needCategory,
       message: form.message,
       consentToFollowUp: form.consentToFollowUp,
+      source: "app",
+      preferredContact: form.preferredContact,
     });
     saveReferral(referral);
+    setCreatedReferralId(referral.id);
     setSubmitted(true);
   };
 
@@ -66,9 +74,9 @@ export default function RequestHelpPage() {
           <div className="request-confirmed">
             <div className="request-confirmed-icon">✓</div>
             <h1>Request submitted</h1>
-            <p>Your request for help has been sent to the IRAAC team. They will review it and follow up with you.</p>
+            <p>Your request has been shared with {service?.name || "the selected service"}. You can track it and keep the conversation going in MobLink.</p>
             <p className="request-confirmed-detail">
-              Reference: <strong>{(getRecentReferral()?.id || "").slice(0, 12)}</strong>
+              Reference: <strong>{createdReferralId.slice(0, 12)}</strong>
             </p>
             <div className="request-confirmed-actions">
               <button type="button" className="service-card-button" onClick={() => router.push("/app/")}>
@@ -119,6 +127,12 @@ export default function RequestHelpPage() {
 
 
         <form onSubmit={handleSubmit} className="request-form">
+          <div className="admin-banner admin-banner-soft">
+            <div>
+              <strong>Prototype: use fictional details only.</strong>
+              <p>This screen saves requests in this browser. It does not contact a real service yet.</p>
+            </div>
+          </div>
           <div className="request-form-group">
             <label htmlFor="requesterName">Your name *</label>
             <input
@@ -144,6 +158,20 @@ export default function RequestHelpPage() {
           </div>
 
           <div className="request-form-group">
+            <label htmlFor="postcode">Postcode *</label>
+            <input
+              id="postcode"
+              type="text"
+              inputMode="numeric"
+              required
+              pattern="[0-9]{4}"
+              placeholder="e.g. 2541"
+              value={form.postcode}
+              onChange={(e) => setForm({ ...form, postcode: e.target.value })}
+            />
+          </div>
+
+          <div className="request-form-group">
             <label htmlFor="requesterEmail">Email (optional)</label>
             <input
               id="requesterEmail"
@@ -152,6 +180,19 @@ export default function RequestHelpPage() {
               value={form.requesterEmail}
               onChange={(e) => setForm({ ...form, requesterEmail: e.target.value })}
             />
+          </div>
+
+          <div className="request-form-group">
+            <label htmlFor="preferredContact">How should the service contact you?</label>
+            <select
+              id="preferredContact"
+              value={form.preferredContact}
+              onChange={(e) => setForm({ ...form, preferredContact: e.target.value as PreferredContact })}
+            >
+              <option value="sms">Text message</option>
+              <option value="phone">Phone call</option>
+              <option value="in_app">MobLink chat</option>
+            </select>
           </div>
 
           <div className="request-form-group">
@@ -184,14 +225,15 @@ export default function RequestHelpPage() {
             <label>
               <input
                 type="checkbox"
+                required
                 checked={form.consentToFollowUp}
                 onChange={(e) => setForm({ ...form, consentToFollowUp: e.target.checked })}
               />
-              <span>IRAAC can follow up with me about this request</span>
+              <span>MobLink may share these details with this service so they can follow up about this request</span>
             </label>
           </div>
 
-          <button type="submit" className="service-card-button request-form-submit">
+          <button type="submit" className="service-card-button request-form-submit" disabled={!form.consentToFollowUp}>
             Submit request
           </button>
         </form>
@@ -200,15 +242,4 @@ export default function RequestHelpPage() {
       </div>
     </main>
   );
-}
-
-function getRecentReferral() {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem("iraac_referrals");
-    const refs = raw ? JSON.parse(raw) : [];
-    return refs[refs.length - 1] || null;
-  } catch {
-    return null;
-  }
 }

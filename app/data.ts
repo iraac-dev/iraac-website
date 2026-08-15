@@ -13,16 +13,15 @@ export type PageKey =
 
 export const navItems = [
   { href: "/", label: "Home", key: "index" },
-  { href: "/programs/", label: "Programs", key: "programs" },
-  { href: "/insights/", label: "Insights", key: "insights" },
+  { href: "/app/search/", label: "Find services", key: "services" },
+  { href: "/#how-it-works", label: "How it works", key: "how" },
 ];
 
 export const dropdownItems = [
-  { href: "/about/", label: "Our Story", key: "about" },
-  { href: "/governance/", label: "Governance & Reporting", key: "governance" },
-  { href: "/support/", label: "Support", key: "support" },
-  { href: "/news/", label: "News", key: "news" },
-  { href: "/contact/", label: "Contact", key: "contact" },
+  { href: "/#for-providers", label: "For service providers", key: "providers" },
+  { href: "/admin/funding/", label: "Funding workspace", key: "funding" },
+  { href: "/app/map/", label: "Service map", key: "map" },
+  { href: "/app/messages/", label: "MobLink chat", key: "chat" },
 ];
 
 export const programs = [
