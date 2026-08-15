@@ -8,6 +8,18 @@ export type ReferralStatus =
   | "escalated"
   | "withdrawn";
 
+export type ReferralSource = "app" | "hotline" | "ai_outbound" | "provider";
+export type PreferredContact = "phone" | "sms" | "in_app";
+export type SupplierNotificationStatus = "not_required" | "queued" | "sent";
+
+export interface ReferralMessage {
+  id: string;
+  sender: "community" | "provider" | "moblink";
+  senderName: string;
+  body: string;
+  createdAt: string;
+}
+
 export interface Referral {
   id: string;
   serviceId: string;
@@ -16,22 +28,65 @@ export interface Referral {
   requesterName: string;
   requesterPhone: string;
   requesterEmail: string;
+  postcode: string;
   needCategory: string;
   message: string;
   consentToFollowUp: boolean;
+  source: ReferralSource;
+  preferredContact: PreferredContact;
+  supplierNotification: SupplierNotificationStatus;
+  conversation: ReferralMessage[];
   status: ReferralStatus;
   staffNotes: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export function createReferral(data: Omit<Referral, "id" | "status" | "staffNotes" | "createdAt" | "updatedAt">): Referral {
+type ReferralInput = Omit<
+  Referral,
+  | "id"
+  | "status"
+  | "staffNotes"
+  | "createdAt"
+  | "updatedAt"
+  | "conversation"
+  | "supplierNotification"
+  | "postcode"
+  | "source"
+  | "preferredContact"
+> & {
+  conversation?: ReferralMessage[];
+  supplierNotification?: SupplierNotificationStatus;
+  postcode?: string;
+  source?: ReferralSource;
+  preferredContact?: PreferredContact;
+};
+
+const STORAGE_KEY = "moblink_referrals";
+const LEGACY_STORAGE_KEY = "iraac_referrals";
+
+export function createReferral(data: ReferralInput): Referral {
   const now = new Date().toISOString();
   return {
     ...data,
+    postcode: data.postcode ?? "",
+    source: data.source ?? "app",
+    preferredContact: data.preferredContact ?? "phone",
     id: `ref_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     status: "requested",
     staffNotes: "",
+    supplierNotification: data.supplierNotification ?? (data.consentToFollowUp ? "queued" : "not_required"),
+    conversation: data.conversation ?? [
+      {
+        id: `msg_${Date.now()}_welcome`,
+        sender: "moblink",
+        senderName: "MobLink",
+        body: data.consentToFollowUp
+          ? `Your request has been shared with ${data.serviceName}. You can keep the conversation here.`
+          : `This request is saved on this device and has not been shared with ${data.serviceName}.`,
+        createdAt: now,
+      },
+    ],
     createdAt: now,
     updatedAt: now,
   };
@@ -40,10 +95,14 @@ export function createReferral(data: Omit<Referral, "id" | "status" | "staffNote
 export function getReferrals(): Referral[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem("iraac_referrals");
-    return raw ? JSON.parse(raw) : [];
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
+    if (!raw) return demoReferrals;
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return demoReferrals;
+    const referrals = parsed.filter(isStoredReferral).map(normalizeReferral);
+    return referrals.length > 0 || parsed.length === 0 ? referrals : demoReferrals;
   } catch {
-    return [];
+    return demoReferrals;
   }
 }
 
@@ -56,17 +115,38 @@ export function saveReferral(referral: Referral): void {
   } else {
     referrals.push(referral);
   }
-  localStorage.setItem("iraac_referrals", JSON.stringify(referrals));
+  writeReferrals(referrals);
 }
 
-export function updateReferralStatus(id: string, status: ReferralStatus, notes?: string): void {
+export function updateReferralStatus(id: string, status: ReferralStatus, notes?: string): Referral | undefined {
   const referrals = getReferrals();
   const r = referrals.find((ref) => ref.id === id);
-  if (!r) return;
+  if (!r) return undefined;
+  if (r.status === status && (notes === undefined || r.staffNotes === notes)) return r;
   r.status = status;
   if (notes !== undefined) r.staffNotes = notes;
   r.updatedAt = new Date().toISOString();
-  localStorage.setItem("iraac_referrals", JSON.stringify(referrals));
+  writeReferrals(referrals);
+  return r;
+}
+
+export function addReferralMessage(
+  id: string,
+  message: Pick<ReferralMessage, "sender" | "senderName" | "body">,
+): Referral | undefined {
+  const referrals = getReferrals();
+  const referral = referrals.find((item) => item.id === id);
+  if (!referral || !message.body.trim()) return undefined;
+
+  referral.conversation.push({
+    ...message,
+    id: `msg_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+    body: message.body.trim(),
+    createdAt: new Date().toISOString(),
+  });
+  referral.updatedAt = new Date().toISOString();
+  writeReferrals(referrals);
+  return referral;
 }
 
 export function getReferralById(id: string): Referral | undefined {
@@ -101,6 +181,76 @@ function groupBy(items: Referral[], key: keyof Referral): Record<string, number>
   );
 }
 
+function writeReferrals(referrals: Referral[]): void {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(referrals));
+}
+
+function normalizeReferral(referral: Referral): Referral {
+  return {
+    ...referral,
+    postcode: referral.postcode || "",
+    source: referral.source || "app",
+    preferredContact: referral.preferredContact || "phone",
+    supplierNotification: referral.supplierNotification || "not_required",
+    conversation: referral.conversation || [],
+  };
+}
+
+function isStoredReferral(value: unknown): value is Referral {
+  if (!value || typeof value !== "object") return false;
+  const referral = value as Partial<Referral>;
+  return (
+    typeof referral.id === "string" &&
+    typeof referral.serviceId === "string" &&
+    typeof referral.serviceName === "string" &&
+    typeof referral.requesterName === "string" &&
+    typeof referral.requesterPhone === "string" &&
+    typeof referral.message === "string" &&
+    typeof referral.consentToFollowUp === "boolean" &&
+    typeof referral.status === "string" &&
+    typeof referral.createdAt === "string"
+  );
+}
+
+export const demoReferrals: Referral[] = [
+  {
+    id: "lead_demo_centrelink",
+    serviceId: "shoalhaven-aboriginal-pension",
+    serviceName: "Shoalhaven Aboriginal Pension Support",
+    serviceCategory: "Centrelink",
+    requesterName: "Demo community member",
+    requesterPhone: "04•• ••• 214",
+    requesterEmail: "",
+    postcode: "2541",
+    needCategory: "Centrelink",
+    message: "Needs help understanding and completing a Centrelink application.",
+    consentToFollowUp: true,
+    source: "hotline",
+    preferredContact: "sms",
+    supplierNotification: "queued",
+    status: "requested",
+    staffNotes: "Confirm the correct payment type before requesting documents.",
+    conversation: [
+      {
+        id: "msg_demo_1",
+        sender: "moblink",
+        senderName: "MobLink call centre",
+        body: "This person asked MobLink for Centrelink application support and agreed to an SMS follow-up.",
+        createdAt: "2026-08-15T08:35:00.000Z",
+      },
+      {
+        id: "msg_demo_2",
+        sender: "community",
+        senderName: "Community member",
+        body: "I would like to know what documents I need before we start.",
+        createdAt: "2026-08-15T08:42:00.000Z",
+      },
+    ],
+    createdAt: "2026-08-15T08:35:00.000Z",
+    updatedAt: "2026-08-15T08:42:00.000Z",
+  },
+];
+
 export const referralStatusLabels: Record<ReferralStatus, string> = {
   requested: "New — pending review",
   triage: "In triage",
@@ -110,6 +260,25 @@ export const referralStatusLabels: Record<ReferralStatus, string> = {
   could_not_connect: "Could not connect",
   escalated: "Escalated",
   withdrawn: "Withdrawn",
+};
+
+export const referralSourceLabels: Record<ReferralSource, string> = {
+  app: "MobLink app",
+  hotline: "MobLink hotline",
+  ai_outbound: "AI-assisted outbound call",
+  provider: "Provider-created",
+};
+
+export const preferredContactLabels: Record<PreferredContact, string> = {
+  phone: "Phone call",
+  sms: "Text message",
+  in_app: "MobLink chat",
+};
+
+export const supplierNotificationLabels: Record<SupplierNotificationStatus, string> = {
+  not_required: "Not required",
+  queued: "Queued",
+  sent: "Sent",
 };
 
 export const referralStatusColors: Record<ReferralStatus, string> = {

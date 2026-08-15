@@ -3,7 +3,7 @@ import { services } from "../data";
 import BottomNav from "../../components/app/BottomNav";
 
 export const metadata = {
-  title: "1800 Mob Link | IRAAC",
+  title: "MobLink | Find support near you",
   description: "Find Aboriginal and community services near you — health, legal, housing, crisis support and more.",
 };
 

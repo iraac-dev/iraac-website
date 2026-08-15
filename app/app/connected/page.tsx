@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { getReferrals, type Referral } from "../../../lib/referrals";
+import { getReferrals, referralStatusLabels, type Referral } from "../../../lib/referrals";
 import BottomNav from "../../../components/app/BottomNav";
 
 export default function ConnectedPage() {
@@ -53,13 +53,14 @@ export default function ConnectedPage() {
                 </div>
                 <div className="compact-grid">
                   {active.map((r) => (
-                    <div className="compact-card" key={r.id}>
+                    <Link href={`/app/connected/${r.id}`} className="compact-card" key={r.id}>
                       <span className="compact-card-emoji" aria-hidden="true">🔄</span>
                       <div className="compact-card-body">
                         <strong className="compact-card-name">{r.serviceName}</strong>
-                        <span className="compact-card-meta">{r.status.replace("_", " ")} · {r.needCategory}</span>
+                        <span className="compact-card-meta">{referralStatusLabels[r.status]} · {r.needCategory}</span>
                       </div>
-                    </div>
+                      <span aria-hidden="true">→</span>
+                    </Link>
                   ))}
                 </div>
               </section>
@@ -72,13 +73,14 @@ export default function ConnectedPage() {
                 </div>
                 <div className="compact-grid">
                   {resolved.map((r) => (
-                    <div className="compact-card" key={r.id}>
+                    <Link href={`/app/connected/${r.id}`} className="compact-card" key={r.id}>
                       <span className="compact-card-emoji" aria-hidden="true">✅</span>
                       <div className="compact-card-body">
                         <strong className="compact-card-name">{r.serviceName}</strong>
                         <span className="compact-card-meta">{r.needCategory} · Resolved</span>
                       </div>
-                    </div>
+                      <span aria-hidden="true">→</span>
+                    </Link>
                   ))}
                 </div>
               </section>

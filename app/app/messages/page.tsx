@@ -13,7 +13,7 @@ export default function ChatPage() {
       <main className="app-page">
         <div className="phone-shell phone-shell-compact">
           <div className="phone-status" aria-hidden="true">
-            <span className="phone-time">IRAAC</span>
+            <span className="phone-time">MobLink</span>
             <span className="phone-signal">1800 MOB LINK</span>
           </div>
           <div className="detail-back">
@@ -54,10 +54,10 @@ export default function ChatPage() {
             <span className="inbox-item-avatar">🤖</span>
             <div className="inbox-item-body">
               <div className="inbox-item-top">
-                <strong className="inbox-item-name">Chat with IRAAC</strong>
+                <strong className="inbox-item-name">MobLink guide</strong>
                 <span className="inbox-item-time">Now</span>
               </div>
-              <span className="inbox-item-preview">Hi, I&apos;m Chat with IRAAC. 👋 Tell me what&apos;s going on...</span>
+              <span className="inbox-item-preview">Tell MobLink what is going on and we&apos;ll help you find the next step.</span>
               <span className="inbox-item-badge">Online</span>
             </div>
           </button>
@@ -80,7 +80,7 @@ export default function ChatPage() {
                 <strong className="inbox-item-name">Have Your Say</strong>
                 <span className="inbox-item-time" />
               </div>
-              <span className="inbox-item-preview">Complete the IRAAC survey — your voice matters</span>
+              <span className="inbox-item-preview">Complete the community survey — your voice matters</span>
             </div>
           </Link>
         </div>

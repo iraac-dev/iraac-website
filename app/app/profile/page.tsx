@@ -58,7 +58,7 @@ export default function ProfilePage() {
               <span className="compact-card-emoji" aria-hidden="true">💬</span>
               <div className="compact-card-body">
                 <strong className="compact-card-name">Messages</strong>
-                <span className="compact-card-meta">Updates from IRAAC</span>
+                <span className="compact-card-meta">Updates from MobLink and connected services</span>
               </div>
             </Link>
             <Link href="/app/settings" className="compact-card">
@@ -72,7 +72,7 @@ export default function ProfilePage() {
               <span className="compact-card-emoji" aria-hidden="true">📝</span>
               <div className="compact-card-body">
                 <strong className="compact-card-name">Have Your Say</strong>
-                <span className="compact-card-meta">Complete the IRAAC survey</span>
+                <span className="compact-card-meta">Complete the community survey</span>
               </div>
             </Link>
           </div>

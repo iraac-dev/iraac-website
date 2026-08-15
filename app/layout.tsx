@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "IRAAC",
-  description: "IRAAC public website, MobLink prototype and staff admin dashboard.",
+  title: "MobLink | Find the right support, close to home",
+  description: "MobLink connects Aboriginal and Torres Strait Islander people with suitable local and national services by app or phone.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
