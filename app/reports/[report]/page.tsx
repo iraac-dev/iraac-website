@@ -40,8 +40,8 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ r
                 <p>{report.centralMessage}</p>
               </div>
               {report.notice ? <div className="report-notice"><strong>Read this report in context</strong><p>{report.notice}</p></div> : null}
-              {report.sections.map((section) => (
-                <section className="report-section" key={section.title}>
+              {report.sections.map((section, index) => (
+                <section className="report-section" id={`section-${index + 1}`} key={section.title}>
                   <h2>{section.title}</h2>
                   {section.paragraphs?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                   {section.points ? <ul>{section.points.map((point) => <li key={point}>{point}</li>)}</ul> : null}
@@ -55,6 +55,14 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ r
             <aside className="report-side">
               <div className="report-side-card"><span>Report date</span><strong>{report.date}</strong></div>
               <div className="report-side-card"><span>Report type</span><strong>{report.type}</strong></div>
+              <nav className="report-contents" aria-label="Report contents">
+                <span>In this report</span>
+                <ol>
+                  {report.sections.map((section, index) => (
+                    <li key={section.title}><a href={`#section-${index + 1}`}>{section.title}</a></li>
+                  ))}
+                </ol>
+              </nav>
               <Link className="report-side-back" href="/reports/">View all reports →</Link>
             </aside>
           </div>
