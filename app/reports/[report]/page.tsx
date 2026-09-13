@@ -22,7 +22,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ r
 
   return (
     <SiteShell>
-      <main className="report-detail">
+      <main id="main-content" tabIndex={-1} className="report-detail">
         <section className="report-detail-hero">
           <div className="container report-detail-hero-inner">
             <Link className="report-back" href="/reports/">← Back to all reports</Link>
@@ -49,7 +49,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ r
               ))}
               <div className="report-end">
                 <div><span>End of report</span><h2>Keep the conversation going</h2><p>Tell IRAAC what this report missed or what needs closer attention.</p></div>
-                <Link className="btn btn-primary" href="/app/survey/">Have Your Say</Link>
+                <Link className="btn btn-primary" href="/app/survey/" prefetch={false}>Have Your Say</Link>
               </div>
             </article>
             <aside className="report-side">

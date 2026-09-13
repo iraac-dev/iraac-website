@@ -1,71 +1,125 @@
 import Link from "next/link";
+import CommunityImage, { PaintedDivider } from "./CommunityImage";
 import { programs } from "./data";
-import SiteShell from "./SiteShell";
+import { communityReports } from "./reports/report-data";
+import SiteShell, { FrontDoor } from "./SiteShell";
 
 export default function Home() {
+  const latest = communityReports[0];
   return (
-    <SiteShell showFrontDoor>
-      <main>
-        <section className="hero-flex">
-          <div className="container">
+    <SiteShell>
+      <main id="main-content" tabIndex={-1}>
+        <FrontDoor />
+        <section className="community-intro">
+          <div className="container community-intro-grid">
             <div>
-              <div className="eyebrow">Aboriginal Community Organisation - Local Decision Making</div>
-              <h1>Strong governance. Strong programs. Strong community.</h1>
+              <div className="eyebrow">New here?</div>
+              <h2>Get to know IRAAC</h2>
               <p>
-                IRAAC is a community organisation working with and for community through Local Decision Making. It
-                delivers programs, builds governance capability and helps Aboriginal Community Organisations do the same.
+                IRAAC works with and for Aboriginal community. We bring people
+                together through community programs and help make sure community
+                priorities are part of the decisions that affect us.
               </p>
-              <Link href="/book-a-call/" className="btn btn-primary">
-                Book a Free 15-Min Call
+              <Link href="/about/" className="text-link">
+                More about IRAAC <span aria-hidden="true">→</span>
               </Link>
-              <Link href="/programs/" className="btn btn-outline">
-                See Our Programs
-              </Link>
+              <aside className="welcome-note">
+                <h3>You don’t need to know where to start.</h3>
+                <p>
+                  You don’t need to know a program name before asking a
+                  question. You can learn about IRAAC first, or choose a way to
+                  get in touch that works for you.
+                </p>
+                <Link href="/contact/" className="text-link">
+                  See ways to get in touch <span aria-hidden="true">→</span>
+                </Link>
+              </aside>
             </div>
-            <div className="art-panel">
-              <img src="https://picsum.photos/seed/iraac-art-placeholder/900/900" alt="" />
-            </div>
+            <CommunityImage kind="office" />
           </div>
         </section>
-
-        <section>
+        <PaintedDivider />
+        <section className="home-programs" id="programs">
           <div className="container">
-            <h2 className="section-title">What We Do</h2>
-            <p className="section-lead">
-              IRAAC runs a small group of community programs and is building the governance and reporting systems that
-              show funders and community alike that IRAAC is well run.
-            </p>
-            <div className="grid">
+            <div className="section-heading">
+              <div>
+                <div className="eyebrow">What we do</div>
+                <h2>Our community programs</h2>
+              </div>
+              <p>
+                Find out what each program is about, who it supports and how it
+                is developing. If something interests you, you can ask us about
+                it.
+              </p>
+            </div>
+            <div className="home-community-photo">
+              <CommunityImage kind="gathering" />
+            </div>
+            <div className="program-grid">
               {programs.map((program) => (
-                <article className="card" key={program.id}>
-                  <img src={program.image} alt="" />
-                  <div className="card-body">
-                    <h3>{program.title}</h3>
-                    <p>{program.description}</p>
-                    <Link href={`/programs/#${program.id}`} className="card-link">
-                      Learn more
-                    </Link>
+                <Link
+                  href={`/programs/${program.id}/`}
+                  className={`program-card program-${program.id}`}
+                  key={program.id}
+                >
+                  <div className="program-card-top">
+                    <span>{program.tag}</span>
                   </div>
-                </article>
+                  <h3>{program.title}</h3>
+                  <p>{program.description}</p>
+                  <div className="program-card-bottom">
+                    <span>Find out more</span>
+                    <span className="round-arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
         </section>
-
-        <section className="alt">
-          <div className="container two-col">
-            <div>
-              <h2 className="section-title">Governed Well, Reported Openly</h2>
-              <p>
-                IRAAC is building the systems that let it show clearly and consistently that it meets the governance and
-                reporting standards expected by Local Decision Making, Aboriginal Affairs NSW, ORIC and other funding
-                bodies.
-              </p>
-              <Link href="/governance/" className="btn btn-primary">
-                See Our Governance
+        {latest && (
+          <section className="home-report">
+            <div className="container">
+              <div className="section-heading compact">
+                <div>
+                  <div className="eyebrow">Community voices</div>
+                  <h2>What we’re hearing from community</h2>
+                </div>
+                <Link href="/reports/" className="text-link">
+                  All reports <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+              <Link href={`/reports/${latest.slug}/`} className="latest-report">
+                <div>
+                  <span className="eyebrow">
+                    Latest report · {latest.month}
+                  </span>
+                  <span className="report-type">{latest.type}</span>
+                </div>
+                <div>
+                  <h3>{latest.title}</h3>
+                  <p>{latest.summary}</p>
+                </div>
+                <span className="round-arrow" aria-hidden="true">
+                  ↗
+                </span>
               </Link>
             </div>
-            <img src="https://picsum.photos/seed/iraac-meeting/1200/800" alt="" />
+          </section>
+        )}
+        <section className="community-accountability">
+          <div className="container">
+            <div>
+              <h2>How IRAAC is run</h2>
+              <p>
+                Learn about our Board, how decisions are made and how we report
+                back.
+              </p>
+            </div>
+            <Link href="/governance/" className="text-link">
+              How we work <span aria-hidden="true">→</span>
+            </Link>
           </div>
         </section>
       </main>

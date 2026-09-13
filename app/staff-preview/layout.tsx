@@ -1,12 +1,12 @@
 import Workspace from "../staff/Workspace";
 export const metadata = {
-  title: "IRAAC community workspace",
+  title: "IRAAC workspace preview",
   robots: { index: false, follow: false },
 };
-export default function AdminLayout({
+export default function PreviewLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <Workspace>{children}</Workspace>;
+  return <Workspace base="/staff-preview">{children}</Workspace>;
 }

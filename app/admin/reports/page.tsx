@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { StaffLink as Link } from "../../staff/Workspace";
 import { useState } from "react";
-import DirectoryInsights from "./DirectoryInsights";
 import { archivePeriod, audiences, reportLibrary } from "./report-library";
 import styles from "./reports.module.css";
 
@@ -228,10 +227,7 @@ export default function AdminReportsPage() {
             ))
         )}
       </section>
-      <details className={styles.insights}>
-        <summary>Service directory & referral statistics</summary>
-        <DirectoryInsights />
-      </details>
+
       <footer className={styles.footer}>
         IRAAC reporting archive · Draft editions · March–August 2026
       </footer>

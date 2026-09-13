@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "IRAAC",
-  description: "IRAAC public website, MobLink prototype and staff admin dashboard.",
+  description: "IRAAC is an Aboriginal Community Organisation working with and for community through Local Decision Making, community programs and stronger governance.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

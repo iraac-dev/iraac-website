@@ -27,10 +27,10 @@ export const programs = [
   {
     id: "mcc",
     title: "MCC - Mob and Country Connections",
-    tag: "Sector Capability",
+    tag: "Community organisations",
     image: "https://picsum.photos/seed/iraac-mcc/900/650",
     description:
-      "IRAAC supports other Aboriginal Community Organisations to build governance, administration and reporting capability through a peer-to-peer, relationship-based model.",
+      "A proposed peer-support project sharing practical governance, reporting and community-listening tools with Aboriginal organisations, at their invitation.",
   },
   {
     id: "youthscape",
@@ -38,23 +38,23 @@ export const programs = [
     tag: "Young People",
     image: "https://picsum.photos/seed/iraac-youth/900/650",
     description:
-      "YouthScape connects young people with culture, opportunity and support, while IRAAC develops the program detail, funding and operating model.",
+      "A proposed program bringing learning support, cultural mentoring, activities and family connection together for children and young people.",
   },
   {
     id: "thecrew",
     title: "The Crew",
-    tag: "Community",
+    tag: "Work, skills & housing",
     image: "https://picsum.photos/seed/iraac-crew/900/650",
     description:
-      "The Crew is a community-facing program building practical skills, connection and participation.",
+      "A proposed pathway into paid work and training, helping prepare vacant homes through supervised cleaning, gardening and safe property care.",
   },
   {
     id: "darc",
     title: "DARC",
-    tag: "Community",
+    tag: "Recovery & wellbeing",
     image: "https://picsum.photos/seed/iraac-darc/900/650",
     description:
-      "DARC sits alongside MCC, YouthScape and The Crew to support community outcomes and stronger pathways.",
+      "A proposed Drug and Alcohol Rehabilitation Centre initiative connecting culturally safe recovery support with family, housing and life after treatment.",
   },
 ];
 
@@ -101,11 +101,12 @@ export const publicPages: Record<
   },
   programs: {
     title: "Our Programs",
-    description: "MCC, YouthScape, The Crew and DARC - IRAAC's community programs.",
+    description:
+      "MCC, YouthScape, The Crew and DARC - IRAAC's community programs.",
     active: "programs",
-    eyebrow: "What We Deliver",
+    eyebrow: "Shaped by community priorities",
     hero: "Our Programs",
-    lead: "Four programs, each supporting community in a different way.",
+    lead: "Learning, work, recovery and stronger community organisations. Explore the four programs IRAAC is developing, what each could offer and where things stand.",
     image: "https://picsum.photos/seed/iraac-mcc/900/650",
     sections: [],
   },

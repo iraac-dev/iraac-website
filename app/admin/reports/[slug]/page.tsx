@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { StaffLink as Link } from "../../../staff/Workspace";
 import { notFound } from "next/navigation";
 import { findLibraryReport, reportLibrary } from "../report-library";
 import PrintReport from "../PrintReport";
