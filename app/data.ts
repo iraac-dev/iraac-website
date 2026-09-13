@@ -1,7 +1,6 @@
 export type PageKey =
   | "about"
   | "programs"
-  | "insights"
   | "governance"
   | "support"
   | "news"
@@ -14,12 +13,11 @@ export type PageKey =
 export const navItems = [
   { href: "/", label: "Home", key: "index" },
   { href: "/programs/", label: "Programs", key: "programs" },
-  { href: "/insights/", label: "Insights", key: "insights" },
+  { href: "/reports/", label: "Reports", key: "reports" },
 ];
 
 export const dropdownItems = [
   { href: "/about/", label: "Our Story", key: "about" },
-  { href: "/governance/", label: "Governance & Reporting", key: "governance" },
   { href: "/support/", label: "Support", key: "support" },
   { href: "/news/", label: "News", key: "news" },
   { href: "/contact/", label: "Contact", key: "contact" },
@@ -110,40 +108,6 @@ export const publicPages: Record<
     lead: "Four programs, each supporting community in a different way.",
     image: "https://picsum.photos/seed/iraac-mcc/900/650",
     sections: [],
-  },
-  insights: {
-    title: "Insights",
-    description: "Reflections on governance, community programs and Local Decision Making from IRAAC.",
-    active: "insights",
-    eyebrow: "From IRAAC",
-    hero: "Insights",
-    lead: "Plain-language reflections on governance, community programs and what IRAAC is learning as it goes.",
-    image: "https://picsum.photos/seed/iraac-meeting/1200/800",
-    sections: [
-      {
-        title: "Bail Conditions: An Emerging Community Issue",
-        body: [
-          "Community feedback has raised bail conditions as an issue connected with Local Decision Making, transport support and uncertainty about the best next step.",
-          "This report shares an early community signal. It does not identify anyone, provide legal advice or claim to describe every person's experience.",
-        ],
-        cardTitle: "Central message",
-        cardBody:
-          "People may need clear information, reliable transport, a trusted person to speak with and a coordinated pathway to qualified legal and practical support.",
-      },
-      {
-        title: "IRAAC Survey Monthly Report",
-        body: [
-          "Community members asked about culture, young people, family, practical support, programs and the best way to speak with someone.",
-          "The message is clear: people want more than a list of services. They want welcoming, face-to-face and flexible pathways into support.",
-        ],
-      },
-      {
-        title: "Why Governance Is the Foundation",
-        body: [
-          "Good governance is what makes strong community programs possible. It gives funders, partners and community confidence that IRAAC is well run.",
-        ],
-      },
-    ],
   },
   governance: {
     title: "Governance & Reporting",
@@ -279,7 +243,7 @@ export const publicPages: Record<
   "enhanced-bail-article": {
     title: "Bail Conditions: Emerging Community Issue",
     description: "A public article about bail conditions as an emerging community issue.",
-    active: "insights",
+    active: "reports",
     eyebrow: "Emerging Community Report",
     hero: "Bail Conditions: An Emerging Community Issue",
     lead: "A plain-language report on bail, practical access and service-navigation challenges.",

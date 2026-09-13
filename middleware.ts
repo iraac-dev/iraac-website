@@ -32,8 +32,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    // Apply to all routes except static files, favicon, and data
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
+  // Public pages do not need a session refresh. Keep authentication middleware
+  // scoped to the community app and staff console.
+  matcher: ["/app/:path*", "/admin/:path*"],
 };
