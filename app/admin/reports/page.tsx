@@ -1,166 +1,240 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { getReferrals, getReferralStats } from "../../../lib/referrals";
-import { services } from "../../data";
+import Link from "next/link";
+import { useState } from "react";
+import DirectoryInsights from "./DirectoryInsights";
+import { archivePeriod, audiences, reportLibrary } from "./report-library";
+import styles from "./reports.module.css";
 
 export default function AdminReportsPage() {
-  const [stats, setStats] = useState<ReturnType<typeof getReferralStats> | null>(null);
-
-  useEffect(() => {
-    setStats(getReferralStats());
-  }, []);
-
-  const totalServices = services.length;
-  const categories = [...new Set(services.map((s) => s.category))];
+  const [audience, setAudience] = useState("All audiences");
+  const [month, setMonth] = useState("All months");
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("All reports");
+  const months = [...new Set(reportLibrary.map((report) => report.month))];
+  const visible = reportLibrary.filter(
+    (report) =>
+      (audience === "All audiences" || report.audience === audience) &&
+      (month === "All months" || report.month === month) &&
+      status !== "Sent" &&
+      `${report.title} ${report.topic} ${report.id} ${report.recipients}`
+        .toLowerCase()
+        .includes(query.trim().toLowerCase()),
+  );
+  function reset() {
+    setAudience("All audiences");
+    setMonth("All months");
+    setQuery("");
+    setStatus("All reports");
+  }
 
   return (
-    <div className="admin-page-content">
-      <div className="admin-top">
+    <div className={styles.workspace}>
+      <header className={styles.heading}>
         <div>
-          <p className="admin-kicker">Staff console</p>
-          <h1>Reports & insights</h1>
+          <p className={styles.eyebrow}>IRAAC / Reporting workspace</p>
+          <h1>
+            Reports & insights<span>.</span>
+          </h1>
+          <p>Community voice. Clear decisions. A record of what comes next.</p>
         </div>
-      </div>
-
-      <div className="admin-report-section">
-        <h2>Service directory overview</h2>
-        <div className="admin-summary-cards">
-          <div className="admin-mini-card">
-            <div className="admin-mini-stat">{totalServices}</div>
-            <div className="admin-mini-label">Total services</div>
-          </div>
-          <div className="admin-mini-card">
-            <div className="admin-mini-stat">{categories.length}</div>
-            <div className="admin-mini-label">Categories</div>
-          </div>
-          <div className="admin-mini-card">
-            <div className="admin-mini-stat">{services.filter((s) => s.suburb === "Nowra").length}</div>
-            <div className="admin-mini-label">Nowra services</div>
-          </div>
-          <div className="admin-mini-card">
-            <div className="admin-mini-stat">{services.filter((s) => s.isAboriginalLed).length}</div>
-            <div className="admin-mini-label">Aboriginal-led</div>
-          </div>
+        <span className={styles.period}>{archivePeriod}</span>
+      </header>
+      <section className={styles.overview} aria-label="Report library overview">
+        <div>
+          <strong>{reportLibrary.length}</strong>
+          <span>Written reports</span>
         </div>
-
-        <div className="admin-report-table-wrap">
-          <table className="admin-report-table">
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>Count</th>
-                <th>Aboriginal-led</th>
-                <th>Crisis</th>
-              </tr>
-            </thead>
-            <tbody>
-              {categories.map((cat) => {
-                const inCat = services.filter((s) => s.category === cat);
-                return (
-                  <tr key={cat}>
-                    <td><strong>{cat}</strong></td>
-                    <td>{inCat.length}</td>
-                    <td>{inCat.filter((s) => s.isAboriginalLed).length}</td>
-                    <td>{inCat.filter((s) => s.isCrisis).length}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <div>
+          <strong>6</strong>
+          <span>Reporting months</span>
         </div>
-      </div>
-
-      {stats && stats.total > 0 && (
-        <div className="admin-report-section">
-          <h2>Referral activity</h2>
-          <div className="admin-summary-cards">
-            <div className="admin-mini-card">
-              <div className="admin-mini-stat">{stats.total}</div>
-              <div className="admin-mini-label">Total referrals</div>
-            </div>
-            <div className="admin-mini-card">
-              <div className="admin-mini-stat">{stats.requested + stats.triage}</div>
-              <div className="admin-mini-label">Needs attention</div>
-            </div>
-            <div className="admin-mini-card">
-              <div className="admin-mini-stat">{stats.resolved}</div>
-              <div className="admin-mini-label">Resolved</div>
-            </div>
-            <div className="admin-mini-card">
-              <div className="admin-mini-stat">{stats.followUpDue}</div>
-              <div className="admin-mini-label">Follow-up due</div>
-            </div>
-          </div>
-
-          <div className="admin-report-grid">
-            <div className="admin-report-block">
-              <h3>By status</h3>
-              <div className="admin-report-bar-list">
-                {Object.entries(stats).filter(([k]) => ["requested", "triage", "referred", "followUpDue", "resolved", "couldNotConnect", "escalated", "withdrawn"].includes(k)).map(([status, count]) => {
-                  const c = count as number;
-                  if (c === 0) return null;
-                  const labels: Record<string, string> = {
-                    requested: "Pending review",
-                    triage: "In triage",
-                    referred: "Referred",
-                    followUpDue: "Follow-up due",
-                    resolved: "Resolved",
-                    couldNotConnect: "Could not connect",
-                    escalated: "Escalated",
-                    withdrawn: "Withdrawn",
-                  };
-                  return (
-                    <div className="admin-report-bar-row" key={status}>
-                      <span className="admin-report-bar-label">{labels[status] || status}</span>
-                      <div className="admin-report-bar-track">
-                        <div
-                          className="admin-report-bar-fill"
-                          style={{ width: `${(c / stats.total) * 100}%` }}
-                        />
-                      </div>
-                      <span className="admin-report-bar-count">{c}</span>
-                    </div>
-                  );
-                })}
+        <div>
+          <strong>3</strong>
+          <span>Audience editions</span>
+        </div>
+        <div>
+          <strong>0</strong>
+          <span>Verified sends</span>
+        </div>
+      </section>
+      <aside className={styles.notice}>
+        <strong>A new archive, with an honest starting point.</strong> These 18
+        draft editions were prepared on 13 September 2026 for the six months
+        shown. They are demonstration reports based on existing project themes,
+        not historical submissions. Recipients are proposed; no reports have
+        been sent from this library.
+      </aside>
+      <section className={styles.feature}>
+        <div>
+          <p className={styles.eyebrow}>In focus / August 2026</p>
+          <h2>
+            Bail, support and
+            <br />a clear next step.
+          </h2>
+          <p>
+            Explore the issue through community, operational and government
+            perspectives.
+          </p>
+          <Link
+            className={styles.lightButton}
+            href="/admin/reports/bail-conditions-community-issue-community"
+          >
+            Read the community edition <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
+        <div className={styles.featureEditions}>
+          {audiences.map((item, index) => (
+            <Link
+              key={item}
+              href={`/admin/reports/bail-conditions-community-issue-${item.toLowerCase()}`}
+            >
+              <span>0{index + 1}</span>
+              <div>
+                <strong>{item}</strong>
+                <small>
+                  {item === "Community"
+                    ? "Understanding the issue"
+                    : item === "IRAAC"
+                      ? "Planning the response"
+                      : "Informing the discussion"}
+                </small>
               </div>
-            </div>
-
-            <div className="admin-report-block">
-              <h3>By need category</h3>
-              <div className="admin-report-bar-list">
-                {Object.entries(stats.byCategory)
-                  .sort(([, a], [, b]) => b - a)
-                  .slice(0, 8)
-                  .map(([cat, count]) => {
-                    const c2 = count as number;
-                    return (
-                      <div className="admin-report-bar-row" key={cat}>
-                        <span className="admin-report-bar-label">{cat}</span>
-                        <div className="admin-report-bar-track">
-                          <div
-                            className="admin-report-bar-fill admin-report-bar-fill-alt"
-                            style={{ width: `${(c2 / stats.total) * 100}%` }}
-                          />
-                        </div>
-                        <span className="admin-report-bar-count">{c2}</span>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
-          </div>
+              <span aria-hidden="true">↗</span>
+            </Link>
+          ))}
         </div>
-      )}
-
-      {(!stats || stats.total === 0) && (
-        <div className="admin-empty">
-          <p>No referral data yet.</p>
-          <p className="admin-empty-hint">
-            Referral reports will populate once community members submit requests for help from services.
+      </section>
+      <section aria-labelledby="library-title">
+        <div className={styles.sectionHeading}>
+          <div>
+            <p className={styles.eyebrow}>The report register</p>
+            <h2 id="library-title">Six months. Three perspectives.</h2>
+          </div>
+          <p aria-live="polite">
+            {visible.length} of {reportLibrary.length} reports
           </p>
         </div>
-      )}
+        <div className={styles.tabs} aria-label="Filter by audience">
+          {["All audiences", ...audiences].map((item) => (
+            <button
+              type="button"
+              key={item}
+              aria-pressed={audience === item}
+              onClick={() => setAudience(item)}
+            >
+              {item}
+              <span>{item === "All audiences" ? 18 : 6}</span>
+            </button>
+          ))}
+        </div>
+        <div className={styles.filters}>
+          <label className={styles.search}>
+            Search reports
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search topic, title or recipient…"
+              type="search"
+            />
+          </label>
+          <label>
+            Reporting month
+            <select
+              value={month}
+              onChange={(event) => setMonth(event.target.value)}
+            >
+              <option>All months</option>
+              {months.map((item) => (
+                <option key={item}>{item}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Report status
+            <select
+              value={status}
+              onChange={(event) => setStatus(event.target.value)}
+            >
+              <option>All reports</option>
+              <option>Draft</option>
+              <option>Sent</option>
+            </select>
+          </label>
+        </div>
+        {visible.length === 0 ? (
+          <div className={styles.empty}>
+            <h3>
+              {status === "Sent"
+                ? "No verified sends yet"
+                : "No reports match these filters"}
+            </h3>
+            <p>
+              {status === "Sent"
+                ? "This archive contains prepared drafts. A sent record requires confirmed recipients and delivery evidence."
+                : "Try a different topic, month or audience."}
+            </p>
+            <button className={styles.darkButton} onClick={reset}>
+              Reset filters
+            </button>
+          </div>
+        ) : (
+          months
+            .filter((item) => visible.some((report) => report.month === item))
+            .map((item) => (
+              <div className={styles.monthGroup} key={item}>
+                <h3>
+                  {item}
+                  <span>
+                    {visible.filter((report) => report.month === item).length}{" "}
+                    editions
+                  </span>
+                </h3>
+                <div className={styles.reportGrid}>
+                  {visible
+                    .filter((report) => report.month === item)
+                    .map((report) => (
+                      <Link
+                        className={styles.reportCard}
+                        href={`/admin/reports/${report.slug}`}
+                        key={report.slug}
+                      >
+                        <div className={styles.cardMeta}>
+                          <span
+                            className={styles.audience}
+                            data-audience={report.audience}
+                          >
+                            {report.audience}
+                          </span>
+                          <span className={styles.draft}>Draft</span>
+                        </div>
+                        <p className={styles.topic}>{report.topic}</p>
+                        <h4>{report.title}</h4>
+                        <p className={styles.summary}>{report.summary}</p>
+                        <div className={styles.recipient}>
+                          <span>Prepared for</span>
+                          <strong>{report.recipients}</strong>
+                        </div>
+                        <div className={styles.cardFooter}>
+                          <small>{report.id}</small>
+                          <span>
+                            Read report <span aria-hidden="true">↗</span>
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
+                </div>
+              </div>
+            ))
+        )}
+      </section>
+      <details className={styles.insights}>
+        <summary>Service directory & referral statistics</summary>
+        <DirectoryInsights />
+      </details>
+      <footer className={styles.footer}>
+        IRAAC reporting archive · Draft editions · March–August 2026
+      </footer>
     </div>
   );
 }

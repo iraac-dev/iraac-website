@@ -1154,6 +1154,14 @@ section.alt {
   min-height: 100vh;
 }
 
+@media print {
+  body:has(.admin-page) > header,
+  body:has(.admin-page) > footer,
+  .admin-sidebar { display: none !important; }
+  .admin-shell { display: block !important; }
+  .admin-main { padding: 0 !important; }
+}
+
 .admin-sidebar {
   position: sticky;
   top: 0;
@@ -1222,6 +1230,14 @@ section.alt {
 
 .admin-main {
   padding: 16px;
+}
+
+@media (max-width: 900px) {
+  .admin-shell-reports .admin-sidebar { padding: 14px 18px; }
+  .admin-shell-reports .admin-sidebar .brand { margin-bottom: 10px; }
+  .admin-shell-reports .admin-sidebar nav { display: flex; flex-wrap: wrap; gap: 3px; }
+  .admin-shell-reports .admin-nav-link { font-size: 11px; padding: 0 8px; }
+  .admin-shell-reports .admin-note { margin-top: 10px; padding-top: 10px; font-size: 10px; }
 }
 
 .session-card,
