@@ -80,7 +80,7 @@ function Footer() {
                   <Link href="/about/">Our Story</Link>
                 </li>
                 <li>
-                  <Link href="/governance/">Governance & Reporting</Link>
+                  <Link href="/reports/">Reports</Link>
                 </li>
                 <li>
                   <Link href="/admin/" className="footer-admin-button">
@@ -116,7 +116,7 @@ function Footer() {
                   <Link href="/news/">Latest Updates</Link>
                 </li>
                 <li>
-                  <Link href="/insights/">Insights</Link>
+                  <Link href="/reports/">Community Reports</Link>
                 </li>
                 <li>
                   <Link href="/contact/">Get in Touch</Link>
@@ -134,11 +134,11 @@ function Footer() {
   );
 }
 
-export default function SiteShell({ children }: { children: React.ReactNode }) {
+export default function SiteShell({ children, showFrontDoor = false }: { children: React.ReactNode; showFrontDoor?: boolean }) {
   return (
     <>
       <Header />
-      <FrontDoor />
+      {showFrontDoor ? <FrontDoor /> : null}
       {children}
       <Footer />
     </>

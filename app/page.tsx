@@ -4,7 +4,7 @@ import SiteShell from "./SiteShell";
 
 export default function Home() {
   return (
-    <SiteShell>
+    <SiteShell showFrontDoor>
       <main>
         <section className="hero-flex">
           <div className="container">

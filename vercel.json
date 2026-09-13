@@ -33,7 +33,7 @@
     },
     {
       "source": "/insights.html",
-      "destination": "/insights",
+      "destination": "/reports",
       "permanent": true
     },
     {

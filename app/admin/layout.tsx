@@ -3,17 +3,23 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+const adminLinks = [
+  { href: "/admin/", label: "Overview" },
+  { href: "/admin/referrals", label: "Referral Queue" },
+  { href: "/admin/services", label: "Service Directory" },
+  { href: "/admin/reports", label: "Reports" },
+  { href: "/admin/funding", label: "Funding", openInNewTab: true },
+];
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const currentPath = pathname === "/admin" ? "/admin/" : pathname;
+  const isFundingWorkspace =
+    currentPath === "/admin/funding" || currentPath.startsWith("/admin/funding/");
 
-  const links = [
-    { href: "/admin/", label: "Overview" },
-    { href: "/admin/referrals", label: "Referral Queue" },
-    { href: "/admin/services", label: "Service Directory" },
-    { href: "/admin/reports", label: "Reports" },
-    { href: "/admin/funding", label: "Funding" },
-  ];
+  if (isFundingWorkspace) {
+    return <>{children}</>;
+  }
 
   return (
     <main className="admin-page">
@@ -23,7 +29,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             IRAAC<span>.</span>
           </Link>
           <nav aria-label="Staff dashboard sections">
-            {links.map((link) => {
+            {adminLinks.map((link) => {
               const isActive =
                 currentPath === link.href || (link.href !== "/admin/" && currentPath.startsWith(link.href));
 
@@ -31,6 +37,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <Link
                   key={link.href}
                   href={link.href}
+                  target={link.openInNewTab ? "_blank" : undefined}
+                  rel={link.openInNewTab ? "noopener noreferrer" : undefined}
                   aria-current={isActive ? "page" : undefined}
                   className={isActive ? "admin-nav-link active" : "admin-nav-link"}
                 >
